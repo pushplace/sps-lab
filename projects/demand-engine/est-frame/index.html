@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Est. Frame — A Gift for New Grandparents</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Hanken+Grotesk:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700;800;900&family=Bebas+Neue&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #f7f6f3;
+      --text: #1a1a1a;
+      --text-muted: #6b6b6b;
+      --text-faint: #a8a5a0;
+      --white: #ffffff;
+      --border: #e5e3df;
+      --accent: #c45d3e;
+      --accent-soft: #f0e8e4;
+      --frame-black: #1a1a1a;
+      --frame-white: #f0eeeb;
+      --frame-natural: #c4a882;
+      --mat-white: #faf9f7;
+      --serif: 'Cormorant Garamond', serif;
+      --display: 'Playfair Display', serif;
+      --condensed: 'Bebas Neue', sans-serif;
+      --sans: 'Hanken Grotesk', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      text-align: center;
+      padding: 72px 24px 56px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-family: var(--display);
+      font-size: 3.2rem;
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      max-width: 520px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .hero-cta:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* ---- MAKER SECTION ---- */
+    .maker-section {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .maker-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* ---- CONTROLS ---- */
+    .controls {
+      padding: 40px 0;
+    }
+
+    .step {
+      margin-bottom: 36px;
+    }
+
+    .step-num {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-faint);
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .step-label {
+      font-family: var(--display);
+      font-size: 1.25rem;
+      font-weight: 400;
+      margin-bottom: 12px;
+    }
+
+    /* Upload */
+    .upload-zone {
+      border: 1.5px dashed var(--border);
+      border-radius: 8px;
+      padding: 40px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .upload-zone:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .upload-zone.has-photo {
+      padding: 0;
+      border-style: solid;
+    }
+
+    .upload-zone.has-photo img {
+      width: 100%;
+      display: block;
+      border-radius: 6px;
+    }
+
+    .upload-zone .upload-icon {
+      font-size: 2rem;
+      color: var(--text-faint);
+      margin-bottom: 8px;
+    }
+
+    .upload-zone .upload-text {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    .upload-zone .upload-hint {
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      margin-top: 4px;
+    }
+
+    .upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .change-photo {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      margin-top: 8px;
+      display: none;
+      text-align: center;
+    }
+
+    .change-photo:hover { color: var(--accent); }
+
+    .has-upload .change-photo { display: block; }
+
+    /* Text inputs */
+    .input-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 12px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      background: var(--white);
+      color: var(--text);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    .input-group input:focus, .input-group select:focus {
+      border-color: var(--accent);
+    }
+
+    .input-group input::placeholder {
+      color: var(--text-faint);
+    }
+
+    .quick-names {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .quick-name {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: var(--white);
+      transition: all 0.15s;
+    }
+
+    .quick-name:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Style picker */
+    .style-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .style-option {
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: var(--white);
+    }
+
+    .style-option:hover {
+      border-color: var(--text-muted);
+    }
+
+    .style-option.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .style-option .style-preview {
+      font-size: 1rem;
+      line-height: 1.3;
+      margin-bottom: 6px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .style-option .style-name {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* Frame picker */
+    .frame-options {
+      display: flex;
+      gap: 10px;
+    }
+
+    .frame-option {
+      width: 48px;
+      height: 48px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.15s;
+      position: relative;
+    }
+
+    .frame-option:hover { transform: scale(1.05); }
+
+    .frame-option.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-soft);
+    }
+
+    .frame-option.frame-black { background: var(--frame-black); }
+    .frame-option.frame-white { background: var(--frame-white); border: 2px solid var(--border); }
+    .frame-option.frame-white.active { border-color: var(--accent); }
+    .frame-option.frame-natural { background: var(--frame-natural); }
+
+    .frame-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--text-faint);
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    /* ---- PREVIEW ---- */
+    .preview-container {
+      position: sticky;
+      top: 40px;
+      padding: 40px 0;
+    }
+
+    .frame-preview {
+      aspect-ratio: auto;
+      padding: 28px;
+      border-radius: 2px;
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.08),
+        0 12px 40px rgba(0,0,0,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+      transition: background 0.3s, box-shadow 0.3s;
+      background: var(--frame-black);
+    }
+
+    .frame-preview.frame-black-bg { background: var(--frame-black); }
+    .frame-preview.frame-white-bg {
+      background: var(--frame-white);
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.06),
+        0 12px 40px rgba(0,0,0,0.1),
+        inset 0 0 0 1px rgba(0,0,0,0.05);
+    }
+    .frame-preview.frame-natural-bg { background: var(--frame-natural); }
+
+    .mat-area {
+      background: var(--mat-white);
+      padding: 32px;
+    }
+
+    .print-area {
+      position: relative;
+      background: #e8e6e2;
+      overflow: hidden;
+      aspect-ratio: 5 / 6;
+    }
+
+    .print-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .print-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-faint);
+      gap: 8px;
+    }
+
+    .print-placeholder-icon {
+      font-size: 2.5rem;
+      opacity: 0.4;
+    }
+
+    .print-placeholder-text {
+      font-size: 0.8rem;
+      font-weight: 300;
+    }
+
+    /* Typography overlay */
+    .typo-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 24px 20px 20px;
+      background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 60%, transparent 100%);
+      text-align: center;
+      color: white;
+      transition: opacity 0.3s;
+    }
+
+    /* Style A: Classic */
+    .typo-overlay.style-classic .typo-name {
+      font-family: var(--display);
+      font-size: 2rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .typo-overlay.style-classic .typo-rule {
+      width: 40px;
+      height: 1px;
+      background: rgba(255,255,255,0.6);
+      margin: 8px auto;
+    }
+
+    .typo-overlay.style-classic .typo-est {
+      font-family: var(--serif);
+      font-size: 0.85rem;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    /* Style B: Modern */
+    .typo-overlay.style-modern .typo-name {
+      font-family: var(--condensed);
+      font-size: 2.8rem;
+      letter-spacing: 0.15em;
+      line-height: 1;
+    }
+
+    .typo-overlay.style-modern .typo-rule {
+      display: none;
+    }
+
+    .typo-overlay.style-modern .typo-est {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    /* Style C: Script */
+    .typo-overlay.style-script .typo-name {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: 0.06em;
+      line-height: 1;
+    }
+
+    .typo-overlay.style-script .typo-rule {
+      width: 60px;
+      height: 1px;
+      background: rgba(255,255,255,0.4);
+      margin: 10px auto;
+    }
+
+    .typo-overlay.style-script .typo-est {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    /* CTA bar */
+    .cta-bar {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: var(--text);
+      color: var(--white);
+      padding: 14px 40px;
+      border-radius: 6px;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .cta-button:hover {
+      background: var(--accent);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(196,93,62,0.25);
+    }
+
+    .cta-price {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      margin-top: 8px;
+    }
+
+    /* ---- DETAILS SECTION ---- */
+    .details {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+      border-top: 1px solid var(--border);
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .detail-item h3 {
+      font-family: var(--display);
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 6px;
+    }
+
+    .detail-item p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ---- FOOTER ---- */
+    .footer {
+      text-align: center;
+      padding: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer a {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-faint);
+      text-decoration: none;
+    }
+
+    .footer a:hover { color: var(--accent); }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 768px) {
+      .maker-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .preview-container {
+        position: static;
+        order: -1;
+      }
+
+      .hero h1 { font-size: 2.4rem; }
+
+      .details-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .input-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">Social Print Studio</div>
+    <h1>The <em>Est.</em> Frame</h1>
+    <p class="hero-sub">Celebrate the moment someone became Nana, Pop-Pop, or Gigi. Upload a photo, choose their name, and we'll print and frame it with gallery-quality precision.</p>
+    <a class="hero-cta" onclick="document.querySelector('.maker-section').scrollIntoView({behavior:'smooth'})">Make yours &darr;</a>
+  </section>
+
+  <!-- MAKER -->
+  <section class="maker-section">
+    <div class="maker-layout">
+
+      <!-- Left: Controls -->
+      <div class="controls">
+
+        <!-- Step 1: Photo -->
+        <div class="step" id="step-upload">
+          <div class="step-num">01</div>
+          <div class="step-label">Choose a photo</div>
+          <div class="upload-zone" id="uploadZone">
+            <input type="file" accept="image/*" id="photoInput">
+            <div class="upload-icon">+</div>
+            <div class="upload-text">Drop a photo or click to upload</div>
+            <div class="upload-hint">The baby, or grandparent holding the baby</div>
+          </div>
+          <div class="change-photo" id="changePhoto" onclick="document.getElementById('photoInput').click()">change photo</div>
+        </div>
+
+        <!-- Step 2: Name & Year -->
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-label">Their new title</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label>Name</label>
+              <input type="text" id="nameInput" placeholder="Nana" maxlength="16" autocomplete="off" spellcheck="false">
+            </div>
+            <div class="input-group">
+              <label>Year</label>
+              <input type="text" id="yearInput" placeholder="2026" maxlength="4" inputmode="numeric">
+            </div>
+          </div>
+          <div class="quick-names">
+            <span class="quick-name" data-name="Nana">Nana</span>
+            <span class="quick-name" data-name="Papa">Papa</span>
+            <span class="quick-name" data-name="Gigi">Gigi</span>
+            <span class="quick-name" data-name="Pop-Pop">Pop-Pop</span>
+            <span class="quick-name" data-name="Grammy">Grammy</span>
+            <span class="quick-name" data-name="Grandpa">Grandpa</span>
+            <span class="quick-name" data-name="Oma">Oma</span>
+            <span class="quick-name" data-name="Opa">Opa</span>
+            <span class="quick-name" data-name="Abuela">Abuela</span>
+            <span class="quick-name" data-name="Mimi">Mimi</span>
+          </div>
+        </div>
+
+        <!-- Step 3: Style -->
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-label">Typography style</div>
+          <div class="style-options">
+            <div class="style-option active" data-style="classic">
+              <div class="style-preview" style="font-family:'Playfair Display';font-size:0.95rem;letter-spacing:0.1em;text-transform:uppercase;">NANA<br><span style="font-family:'Cormorant Garamond';font-size:0.65rem;letter-spacing:0.15em;font-weight:300;">Est. 2026</span></div>
+              <div class="style-name">Classic</div>
+            </div>
+            <div class="style-option" data-style="modern">
+              <div class="style-preview" style="font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:0.12em;">NANA<br><span style="font-family:'JetBrains Mono';font-size:0.55rem;letter-spacing:0.2em;">EST. 2026</span></div>
+              <div class="style-name">Modern</div>
+            </div>
+            <div class="style-option" data-style="script">
+              <div class="style-preview" style="font-family:'Cormorant Garamond';font-size:1.1rem;font-style:italic;font-weight:300;letter-spacing:0.04em;">Nana<br><span style="font-family:'Hanken Grotesk';font-size:0.55rem;letter-spacing:0.15em;font-style:normal;text-transform:uppercase;">Est. 2026</span></div>
+              <div class="style-name">Elegant</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Frame -->
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-label">Frame color</div>
+          <div class="frame-options">
+            <div>
+              <div class="frame-option frame-black active" data-frame="black"></div>
+              <div class="frame-label">Black</div>
+            </div>
+            <div>
+              <div class="frame-option frame-white" data-frame="white"></div>
+              <div class="frame-label">White</div>
+            </div>
+            <div>
+              <div class="frame-option frame-natural" data-frame="natural"></div>
+              <div class="frame-label">Natural</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right: Live Preview -->
+      <div class="preview-container">
+        <div class="frame-preview frame-black-bg" id="framePreview">
+          <div class="mat-area">
+            <div class="print-area" id="printArea">
+
+              <!-- Placeholder -->
+              <div class="print-placeholder" id="placeholder">
+                <div class="print-placeholder-icon">&#9634;</div>
+                <div class="print-placeholder-text">Your photo will appear here</div>
+              </div>
+
+              <!-- Photo -->
+              <img class="print-photo" id="printPhoto" style="display:none;" alt="Preview">
+
+              <!-- Typography overlay -->
+              <div class="typo-overlay style-classic" id="typoOverlay">
+                <div class="typo-name" id="typoName">NANA</div>
+                <div class="typo-rule"></div>
+                <div class="typo-est" id="typoEst">Est. 2026</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-bar">
+          <button class="cta-button">Order This Frame</button>
+          <div class="cta-price">Gallery Frame with mat &middot; from $68</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DETAILS -->
+  <section class="details">
+    <div class="details-grid">
+      <div class="detail-item">
+        <h3>Gallery Frame</h3>
+        <p>Premium wood frame in black, white, or natural. Hand-assembled with paper backing and sawtooth hanger. Ready to hang.</p>
+      </div>
+      <div class="detail-item">
+        <h3>Museum Mat</h3>
+        <p>2-inch white mat border elevates the print and gives the typography room to breathe. Archival quality.</p>
+      </div>
+      <div class="detail-item">
+        <h3>Lab Printed</h3>
+        <p>Silver halide process on Kodak photo paper. The same process used by professional photographers. Made in the US.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <a href="/">&larr; SPS Lab</a>
+  </footer>
+
+  <script>
+    const photoInput = document.getElementById('photoInput');
+    const uploadZone = document.getElementById('uploadZone');
+    const printPhoto = document.getElementById('printPhoto');
+    const placeholder = document.getElementById('placeholder');
+    const nameInput = document.getElementById('nameInput');
+    const yearInput = document.getElementById('yearInput');
+    const typoName = document.getElementById('typoName');
+    const typoEst = document.getElementById('typoEst');
+    const typoOverlay = document.getElementById('typoOverlay');
+    const framePreview = document.getElementById('framePreview');
+    const changePhoto = document.getElementById('changePhoto');
+
+    // Photo upload
+    photoInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        printPhoto.src = ev.target.result;
+        printPhoto.style.display = 'block';
+        placeholder.style.display = 'none';
+        uploadZone.classList.add('has-photo');
+        uploadZone.innerHTML = '<img src="' + ev.target.result + '" alt="Uploaded photo" style="width:100%;border-radius:6px;display:block;">';
+        document.getElementById('step-upload').classList.add('has-upload');
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Drag and drop
+    uploadZone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      uploadZone.style.borderColor = 'var(--accent)';
+      uploadZone.style.background = 'var(--accent-soft)';
+    });
+
+    uploadZone.addEventListener('dragleave', function() {
+      uploadZone.style.borderColor = '';
+      uploadZone.style.background = '';
+    });
+
+    uploadZone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      uploadZone.style.borderColor = '';
+      uploadZone.style.background = '';
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        photoInput.files = dt.files;
+        photoInput.dispatchEvent(new Event('change'));
+      }
+    });
+
+    // Name input — update preview live
+    nameInput.addEventListener('input', function() {
+      const name = this.value.trim() || 'Nana';
+      updateTypography(name);
+    });
+
+    // Year input
+    yearInput.addEventListener('input', function() {
+      const year = this.value.trim() || '2026';
+      typoEst.textContent = 'Est. ' + year;
+    });
+
+    // Quick name buttons
+    document.querySelectorAll('.quick-name').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const name = this.dataset.name;
+        nameInput.value = name;
+        updateTypography(name);
+      });
+    });
+
+    function updateTypography(name) {
+      const style = typoOverlay.className.replace('typo-overlay ', '');
+      if (style === 'style-classic' || style === 'style-modern') {
+        typoName.textContent = name.toUpperCase();
+      } else {
+        typoName.textContent = name;
+      }
+    }
+
+    // Style picker
+    document.querySelectorAll('.style-option').forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        document.querySelectorAll('.style-option').forEach(function(o) { o.classList.remove('active'); });
+        this.classList.add('active');
+        const style = this.dataset.style;
+        typoOverlay.className = 'typo-overlay style-' + style;
+        const name = nameInput.value.trim() || 'Nana';
+        updateTypography(name);
+      });
+    });
+
+    // Frame picker
+    document.querySelectorAll('.frame-option').forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        document.querySelectorAll('.frame-option').forEach(function(o) { o.classList.remove('active'); });
+        this.classList.add('active');
+        const frame = this.dataset.frame;
+        framePreview.className = 'frame-preview frame-' + frame + '-bg';
+      });
+    });
+  </script>
+
+</body>
+</html>
