@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPS Lab — Landing Pages & Maker Previews</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #f5f4f1;
+      --text: #1a1a1a;
+      --text-muted: #6b6b6b;
+      --card-bg: #ffffff;
+      --card-border: #e5e3df;
+      --accent: #c45d3e;
+      --serif: 'Instrument Serif', serif;
+      --sans: 'Hanken Grotesk', sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    /* Hero */
+    .hero {
+      margin-bottom: 56px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: 2.8rem;
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      font-weight: 300;
+    }
+
+    /* Section groups */
+    .section {
+      margin-bottom: 48px;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    .section-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+
+    /* Card grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 20px;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 140px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .card-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-top: 12px;
+      align-self: flex-start;
+    }
+
+    .tag-landing { background: #e8f0e8; color: #2d6a2d; }
+    .tag-maker { background: #e8ecf0; color: #2d4a6a; }
+    .tag-mockup { background: #f0e8f0; color: #6a2d6a; }
+    .tag-experiment { background: #f0ece8; color: #6a4a2d; }
+
+    .card-arrow {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: all 0.2s ease;
+    }
+
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Empty state */
+    .empty-card {
+      background: transparent;
+      border: 2px dashed var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 300;
+      min-height: 140px;
+      border-radius: 10px;
+      cursor: default;
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section:nth-child(2) { animation: fadeUp 0.6s ease 0.1s both; }
+    .section:nth-child(3) { animation: fadeUp 0.6s ease 0.2s both; }
+    .section:nth-child(4) { animation: fadeUp 0.6s ease 0.3s both; }
+    .section:nth-child(5) { animation: fadeUp 0.6s ease 0.4s both; }
+
+    /* Footer */
+    .footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2rem; }
+      .container { padding: 40px 16px 60px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="hero">
+      <h1>SPS Lab</h1>
+      <p>Landing page previews, maker tool prototypes, and app mockups for Social Print Studio. Proof of concepts for team review.</p>
+    </div>
+
+    <!-- DEMAND ENGINE TESTS -->
+    <div class="section">
+      <h2 class="section-title">Demand Engine Tests</h2>
+      <p class="section-desc">Landing pages for the 4 demand engine hypotheses — testing audience + moment + product combinations.</p>
+      <div class="grid">
+        <div class="empty-card">Baby's First Year Calendar</div>
+        <div class="empty-card">Gift-Positioned Tiny Books</div>
+        <div class="empty-card">Homepage Identity A/B/C</div>
+      </div>
+    </div>
+
+    <!-- MOTHER'S DAY 2026 -->
+    <div class="section">
+      <h2 class="section-title">Mother's Day 2026</h2>
+      <p class="section-desc">Landing pages and ad destinations for the 6-play Mother's Day blitz.</p>
+      <div class="grid">
+        <div class="empty-card">Tiny Book Gift Bundle</div>
+        <div class="empty-card">Calendar for Grandma</div>
+        <div class="empty-card">Dad-Simple Landing Page</div>
+      </div>
+    </div>
+
+    <!-- MAKER TOOLS -->
+    <div class="section">
+      <h2 class="section-title">Maker Tool Previews</h2>
+      <p class="section-desc">Prototype maker experiences and product customizer UIs.</p>
+      <div class="grid">
+        <div class="empty-card">+ Add a maker preview</div>
+      </div>
+    </div>
+
+    <!-- APP MOCKUPS -->
+    <div class="section">
+      <h2 class="section-title">App Mockups</h2>
+      <p class="section-desc">Interactive walkthroughs and UI concepts.</p>
+      <div class="grid">
+        <div class="empty-card">+ Add a mockup</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      SPS Lab &middot; Social Print Studio &middot; Internal use
+    </div>
+
+  </div>
+</body>
+</html>
