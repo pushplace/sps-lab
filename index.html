@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SPS Lab — Landing Pages & Maker Previews</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -13,11 +13,14 @@
       --bg: #f5f4f1;
       --text: #1a1a1a;
       --text-muted: #6b6b6b;
+      --text-faint: #a8a5a0;
       --card-bg: #ffffff;
       --card-border: #e5e3df;
       --accent: #c45d3e;
+      --grid-line: rgba(0,0,0,0.028);
       --serif: 'Instrument Serif', serif;
       --sans: 'Hanken Grotesk', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
     }
 
     body {
@@ -26,6 +29,22 @@
       color: var(--text);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      /* Faint grid paper background */
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* Top accent bar */
+    .topbar {
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), #d4845a, var(--accent));
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
     }
 
     .container {
@@ -40,12 +59,31 @@
       animation: fadeUp 0.6s ease both;
     }
 
+    .hero-top {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
     .hero h1 {
       font-family: var(--serif);
       font-size: 2.8rem;
       font-weight: 400;
       line-height: 1.15;
-      margin-bottom: 12px;
+    }
+
+    .hero-badge {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 400;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 3px;
+      padding: 2px 7px;
+      letter-spacing: 0.04em;
+      position: relative;
+      top: -4px;
     }
 
     .hero p {
@@ -60,11 +98,27 @@
       margin-bottom: 48px;
     }
 
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .section-num {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--text-faint);
+      letter-spacing: 0.02em;
+      position: relative;
+      top: -1px;
+    }
+
     .section-title {
       font-family: var(--serif);
       font-size: 1.5rem;
       font-weight: 400;
-      margin-bottom: 8px;
     }
 
     .section-desc {
@@ -72,6 +126,7 @@
       color: var(--text-muted);
       margin-bottom: 20px;
       font-weight: 300;
+      padding-left: 38px;
     }
 
     /* Card grid */
@@ -118,12 +173,13 @@
 
     .card-tag {
       display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 500;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 400;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       padding: 3px 8px;
-      border-radius: 4px;
+      border-radius: 3px;
       margin-top: 12px;
       align-self: flex-start;
     }
@@ -152,16 +208,27 @@
     /* Empty state */
     .empty-card {
       background: transparent;
-      border: 2px dashed var(--card-border);
+      border: 1.5px dashed var(--card-border);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      font-weight: 300;
+      gap: 6px;
+      color: var(--text-faint);
+      font-size: 0.82rem;
+      font-weight: 400;
       min-height: 140px;
       border-radius: 10px;
       cursor: default;
+      position: relative;
+    }
+
+    .empty-card .empty-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--card-border);
     }
 
     /* Animations */
@@ -180,68 +247,123 @@
       margin-top: 64px;
       padding-top: 24px;
       border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left {
       font-size: 0.8rem;
       color: var(--text-muted);
       font-weight: 300;
+    }
+
+    .footer-right {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-faint);
+      letter-spacing: 0.02em;
     }
 
     @media (max-width: 640px) {
       .grid { grid-template-columns: 1fr; }
       .hero h1 { font-size: 2rem; }
       .container { padding: 40px 16px 60px; }
+      .section-desc { padding-left: 0; }
     }
   </style>
 </head>
 <body>
+  <div class="topbar"></div>
   <div class="container">
 
     <div class="hero">
-      <h1>SPS Lab</h1>
-      <p>Landing page previews, maker tool prototypes, and app mockups for Social Print Studio. Proof of concepts for team review.</p>
+      <div class="hero-top">
+        <h1>SPS Lab</h1>
+        <span class="hero-badge">internal</span>
+      </div>
+      <p>Prototypes, landing pages, and maker tools for Social Print Studio. Nothing here is production — everything is an experiment.</p>
     </div>
 
     <!-- DEMAND ENGINE TESTS -->
     <div class="section">
-      <h2 class="section-title">Demand Engine Tests</h2>
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-title">Demand Engine Tests</h2>
+      </div>
       <p class="section-desc">Landing pages for the 4 demand engine hypotheses — testing audience + moment + product combinations.</p>
       <div class="grid">
-        <div class="empty-card">Baby's First Year Calendar</div>
-        <div class="empty-card">Gift-Positioned Tiny Books</div>
-        <div class="empty-card">Homepage Identity A/B/C</div>
+        <div class="empty-card">
+          Baby's First Year Calendar
+          <span class="empty-label">pending</span>
+        </div>
+        <div class="empty-card">
+          Gift-Positioned Tiny Books
+          <span class="empty-label">pending</span>
+        </div>
+        <div class="empty-card">
+          Homepage Identity A/B/C
+          <span class="empty-label">pending</span>
+        </div>
       </div>
     </div>
 
     <!-- MOTHER'S DAY 2026 -->
     <div class="section">
-      <h2 class="section-title">Mother's Day 2026</h2>
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-title">Mother's Day 2026</h2>
+      </div>
       <p class="section-desc">Landing pages and ad destinations for the 6-play Mother's Day blitz.</p>
       <div class="grid">
-        <div class="empty-card">Tiny Book Gift Bundle</div>
-        <div class="empty-card">Calendar for Grandma</div>
-        <div class="empty-card">Dad-Simple Landing Page</div>
+        <div class="empty-card">
+          Tiny Book Gift Bundle
+          <span class="empty-label">pending</span>
+        </div>
+        <div class="empty-card">
+          Calendar for Grandma
+          <span class="empty-label">pending</span>
+        </div>
+        <div class="empty-card">
+          Dad-Simple Landing Page
+          <span class="empty-label">pending</span>
+        </div>
       </div>
     </div>
 
     <!-- MAKER TOOLS -->
     <div class="section">
-      <h2 class="section-title">Maker Tool Previews</h2>
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-title">Maker Tool Previews</h2>
+      </div>
       <p class="section-desc">Prototype maker experiences and product customizer UIs.</p>
       <div class="grid">
-        <div class="empty-card">+ Add a maker preview</div>
+        <div class="empty-card">
+          + Add a maker preview
+          <span class="empty-label">slot open</span>
+        </div>
       </div>
     </div>
 
     <!-- APP MOCKUPS -->
     <div class="section">
-      <h2 class="section-title">App Mockups</h2>
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-title">App Mockups</h2>
+      </div>
       <p class="section-desc">Interactive walkthroughs and UI concepts.</p>
       <div class="grid">
-        <div class="empty-card">+ Add a mockup</div>
+        <div class="empty-card">
+          + Add a mockup
+          <span class="empty-label">slot open</span>
+        </div>
       </div>
     </div>
 
     <div class="footer">
-      SPS Lab &middot; Social Print Studio &middot; Internal use
+      <span class="footer-left">Social Print Studio</span>
+      <span class="footer-right">sps-lab v0.1</span>
     </div>
 
   </div>

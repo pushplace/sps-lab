@@ -66,6 +66,29 @@ Use these tags on the gallery cards:
 
 Replace the corresponding `<div class="empty-card">...</div>` in the gallery when adding a real project.
 
+## SPS Product Data
+
+**printkit.dev** is SPS's developer API for photo printing. The product catalog is useful as a reference when building landing pages and mockups:
+
+- **Full catalog:** `https://printkit.dev/products.json` — all products with titles, descriptions, sizes, price ranges, and CDN image URLs
+- **Per-product detail:** `https://printkit.dev/products/{handle}.json` — variant-level SKUs, specs, constraints
+
+Current products in the catalog (6 as of Feb 2026, more being added):
+- `large-format-prints` — 20 sizes, $9-60
+- `gallery-frames` — 19 sizes, $54-289 (white/black/natural wood)
+- `wood-prints` — 21 sizes, $22-322
+- `acrylic-photo-block` — 4 sizes, $40-54
+- `metal-prints` — 25 sizes, $21-406
+- `photo-magazine` — 38 pages, $26
+
+**Not all SPS products are in printkit yet.** Major products missing from the API but sold on socialprintstudio.com:
+- Daily Calendar ($1.67M/yr — the #1 product)
+- Tiny Books ($875K/yr — #2)
+- Layflat Guestbook ($650K/yr — #3)
+- Photo Magnets, Classic Prints, Wedding Albums, etc.
+
+When building landing pages, use printkit.dev for product images and specs where available. For products not yet in the API, pull images from the Shopify CDN (`cdn.shopify.com/s/files/1/0527/1502/8643/...`) or socialprintstudio.com product pages.
+
 ## Context
 
 This lab supports the strategies in `/Users/georgesylvain/claude/`:
