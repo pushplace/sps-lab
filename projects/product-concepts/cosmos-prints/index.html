@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmos Prints — NASA Space Photography, Printed</title>
+  <meta name="description" content="Browse NASA's stunning astronomy images and order them as premium metal prints or gallery frames.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #06060f;
+      --bg-surface: #0c0c18;
+      --bg-elevated: #141424;
+      --bg-card: #10101c;
+      --text-primary: #e8e6e3;
+      --text-secondary: #8888a0;
+      --text-dim: #55556a;
+      --accent: #7c6cf0;
+      --accent-hover: #9b8ff8;
+      --accent-glow: rgba(124, 108, 240, 0.25);
+      --gold: #f0b840;
+      --success: #34d399;
+      --border: rgba(255,255,255,0.06);
+      --border-hover: rgba(255,255,255,0.14);
+      --font-display: 'Space Grotesk', system-ui, sans-serif;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #stars {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(6,6,15,0.95), transparent);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      color: var(--text-primary);
+    }
+
+    .brand-icon {
+      font-size: 1.3rem;
+      color: var(--accent);
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 1; text-shadow: 0 0 8px var(--accent-glow); }
+      50% { opacity: 0.7; text-shadow: 0 0 20px var(--accent-glow); }
+    }
+
+    .brand-tagline {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      height: 85vh;
+      min-height: 500px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: -5%;
+      background-size: cover;
+      background-position: center;
+      transition: opacity 1s ease;
+      opacity: 0;
+    }
+
+    .hero-bg.loaded { opacity: 1; }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        var(--bg-deep) 0%,
+        rgba(6,6,15,0.7) 35%,
+        rgba(6,6,15,0.2) 60%,
+        transparent 100%
+      );
+    }
+
+    .hero-content {
+      position: absolute;
+      bottom: 4rem;
+      left: 2rem;
+      right: 2rem;
+      max-width: 650px;
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease 0.3s;
+    }
+
+    .hero-content.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      border: 1px solid rgba(124,108,240,0.3);
+      padding: 0.3rem 0.8rem;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-desc {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: white;
+      background: var(--accent);
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .hero-cta:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 30px var(--accent-glow);
+    }
+
+    .cta-arrow { transition: transform 0.2s; }
+    .hero-cta:hover .cta-arrow { transform: translateX(3px); }
+
+    /* How It Works */
+    .how-it-works {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 2.5rem 2rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .step-num {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      opacity: 0.7;
+    }
+
+    .step-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .step-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--border-hover);
+    }
+
+    /* Categories */
+    .gallery-section {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .categories {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 0.5rem;
+    }
+
+    .categories::-webkit-scrollbar { display: none; }
+
+    .cat-btn {
+      white-space: nowrap;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 0.5rem 1.3rem;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cat-btn:hover {
+      background: rgba(255,255,255,0.08);
+      color: var(--text-primary);
+      border-color: var(--border-hover);
+    }
+
+    .cat-btn.active {
+      background: rgba(124,108,240,0.15);
+      border-color: rgba(124,108,240,0.4);
+      color: white;
+    }
+
+    /* Gallery Grid */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    .gallery-card {
+      position: relative;
+      aspect-ratio: 3/2;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+
+    .gallery-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    .gallery-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      opacity: 0;
+    }
+
+    .gallery-card img.loaded { opacity: 1; transition: opacity 0.5s ease, transform 0.5s ease; }
+    .gallery-card:hover img { transform: scale(1.06); }
+
+    .card-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 2.5rem 1rem 1rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.85));
+      transform: translateY(100%);
+      transition: transform 0.35s ease;
+    }
+
+    .gallery-card:hover .card-info { transform: translateY(0); }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: white;
+      line-height: 1.3;
+    }
+
+    .card-date {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      margin-top: 0.25rem;
+    }
+
+    .card-print-badge {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: white;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .gallery-card:hover .card-print-badge { opacity: 1; }
+
+    /* Loading Skeletons */
+    .skeleton-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    .skeleton-card {
+      aspect-ratio: 3/2;
+      border-radius: 10px;
+      background: linear-gradient(110deg, var(--bg-card) 30%, var(--bg-elevated) 50%, var(--bg-card) 70%);
+      background-size: 200% 100%;
+      animation: shimmer 1.8s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Empty State */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-dim);
+    }
+
+    .empty-state p { font-size: 0.95rem; }
+
+    /* Load More */
+    .load-more {
+      display: block;
+      margin: 2.5rem auto 0;
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      padding: 0.7rem 2.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .load-more:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(4,4,12,0.92);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    .modal.active { opacity: 1; pointer-events: auto; }
+
+    .modal-close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.5rem;
+      font-size: 1.8rem;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover { background: rgba(255,255,255,0.08); color: white; }
+
+    .modal-content {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 2rem;
+      max-width: 1100px;
+      max-height: 92vh;
+      width: 94%;
+      padding: 1.5rem;
+      transform: scale(0.96) translateY(10px);
+      transition: transform 0.35s ease;
+      overflow-y: auto;
+    }
+
+    .modal.active .modal-content { transform: scale(1) translateY(0); }
+
+    .modal-left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 300px;
+    }
+
+    .modal-preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      perspective: 800px;
+    }
+
+    .mockup-wrapper {
+      display: inline-flex;
+      transition: all 0.5s ease;
+      max-width: 100%;
+    }
+
+    .mockup-wrapper img {
+      display: block;
+      max-width: 100%;
+      max-height: 65vh;
+      object-fit: contain;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Metal mockup */
+    .mockup-metal .mockup-wrapper {
+      padding: 3px;
+      background: linear-gradient(145deg, rgba(200,200,220,0.25), rgba(120,120,150,0.08));
+      box-shadow:
+        0 2px 0 rgba(180,180,210,0.12),
+        0 30px 70px -10px rgba(0,0,0,0.6),
+        0 0 80px -20px var(--accent-glow);
+      border-radius: 2px;
+    }
+
+    /* Frame mockup */
+    .mockup-frame .mockup-wrapper {
+      padding: 14px;
+      background: #1a1a1a;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    }
+
+    .mockup-frame.frame-white .mockup-wrapper { background: #eee9e2; }
+    .mockup-frame.frame-natural .mockup-wrapper { background: #a88960; }
+
+    .mockup-frame.has-mat .mockup-wrapper img {
+      border: 18px solid #faf9f6;
+    }
+
+    /* Modal Right */
+    .modal-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+
+    .modal-right::-webkit-scrollbar { width: 3px; }
+    .modal-right::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 3px; }
+
+    .modal-info h2 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 600;
+      line-height: 1.25;
+      margin-bottom: 0.4rem;
+    }
+
+    .modal-date {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      margin-bottom: 0.6rem;
+    }
+
+    .modal-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .modal-credit {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-style: italic;
+      margin-top: 0.3rem;
+    }
+
+    /* Configurator */
+    .configurator {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .config-label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+    }
+
+    .product-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .prod-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 0.65rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .prod-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    .prod-btn.active {
+      border-color: var(--accent);
+      background: rgba(124,108,240,0.1);
+      color: white;
+    }
+
+    .prod-icon { font-size: 0.9rem; }
+
+    .size-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.4rem;
+    }
+
+    .size-btn {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 0.55rem 0.4rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .size-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    .size-btn.active {
+      border-color: var(--accent);
+      background: rgba(124,108,240,0.12);
+      color: white;
+    }
+
+    .size-btn .size-label { display: block; font-weight: 500; }
+    .size-btn .size-price { display: block; font-size: 0.62rem; color: var(--text-dim); margin-top: 0.15rem; }
+    .size-btn.active .size-price { color: var(--accent-hover); }
+
+    /* Frame Options */
+    .frame-options { display: flex; flex-direction: column; gap: 1rem; }
+
+    .color-options { display: flex; gap: 0.5rem; }
+
+    .color-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .color-btn:hover { border-color: var(--border-hover); }
+
+    .color-btn.active {
+      border-color: var(--accent);
+      background: rgba(124,108,240,0.1);
+      color: white;
+    }
+
+    .color-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .toggle-group { display: flex; gap: 0.4rem; }
+
+    .mat-btn {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mat-btn:hover { border-color: var(--border-hover); }
+
+    .mat-btn.active {
+      border-color: var(--accent);
+      background: rgba(124,108,240,0.1);
+      color: white;
+    }
+
+    /* Order Section */
+    .order-section {
+      margin-top: 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .price-display {
+      text-align: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .price-amount {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .price-label {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    .order-btn {
+      display: block;
+      width: 100%;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.85rem 1.5rem;
+      border-radius: 10px;
+      border: none;
+      background: var(--success);
+      color: #052e1f;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .order-btn:hover:not(:disabled) {
+      background: #4ade80;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 25px rgba(52,211,153,0.3);
+    }
+
+    .order-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      background: var(--text-dim);
+      color: var(--bg-deep);
+    }
+
+    .order-btn-loading { display: none; }
+
+    .price-note {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    /* Footer */
+    .footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-links a { color: var(--accent); text-decoration: none; }
+    .footer-links a:hover { text-decoration: underline; }
+
+    .footer-note {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      opacity: 0.6;
+    }
+
+    /* Error Banner */
+    .error-banner {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #dc2626;
+      color: white;
+      font-size: 0.85rem;
+      padding: 0.7rem 1.5rem;
+      border-radius: 10px;
+      z-index: 2000;
+      transition: transform 0.3s ease;
+      box-shadow: 0 8px 30px rgba(220,38,38,0.3);
+    }
+
+    .error-banner.visible { transform: translateX(-50%) translateY(0); }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .modal-content {
+        grid-template-columns: 1fr;
+        max-height: 95vh;
+        padding: 1rem;
+      }
+      .modal-left { min-height: 200px; }
+      .mockup-wrapper img { max-height: 40vh; }
+      .how-it-works { gap: 0.8rem; }
+      .step-divider { width: 20px; }
+    }
+
+    @media (max-width: 640px) {
+      .header { padding: 0.8rem 1rem; }
+      .brand-tagline { display: none; }
+      .hero { height: 70vh; min-height: 400px; }
+      .hero-content { bottom: 2rem; left: 1rem; right: 1rem; }
+      .gallery-section { padding: 1.5rem 1rem 3rem; }
+      .gallery { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.75rem; }
+      .size-grid { grid-template-columns: repeat(2, 1fr); }
+      .how-it-works { flex-direction: column; gap: 0.5rem; }
+      .step-divider { width: 1px; height: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="stars"></canvas>
+
+  <header class="header">
+    <div class="brand">
+      <span class="brand-icon">✦</span>
+      <span class="brand-name">COSMOS PRINTS</span>
+    </div>
+    <div class="brand-tagline">The universe on your wall</div>
+  </header>
+
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content" id="hero-content">
+      <div class="hero-badge">Today's Astronomy Picture</div>
+      <h1 class="hero-title" id="hero-title">Loading...</h1>
+      <p class="hero-desc" id="hero-desc"></p>
+      <button class="hero-cta" id="hero-cta" style="display:none">
+        Print This Image
+        <span class="cta-arrow">&rarr;</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="how-it-works">
+    <div class="step"><span class="step-num">01</span><span class="step-text">Browse NASA's cosmic gallery</span></div>
+    <div class="step-divider"></div>
+    <div class="step"><span class="step-num">02</span><span class="step-text">Choose metal print or gallery frame</span></div>
+    <div class="step-divider"></div>
+    <div class="step"><span class="step-num">03</span><span class="step-text">Order &amp; receive museum-quality art</span></div>
+  </section>
+
+  <section class="gallery-section">
+    <nav class="categories" id="categories"></nav>
+    <div class="gallery" id="gallery"></div>
+    <div class="skeleton-grid" id="skeleton-grid"></div>
+    <button class="load-more" id="load-more" style="display:none">Load More</button>
+  </section>
+
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modal-close">&times;</button>
+    <div class="modal-content">
+      <div class="modal-left">
+        <div class="modal-preview" id="modal-preview">
+          <div class="mockup-wrapper" id="mockup-wrapper">
+            <img id="modal-image" alt="" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-right">
+        <div class="modal-info">
+          <h2 id="modal-title"></h2>
+          <p class="modal-date" id="modal-date"></p>
+          <p class="modal-desc" id="modal-desc"></p>
+          <p class="modal-credit" id="modal-credit"></p>
+        </div>
+        <div class="configurator">
+          <div class="config-section">
+            <label class="config-label">Product</label>
+            <div class="product-toggle" id="product-toggle">
+              <button class="prod-btn active" data-product="metal">
+                <span class="prod-icon">&#9670;</span> Metal Print
+              </button>
+              <button class="prod-btn" data-product="frame">
+                <span class="prod-icon">&#9634;</span> Gallery Frame
+              </button>
+            </div>
+          </div>
+          <div class="config-section">
+            <label class="config-label">Size</label>
+            <div class="size-grid" id="size-grid"></div>
+          </div>
+          <div class="config-section frame-options" id="frame-options" style="display:none">
+            <div>
+              <label class="config-label">Frame Color</label>
+              <div class="color-options" id="color-options">
+                <button class="color-btn active" data-color="black">
+                  <span class="color-swatch" style="background:#1a1a1a"></span> Black
+                </button>
+                <button class="color-btn" data-color="white">
+                  <span class="color-swatch" style="background:#eee9e2"></span> White
+                </button>
+                <button class="color-btn" data-color="natural">
+                  <span class="color-swatch" style="background:#a88960"></span> Natural
+                </button>
+              </div>
+            </div>
+            <div>
+              <label class="config-label">Mat</label>
+              <div class="toggle-group" id="mat-toggle">
+                <button class="mat-btn active" data-mat="false">No Mat</button>
+                <button class="mat-btn" data-mat="true">White Mat</button>
+              </div>
+            </div>
+          </div>
+          <div class="order-section">
+            <div class="price-display" id="price-display">
+              <span class="price-label">Select a size</span>
+            </div>
+            <button class="order-btn" id="order-btn" disabled>
+              <span class="order-btn-text">Select a size to order</span>
+              <span class="order-btn-loading">Preparing your order...</span>
+            </button>
+            <p class="price-note">Fulfilled by Social Print Studio. Free shipping on orders $50+</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="error-banner" id="error-banner"></div>
+
+  <footer class="footer">
+    <div class="footer-brand">COSMOS PRINTS</div>
+    <div class="footer-links">
+      <span>Powered by <a href="https://printkit.dev" target="_blank" rel="noopener">PrintKit</a></span>
+      <span>&times;</span>
+      <span><a href="https://api.nasa.gov" target="_blank" rel="noopener">NASA Open APIs</a></span>
+    </div>
+    <div class="footer-note">All NASA imagery is public domain. Prints fulfilled by Social Print Studio.</div>
+  </footer>
+
+<script>
+// ============================================================
+// CONSTANTS
+// ============================================================
+
+const NASA_KEY = 'DEMO_KEY';
+
+const CATEGORIES = [
+  { id: 'featured', label: 'Featured', type: 'apod' },
+  { id: 'webb', label: "Webb's Universe", type: 'search', query: 'james webb space telescope' },
+  { id: 'hubble', label: 'Hubble', type: 'search', query: 'hubble space telescope' },
+  { id: 'nebulae', label: 'Nebulae', type: 'search', query: 'nebula' },
+  { id: 'galaxies', label: 'Galaxies', type: 'search', query: 'galaxy spiral' },
+  { id: 'planets', label: 'Planets', type: 'search', query: 'planet jupiter saturn' },
+  { id: 'earth', label: 'Earth', type: 'search', query: 'earth from space ISS' },
+];
+
+const METAL_SIZES = [
+  { label: '8×10"', dim: '8x10', sku: 'metal-print-8x10', price: 40 },
+  { label: '12×18"', dim: '12x18', sku: 'metal-print-12x18', price: 87 },
+  { label: '16×20"', dim: '16x20', sku: 'metal-print-16x20', price: 106 },
+  { label: '16×24"', dim: '16x24', sku: 'metal-print-16x24', price: 133 },
+  { label: '20×30"', dim: '20x30', sku: 'metal-print-20x30', price: 203 },
+  { label: '24×36"', dim: '24x36', sku: 'metal-print-24x36', price: 287 },
+  { label: '30×40"', dim: '30x40', sku: 'metal-print-30x40', price: 406 },
+];
+
+const FRAME_SIZES = [
+  { label: '8×10"', dim: '8x10', sku: 'print-8x10', price: 60 },
+  { label: '11×14"', dim: '11x14', sku: 'print-11x14', price: 89 },
+  { label: '16×20"', dim: '16x20', sku: 'print-16x20', price: 135 },
+  { label: '20×30"', dim: '20x30', sku: 'print-20x30', price: 195 },
+  { label: '24×36"', dim: '24x36', sku: 'print-24x36', price: 255 },
+];
+
+// ============================================================
+// STATE
+// ============================================================
+
+const state = {
+  currentCategory: 'featured',
+  images: [],
+  heroImage: null,
+  selectedImage: null,
+  selectedProduct: 'metal',
+  selectedSize: null,
+  frameColor: 'black',
+  hasMat: false,
+  modalOpen: false,
+  loading: false,
+  cache: {},
+  page: 1,
+};
+
+// ============================================================
+// API FUNCTIONS
+// ============================================================
+
+async function fetchAPOD(count) {
+  const url = count
+    ? `https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}&count=${count}&thumbs=true`
+    : `https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}&thumbs=true`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`APOD API error: ${res.status}`);
+  const data = await res.json();
+  return Array.isArray(data) ? data : [data];
+}
+
+async function fetchNASAImages(query, page = 1) {
+  const url = `https://images-api.nasa.gov/search?q=${encodeURIComponent(query)}&media_type=image&page=${page}&page_size=24`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`NASA Images API error: ${res.status}`);
+  const data = await res.json();
+  return data.collection.items || [];
+}
+
+// ============================================================
+// DATA NORMALIZERS
+// ============================================================
+
+function normalizeAPOD(items) {
+  return items
+    .filter(item => item.media_type === 'image' && item.url)
+    .map(item => ({
+      id: `apod-${item.date}`,
+      title: item.title || 'Untitled',
+      description: item.explanation || '',
+      date: item.date || '',
+      thumbnailUrl: item.url,
+      fullUrl: item.hdurl || item.url,
+      printUrl: item.hdurl || item.url,
+      copyright: item.copyright || null,
+      source: 'apod',
+    }));
+}
+
+function normalizeNASAImages(items) {
+  return items
+    .filter(item => item.links && item.links.length > 0 && item.data && item.data.length > 0)
+    .map(item => {
+      const d = item.data[0];
+      const thumbUrl = item.links[0].href;
+      return {
+        id: `nasa-${d.nasa_id}`,
+        title: d.title || 'Untitled',
+        description: d.description || '',
+        date: (d.date_created || '').split('T')[0],
+        thumbnailUrl: thumbUrl.replace('~thumb', '~medium'),
+        fullUrl: thumbUrl.replace('~thumb', '~large'),
+        printUrl: thumbUrl.replace('~thumb', '~orig'),
+        copyright: null,
+        source: 'nasa-images',
+      };
+    });
+}
+
+// ============================================================
+// RENDERING
+// ============================================================
+
+function renderCategories() {
+  const nav = document.getElementById('categories');
+  nav.innerHTML = CATEGORIES.map(cat =>
+    `<button class="cat-btn${cat.id === state.currentCategory ? ' active' : ''}" data-cat="${cat.id}">${cat.label}</button>`
+  ).join('');
+}
+
+function renderHero(image) {
+  state.heroImage = image;
+  const bg = document.getElementById('hero-bg');
+  const content = document.getElementById('hero-content');
+
+  const img = new Image();
+  img.onload = () => {
+    bg.style.backgroundImage = `url(${image.fullUrl})`;
+    bg.classList.add('loaded');
+    content.classList.add('visible');
+  };
+  img.onerror = () => {
+    bg.style.backgroundImage = `url(${image.thumbnailUrl})`;
+    bg.classList.add('loaded');
+    content.classList.add('visible');
+  };
+  img.src = image.fullUrl;
+
+  document.getElementById('hero-title').textContent = image.title;
+  document.getElementById('hero-desc').textContent = image.description;
+  const cta = document.getElementById('hero-cta');
+  cta.style.display = 'inline-flex';
+}
+
+function renderGallery(images) {
+  const gallery = document.getElementById('gallery');
+  const skeleton = document.getElementById('skeleton-grid');
+  skeleton.innerHTML = '';
+  skeleton.style.display = 'none';
+
+  if (!images || images.length === 0) {
+    gallery.innerHTML = '<div class="empty-state"><p>No images found. Try another category.</p></div>';
+    return;
+  }
+
+  gallery.innerHTML = images.map((img, i) => `
+    <div class="gallery-card" data-index="${i}" role="button" tabindex="0" aria-label="View ${img.title}">
+      <img src="${img.thumbnailUrl}" alt="${img.title}" loading="lazy" decoding="async" onload="this.classList.add('loaded')" onerror="this.parentElement.style.display='none'" />
+      <span class="card-print-badge">Print</span>
+      <div class="card-info">
+        <div class="card-title">${escapeHtml(img.title)}</div>
+        <div class="card-date">${img.date}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderSkeletons(count = 9) {
+  const skeleton = document.getElementById('skeleton-grid');
+  const gallery = document.getElementById('gallery');
+  gallery.innerHTML = '';
+  skeleton.style.display = 'grid';
+  skeleton.innerHTML = Array(count).fill('<div class="skeleton-card"></div>').join('');
+}
+
+function renderSizes() {
+  const sizes = state.selectedProduct === 'metal' ? METAL_SIZES : FRAME_SIZES;
+  const grid = document.getElementById('size-grid');
+  grid.innerHTML = sizes.map((s, i) => `
+    <button class="size-btn${state.selectedSize && state.selectedSize.sku === s.sku ? ' active' : ''}" data-index="${i}">
+      <span class="size-label">${s.label}</span>
+      <span class="size-price">$${s.price}</span>
+    </button>
+  `).join('');
+}
+
+function updateMockup() {
+  const preview = document.getElementById('modal-preview');
+  preview.className = 'modal-preview';
+
+  if (state.selectedProduct === 'metal') {
+    preview.classList.add('mockup-metal');
+  } else {
+    preview.classList.add('mockup-frame');
+    preview.classList.add(`frame-${state.frameColor}`);
+    if (state.hasMat) preview.classList.add('has-mat');
+  }
+}
+
+function updatePrice() {
+  const display = document.getElementById('price-display');
+  const btn = document.getElementById('order-btn');
+  const btnText = btn.querySelector('.order-btn-text');
+
+  if (state.selectedSize) {
+    display.innerHTML = `<span class="price-amount">$${state.selectedSize.price}</span>`;
+    btn.disabled = false;
+    btnText.textContent = `Order ${state.selectedSize.label} ${state.selectedProduct === 'metal' ? 'Metal Print' : 'Gallery Frame'} →`;
+  } else {
+    display.innerHTML = '<span class="price-label">Select a size</span>';
+    btn.disabled = true;
+    btnText.textContent = 'Select a size to order';
+  }
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+
+function openModal(image) {
+  state.selectedImage = image;
+  state.selectedSize = null;
+  state.modalOpen = true;
+
+  document.getElementById('modal-title').textContent = image.title;
+  document.getElementById('modal-date').textContent = image.date;
+  document.getElementById('modal-desc').textContent = image.description;
+  document.getElementById('modal-credit').textContent = image.copyright ? `© ${image.copyright}` : '';
+
+  const modalImg = document.getElementById('modal-image');
+  modalImg.style.opacity = '0';
+
+  const loader = new Image();
+  loader.onload = () => { modalImg.src = image.fullUrl; modalImg.style.opacity = '1'; };
+  loader.onerror = () => { modalImg.src = image.thumbnailUrl; modalImg.style.opacity = '1'; };
+  loader.src = image.fullUrl;
+
+  renderSizes();
+  updateMockup();
+  updatePrice();
+
+  document.getElementById('frame-options').style.display = state.selectedProduct === 'frame' ? 'flex' : 'none';
+  document.getElementById('modal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  state.modalOpen = false;
+  state.selectedImage = null;
+  document.getElementById('modal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ============================================================
+// CATEGORY LOADING
+// ============================================================
+
+async function loadCategory(catId) {
+  state.currentCategory = catId;
+  state.page = 1;
+
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === catId));
+
+  if (state.cache[catId]) {
+    state.images = state.cache[catId];
+    renderGallery(state.images);
+    document.getElementById('load-more').style.display = 'block';
+    return;
+  }
+
+  renderSkeletons();
+  const loadMore = document.getElementById('load-more');
+  loadMore.style.display = 'none';
+
+  try {
+    const cat = CATEGORIES.find(c => c.id === catId);
+    let images;
+
+    if (cat.type === 'apod') {
+      const raw = await fetchAPOD(24);
+      images = normalizeAPOD(raw);
+    } else {
+      const raw = await fetchNASAImages(cat.query, 1);
+      images = normalizeNASAImages(raw);
+    }
+
+    state.images = images;
+    state.cache[catId] = images;
+    renderGallery(images);
+    loadMore.style.display = 'block';
+  } catch (err) {
+    console.error('Load category error:', err);
+    showError('Failed to load images. NASA API may be rate-limited — try again in a moment.');
+    document.getElementById('skeleton-grid').style.display = 'none';
+  }
+}
+
+async function loadMore() {
+  const cat = CATEGORIES.find(c => c.id === state.currentCategory);
+  const btn = document.getElementById('load-more');
+  btn.textContent = 'Loading...';
+  btn.disabled = true;
+
+  try {
+    let newImages;
+    if (cat.type === 'apod') {
+      const raw = await fetchAPOD(12);
+      newImages = normalizeAPOD(raw);
+    } else {
+      state.page++;
+      const raw = await fetchNASAImages(cat.query, state.page);
+      newImages = normalizeNASAImages(raw);
+    }
+
+    state.images = [...state.images, ...newImages];
+    state.cache[state.currentCategory] = state.images;
+    renderGallery(state.images);
+  } catch (err) {
+    console.error('Load more error:', err);
+    showError('Could not load more images.');
+  } finally {
+    btn.textContent = 'Load More';
+    btn.disabled = false;
+  }
+}
+
+// ============================================================
+// PRINTKIT ORDER
+// ============================================================
+
+function buildSKU() {
+  if (state.selectedProduct === 'metal') {
+    return state.selectedSize.sku;
+  }
+  let sku = `${state.selectedSize.sku}-${state.frameColor}`;
+  if (state.hasMat) sku += '-mat';
+  return sku;
+}
+
+async function orderPrint() {
+  if (!state.selectedImage || !state.selectedSize) return;
+
+  const btn = document.getElementById('order-btn');
+  const btnText = btn.querySelector('.order-btn-text');
+  const btnLoading = btn.querySelector('.order-btn-loading');
+
+  btn.disabled = true;
+  btnText.style.display = 'none';
+  btnLoading.style.display = 'inline';
+
+  try {
+    const sku = buildSKU();
+    const res = await fetch('https://printkit.dev/api/add-to-cart', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sku,
+        source: 'cosmos-prints',
+        quantity: 1,
+        projectData: {
+          photos: [state.selectedImage.printUrl],
+          metadata: {
+            title: state.selectedImage.title,
+            source: 'NASA ' + (state.selectedImage.source === 'apod' ? 'APOD' : 'Image Library'),
+          },
+        },
+        properties: {
+          'Project Name': state.selectedImage.title,
+          '_source': 'cosmos-prints',
+          '_image_url': state.selectedImage.printUrl,
+        },
+      }),
+    });
+
+    const data = await res.json();
+
+    if (data.success && data.redirectUrl) {
+      window.location.href = data.redirectUrl;
+    } else {
+      throw new Error(data.error || 'Order submission failed');
+    }
+  } catch (err) {
+    console.error('Order error:', err);
+    showError('Something went wrong placing your order. Please try again.');
+    btn.disabled = false;
+    btnText.style.display = 'inline';
+    btnLoading.style.display = 'none';
+  }
+}
+
+// ============================================================
+// UTILITIES
+// ============================================================
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function showError(msg) {
+  const banner = document.getElementById('error-banner');
+  banner.textContent = msg;
+  banner.classList.add('visible');
+  setTimeout(() => banner.classList.remove('visible'), 4000);
+}
+
+// ============================================================
+// STAR FIELD
+// ============================================================
+
+function drawStars() {
+  const canvas = document.getElementById('stars');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  canvas.style.width = window.innerWidth + 'px';
+  canvas.style.height = window.innerHeight + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  for (let i = 0; i < 250; i++) {
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight;
+    const r = Math.random() * 1.2 + 0.15;
+    const a = Math.random() * 0.55 + 0.08;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 255, 255, ${a})`;
+    ctx.fill();
+  }
+}
+
+// ============================================================
+// PARALLAX
+// ============================================================
+
+function initParallax() {
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    const bg = document.getElementById('hero-bg');
+    if (bg) bg.style.transform = `translateY(${y * 0.25}px) scale(1.05)`;
+  }, { passive: true });
+}
+
+// ============================================================
+// EVENT HANDLERS
+// ============================================================
+
+function initEvents() {
+  // Categories
+  document.getElementById('categories').addEventListener('click', e => {
+    const btn = e.target.closest('.cat-btn');
+    if (btn) loadCategory(btn.dataset.cat);
+  });
+
+  // Gallery card clicks
+  document.getElementById('gallery').addEventListener('click', e => {
+    const card = e.target.closest('.gallery-card');
+    if (card) {
+      const idx = parseInt(card.dataset.index);
+      if (state.images[idx]) openModal(state.images[idx]);
+    }
+  });
+
+  // Gallery keyboard
+  document.getElementById('gallery').addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const card = e.target.closest('.gallery-card');
+      if (card) card.click();
+    }
+  });
+
+  // Hero CTA
+  document.getElementById('hero-cta').addEventListener('click', () => {
+    if (state.heroImage) openModal(state.heroImage);
+  });
+
+  // Modal close
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && state.modalOpen) closeModal();
+  });
+
+  // Product toggle
+  document.getElementById('product-toggle').addEventListener('click', e => {
+    const btn = e.target.closest('.prod-btn');
+    if (!btn) return;
+    state.selectedProduct = btn.dataset.product;
+    state.selectedSize = null;
+    document.querySelectorAll('.prod-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.getElementById('frame-options').style.display = state.selectedProduct === 'frame' ? 'flex' : 'none';
+    renderSizes();
+    updateMockup();
+    updatePrice();
+  });
+
+  // Size selection
+  document.getElementById('size-grid').addEventListener('click', e => {
+    const btn = e.target.closest('.size-btn');
+    if (!btn) return;
+    const idx = parseInt(btn.dataset.index);
+    const sizes = state.selectedProduct === 'metal' ? METAL_SIZES : FRAME_SIZES;
+    state.selectedSize = sizes[idx];
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    updatePrice();
+  });
+
+  // Frame color
+  document.getElementById('color-options').addEventListener('click', e => {
+    const btn = e.target.closest('.color-btn');
+    if (!btn) return;
+    state.frameColor = btn.dataset.color;
+    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    updateMockup();
+  });
+
+  // Mat toggle
+  document.getElementById('mat-toggle').addEventListener('click', e => {
+    const btn = e.target.closest('.mat-btn');
+    if (!btn) return;
+    state.hasMat = btn.dataset.mat === 'true';
+    document.querySelectorAll('.mat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    updateMockup();
+  });
+
+  // Order button
+  document.getElementById('order-btn').addEventListener('click', orderPrint);
+
+  // Load more
+  document.getElementById('load-more').addEventListener('click', loadMore);
+
+  // Resize stars
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(drawStars, 200);
+  });
+}
+
+// ============================================================
+// INIT
+// ============================================================
+
+async function init() {
+  drawStars();
+  initParallax();
+  renderCategories();
+  initEvents();
+  renderSkeletons();
+
+  try {
+    const [todayData, randomData] = await Promise.all([
+      fetchAPOD().catch(() => []),
+      fetchAPOD(24).catch(() => []),
+    ]);
+
+    // Hero — use today's APOD
+    const todayImages = normalizeAPOD(todayData);
+    const randomImages = normalizeAPOD(randomData);
+
+    if (todayImages.length > 0) {
+      renderHero(todayImages[0]);
+    } else if (randomImages.length > 0) {
+      renderHero(randomImages[0]);
+    }
+
+    // Gallery — use random APODs
+    state.images = randomImages;
+    state.cache.featured = randomImages;
+    renderGallery(randomImages);
+    document.getElementById('load-more').style.display = 'block';
+
+  } catch (err) {
+    console.error('Init error:', err);
+    showError('Failed to connect to NASA API. Please refresh to try again.');
+    document.getElementById('skeleton-grid').style.display = 'none';
+  }
+}
+
+init();
+</script>
+</body>
+</html>
