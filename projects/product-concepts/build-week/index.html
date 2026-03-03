@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WTF DO WE BUILD THIS WEEK — SPS War Room</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0a0a0c;
+    --green: #00ff88;
+    --green-dim: #00ff8830;
+    --green-mid: #00ff8860;
+    --amber: #ffb800;
+    --amber-dim: #ffb80030;
+    --red: #ff4444;
+    --red-dim: #ff444430;
+    --cyan: #00d4ff;
+    --cyan-dim: #00d4ff30;
+    --purple: #b388ff;
+    --purple-dim: #b388ff30;
+    --pink: #ff6bb5;
+    --pink-dim: #ff6bb530;
+    --text: #f0f0f2;
+    --text-dim: #9a9aa6;
+    --surface: #111114;
+    --surface2: #18181c;
+    --border: #222228;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      linear-gradient(rgba(0,255,136,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* Header */
+  .header {
+    padding: 40px 48px 20px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 200px;
+    height: 1px;
+    background: var(--green);
+    box-shadow: 0 0 10px var(--green);
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -2px;
+    color: var(--green);
+    text-shadow: 0 0 30px var(--green-dim);
+    line-height: 1;
+  }
+  .header-meta {
+    text-align: right;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+  .header-meta .live {
+    color: var(--green);
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .header-sub {
+    font-size: 14px;
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+  .header-sub span { color: var(--amber); }
+
+  /* Main layout */
+  .main {
+    padding: 40px 48px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  /* The Decision Tree */
+  .tree {
+    position: relative;
+  }
+
+  /* Nodes */
+  .node {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    position: relative;
+    transition: all 0.3s;
+    cursor: default;
+  }
+  .node:hover {
+    border-color: var(--green);
+    box-shadow: 0 0 20px var(--green-dim);
+  }
+  .node-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .node-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .node-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  /* Root question */
+  .root {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .root-box {
+    display: inline-block;
+    background: var(--surface);
+    border: 2px solid var(--green);
+    border-radius: 12px;
+    padding: 32px 48px;
+    position: relative;
+    box-shadow: 0 0 40px var(--green-dim);
+  }
+  .root-box::before {
+    content: '>';
+    position: absolute;
+    left: 20px;
+    top: 34px;
+    color: var(--green);
+    font-size: 20px;
+    animation: blink 1s ease-in-out infinite;
+  }
+  .root-q {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--green);
+    text-shadow: 0 0 20px var(--green-dim);
+  }
+  .root-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 8px;
+  }
+
+  /* Connector lines */
+  .connector {
+    text-align: center;
+    padding: 16px 0;
+    position: relative;
+  }
+  .connector .line {
+    width: 2px;
+    height: 32px;
+    background: linear-gradient(180deg, var(--green), var(--green-dim));
+    margin: 0 auto;
+    box-shadow: 0 0 6px var(--green-dim);
+  }
+  .connector .branch-lines {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    height: 40px;
+  }
+  .connector .h-line {
+    height: 2px;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green-dim);
+    position: absolute;
+    top: 0;
+  }
+  .connector .v-line {
+    width: 2px;
+    height: 40px;
+    background: linear-gradient(180deg, var(--green), var(--green-dim));
+    box-shadow: 0 0 6px var(--green-dim);
+    position: absolute;
+    top: 0;
+  }
+
+  /* Three paths */
+  .paths {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 16px;
+  }
+
+  /* Path headers */
+  .path {
+    position: relative;
+  }
+  .path-header {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .path-arrow {
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+  .path-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+  }
+  .path-a .path-label, .path-a .path-arrow { color: var(--green); }
+  .path-b .path-label, .path-b .path-arrow { color: var(--cyan); }
+  .path-c .path-label, .path-c .path-arrow { color: var(--purple); }
+
+  /* Path specific node colors */
+  .path-a .node { border-left: 3px solid var(--green); }
+  .path-a .node:hover { box-shadow: 0 0 20px var(--green-dim); border-color: var(--green); }
+  .path-a .node-title { color: var(--green); }
+
+  .path-b .node { border-left: 3px solid var(--cyan); }
+  .path-b .node:hover { box-shadow: 0 0 20px var(--cyan-dim); border-color: var(--cyan); }
+  .path-b .node-title { color: var(--cyan); }
+
+  .path-c .node { border-left: 3px solid var(--purple); }
+  .path-c .node:hover { box-shadow: 0 0 20px var(--purple-dim); border-color: var(--purple); }
+  .path-c .node-title { color: var(--purple); }
+
+  .node-chain {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .chain-arrow {
+    text-align: center;
+    font-size: 16px;
+    color: var(--text-dim);
+    padding: 2px 0;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-top: 8px;
+    margin-right: 4px;
+  }
+  .tag-infra { background: var(--green-dim); color: var(--green); }
+  .tag-product { background: var(--cyan-dim); color: var(--cyan); }
+  .tag-revenue { background: var(--amber-dim); color: var(--amber); }
+  .tag-risk { background: var(--red-dim); color: var(--red); }
+  .tag-fun { background: var(--pink-dim); color: var(--pink); }
+  .tag-leverage { background: var(--purple-dim); color: var(--purple); }
+
+  /* Outcome boxes */
+  .outcome {
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 12px;
+  }
+  .outcome-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .outcome-text {
+    font-size: 12px;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .outcome-metric {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+  }
+  .om {
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+  .om strong {
+    display: block;
+    font-size: 16px;
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  /* The verdict section */
+  .verdict {
+    margin-top: 48px;
+    border: 2px solid var(--green);
+    border-radius: 12px;
+    padding: 32px;
+    background: var(--surface);
+    position: relative;
+    box-shadow: 0 0 60px var(--green-dim);
+  }
+  .verdict::before {
+    content: 'RECOMMENDED PATH';
+    position: absolute;
+    top: -10px;
+    left: 24px;
+    background: var(--bg);
+    padding: 0 12px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--green);
+    font-weight: 600;
+  }
+  .verdict-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 12px;
+    text-shadow: 0 0 20px var(--green-dim);
+  }
+  .verdict-logic {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+  .verdict-logic code {
+    color: var(--green);
+    background: var(--green-dim);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+  }
+
+  /* === THE FLOURISH: Animated data stream === */
+  .matrix-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    opacity: 0.3;
+  }
+  .rain-col {
+    position: absolute;
+    top: -100%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--green);
+    text-shadow: 0 0 8px var(--green);
+    writing-mode: vertical-rl;
+    animation: rain-fall linear infinite;
+    white-space: nowrap;
+  }
+  @keyframes rain-fall {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(calc(100vh + 100%)); }
+  }
+
+  /* Make everything else sit above the rain */
+  .header, .main { position: relative; z-index: 1; }
+  .verdict-timeline {
+    margin-top: 20px;
+    display: flex;
+    gap: 0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .vt-block {
+    padding: 12px 16px;
+    flex: 1;
+    border-right: 1px solid var(--bg);
+  }
+  .vt-block:last-child { border-right: none; }
+  .vt-block .vt-day {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    margin-bottom: 4px;
+  }
+  .vt-block .vt-task {
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .vt-a { background: var(--green-dim); color: var(--green); }
+  .vt-b { background: var(--cyan-dim); color: var(--cyan); }
+  .vt-c { background: var(--purple-dim); color: var(--purple); }
+  .vt-d { background: var(--amber-dim); color: var(--amber); }
+
+  /* The real talk box */
+  .real-talk {
+    margin-top: 32px;
+    background: var(--surface);
+    border: 1px solid var(--amber);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 0 30px var(--amber-dim);
+  }
+  .rt-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .rt-header span {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--amber);
+    font-weight: 600;
+  }
+  .rt-body {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    font-weight: 400;
+  }
+  .rt-body strong { color: var(--amber); font-weight: 600; }
+
+  /* === DECISION MADE === */
+  .decision-made {
+    margin-top: 48px;
+    position: relative;
+  }
+  .dm-banner {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .dm-stamp {
+    display: inline-block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--green);
+    text-shadow: 0 0 40px var(--green-dim), 0 0 80px var(--green-dim);
+    letter-spacing: -2px;
+    position: relative;
+    animation: stampIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  }
+  @keyframes stampIn {
+    0% { transform: scale(3) rotate(-10deg); opacity: 0; }
+    60% { transform: scale(0.95) rotate(1deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  .dm-stamp::before, .dm-stamp::after {
+    content: '';
+    position: absolute;
+    left: -20px;
+    right: -20px;
+    height: 3px;
+    background: var(--green);
+    box-shadow: 0 0 15px var(--green);
+  }
+  .dm-stamp::before { top: -8px; }
+  .dm-stamp::after { bottom: -8px; }
+  .dm-subtitle {
+    font-size: 16px;
+    color: var(--text-dim);
+    margin-top: 16px;
+  }
+  .dm-subtitle a {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+  .dm-subtitle a:hover { text-decoration: underline; }
+
+  .dm-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .dm-photo-wrap {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+      0 0 40px rgba(0,255,136,0.15),
+      0 0 80px rgba(0,255,136,0.05),
+      0 20px 60px rgba(0,0,0,0.5);
+    border: 2px solid var(--green);
+    animation: photoGlow 3s ease-in-out infinite alternate;
+  }
+  @keyframes photoGlow {
+    0% { box-shadow: 0 0 40px rgba(0,255,136,0.15), 0 0 80px rgba(0,255,136,0.05), 0 20px 60px rgba(0,0,0,0.5); }
+    100% { box-shadow: 0 0 60px rgba(0,255,136,0.25), 0 0 120px rgba(0,255,136,0.1), 0 20px 60px rgba(0,0,0,0.5); }
+  }
+  .dm-photo-wrap img {
+    width: 100%;
+    display: block;
+  }
+  .dm-photo-tag {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--green);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 11px;
+    color: var(--green);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  .dm-details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .dm-chosen {
+    background: var(--surface);
+    border: 1px solid var(--green);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 0 30px var(--green-dim);
+  }
+  .dm-chosen-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--green);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .dm-chosen-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 8px;
+    text-shadow: 0 0 20px var(--green-dim);
+  }
+  .dm-chosen-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+  .dm-rejected {
+    display: flex;
+    gap: 12px;
+  }
+  .dm-rej-card {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    position: relative;
+    opacity: 0.5;
+  }
+  .dm-rej-card::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: var(--red);
+    box-shadow: 0 0 6px var(--red);
+    transform: rotate(-5deg);
+  }
+  .dm-rej-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .dm-rej-title.cyan { color: var(--cyan); }
+  .dm-rej-title.purple { color: var(--purple); }
+  .dm-rej-sub {
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+  .dm-app-credit {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 12px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .dm-app-credit a {
+    color: var(--cyan);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .dm-app-credit a:hover { text-decoration: underline; }
+  .dm-app-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: blink 1.5s ease-in-out infinite;
+  }
+
+  @media (max-width: 1024px) {
+    .dm-content { grid-template-columns: 1fr; }
+    .dm-stamp { font-size: 36px; }
+  }
+
+  /* Bottom status bar */
+  .status-bar {
+    margin-top: 48px;
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+  }
+  .status-bar .sb-live {
+    color: var(--green);
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  /* Typing cursor */
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 16px;
+    background: var(--green);
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: blink 0.8s step-end infinite;
+  }
+
+  /* Hover glow on the tree branches */
+  .path:hover .node {
+    background: var(--surface2);
+  }
+
+  @media (max-width: 1024px) {
+    .paths { grid-template-columns: 1fr; gap: 32px; }
+    .header { padding: 24px; }
+    .header h1 { font-size: 32px; }
+    .main { padding: 24px; }
+    .root-q { font-size: 22px; }
+    .root-box { padding: 24px 32px; }
+    .verdict-timeline { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="matrix-rain" id="matrixRain"></div>
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>WTF DO WE BUILD<span class="cursor"></span></h1>
+      <div class="header-sub">Social Print Studio &mdash; <span>Build Week Decision Matrix</span></div>
+    </div>
+    <div class="header-meta">
+      <div><span class="live">LIVE</span> &mdash; War Room Session</div>
+      <div>George + Ben + Alejo</div>
+      <div>March 2026</div>
+      <div>$2M cash &middot; 6 humans &middot; 1 room</div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="tree">
+
+    <!-- Root -->
+    <div class="root">
+      <div class="root-box">
+        <div class="root-q">3 builders. 1 week. What ships?</div>
+        <div class="root-sub">The real question: do we build the factory or build the products?</div>
+      </div>
+    </div>
+
+    <!-- Branch connector -->
+    <div class="connector">
+      <div class="line"></div>
+    </div>
+
+    <!-- Three paths -->
+    <div class="paths">
+
+      <!-- PATH A: PrintKit -->
+      <div class="path path-a">
+        <div class="path-header">
+          <div class="path-arrow">&darr;</div>
+          <div class="path-label">Path A: Build the Factory</div>
+        </div>
+        <div class="node-chain">
+          <div class="node">
+            <div class="node-label">The Bet</div>
+            <div class="node-title">PrintKit Week</div>
+            <div class="node-desc">Go heads-down on printkit.dev. Build the core product creation pipeline. Make it so any new SPS product idea can go from concept to Shopify in hours, not weeks.</div>
+            <span class="tag tag-infra">Infrastructure</span>
+            <span class="tag tag-leverage">High Leverage</span>
+          </div>
+          <div class="chain-arrow">&darr;</div>
+          <div class="node">
+            <div class="node-label">What You Build</div>
+            <div class="node-title">The Integration Layer</div>
+            <div class="node-desc">Photo upload &rarr; editor &rarr; preview &rarr; cart &rarr; print file &rarr; fulfillment. The pipe that every future product flows through. Once this works, spinning up Inch by Inch or FaceCube is a config change, not a project.</div>
+            <span class="tag tag-infra">Platform</span>
+          </div>
+          <div class="chain-arrow">&darr;</div>
+          <div class="node">
+            <div class="node-label">The Unlock</div>
+            <div class="node-title">Infinite Product Velocity</div>
+            <div class="node-desc">Every weird product idea George has at 2am can ship the next day. New product = new template + new editor config. The FaceCube grid alignment editor? A PrintKit plugin. The Inch by Inch strip layout? Another plugin.</div>
+            <span class="tag tag-leverage">Compounding</span>
+            <span class="tag tag-fun">George's Dream</span>
+          </div>
+          <div class="outcome">
+            <div class="outcome-label">End State</div>
+            <div class="outcome-text">PrintKit works. It barely works. But it works. And now every product idea from this point forward takes 10% of the effort. You traded one week of products for a decade of velocity.</div>
+            <div class="outcome-metric">
+              <div class="om"><strong>0</strong>products shipped</div>
+              <div class="om"><strong>&infin;</strong>products enabled</div>
+              <div class="om"><strong>$0</strong>revenue this week</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PATH B: Maker Tools / Demand Engine -->
+      <div class="path path-b">
+        <div class="path-header">
+          <div class="path-arrow">&darr;</div>
+          <div class="path-label">Path B: Build the Products</div>
+        </div>
+        <div class="node-chain">
+          <div class="node">
+            <div class="node-label">The Bet</div>
+            <div class="node-title">Demand Engine Sprint</div>
+            <div class="node-desc">Build 2-3 product maker tools that ship this week. Baby's First Year maker. Gift-positioned landing pages. Interactive product customizers that convert. Test demand now, optimize later.</div>
+            <span class="tag tag-product">Products</span>
+            <span class="tag tag-revenue">Revenue</span>
+          </div>
+          <div class="chain-arrow">&darr;</div>
+          <div class="node">
+            <div class="node-label">What You Build</div>
+            <div class="node-title">Standalone Makers</div>
+            <div class="node-desc">Each product gets its own bespoke maker UI. Photo upload, customization, preview, add to cart. Hard-coded to one product each. Fast to build, fast to test, annoying to maintain.</div>
+            <span class="tag tag-product">Ship Fast</span>
+            <span class="tag tag-risk">Tech Debt</span>
+          </div>
+          <div class="chain-arrow">&darr;</div>
+          <div class="node">
+            <div class="node-label">The Reality</div>
+            <div class="node-title">You Learn What Converts</div>
+            <div class="node-desc">Run $500 of Meta traffic at each maker. See which concepts actually get people to upload photos and buy. Kill the losers. Scale the winners. Real data in 2 weeks, not 2 months.</div>
+            <span class="tag tag-revenue">Data</span>
+          </div>
+          <div class="outcome">
+            <div class="outcome-label">End State</div>
+            <div class="outcome-text">2-3 maker tools live. Traffic running. You know which product concepts have legs. But each one is a snowflake codebase and if you want to iterate you're rebuilding from scratch each time.</div>
+            <div class="outcome-metric">
+              <div class="om"><strong>2-3</strong>products shipped</div>
+              <div class="om"><strong>Real</strong>demand signal</div>
+              <div class="om"><strong>~$1K</strong>test revenue</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PATH C: New Products -->
+      <div class="path path-c">
+        <div class="path-header">
+          <div class="path-arrow">&darr;</div>
+          <div class="path-label">Path C: Build Weird Stuff</div>
+        </div>
+        <div class="node-chain">
+          <div class="node">
+            <div class="node-label">The Bet</div>
+            <div class="node-title">New Product Blitz</div>
+            <div class="node-desc">Ship 1-2 entirely new products. FaceCube. Inch by Inch. Strava Posters v2. Whatever George dreamed up in the shower this morning. No testing framework, just build and launch.</div>
+            <span class="tag tag-fun">Creative</span>
+            <span class="tag tag-risk">Yolo</span>
+          </div>
+          <div class="chain-arrow">&darr;</div>
+          <div class="node">
+            <div class="node-label">What You Build</div>
+            <div class="node-title">Full Product Experiences</div>
+            <div class="node-desc">Not just landing pages &mdash; actual working products. Editor, checkout, fulfillment pipeline. The whole thing. For 1, maybe 2 products if you're fast. Each one is a standalone island.</div>
+            <span class="tag tag-product">End to End</span>
+          </div>
+          <div class="chain-arrow">&darr;</div>
+          <div class="node">
+            <div class="node-label">The Risk</div>
+            <div class="node-title">Building on Sand</div>
+            <div class="node-desc">Without PrintKit, each product is hand-wired to Shopify. Adding the next product means starting from zero. You're fast this week but slow every week after. Also: you might build something nobody wants.</div>
+            <span class="tag tag-risk">No Leverage</span>
+            <span class="tag tag-fun">But Fun</span>
+          </div>
+          <div class="outcome">
+            <div class="outcome-label">End State</div>
+            <div class="outcome-text">1-2 wild new products exist. They might be brilliant. They might flop. Either way, next week you're back to square one on infrastructure. But hey, you had a blast building them.</div>
+            <div class="outcome-metric">
+              <div class="om"><strong>1-2</strong>new products</div>
+              <div class="om"><strong>???</strong>demand signal</div>
+              <div class="om"><strong>Max</strong>fun had</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- The Verdict -->
+    <div class="verdict">
+      <div class="verdict-title">PrintKit first. Products on PrintKit. Weird stuff for dessert.</div>
+      <div class="verdict-logic">
+        The logic is simple:<br><br>
+        <code>if (printkit.works())</code> then every product idea is a weekend project forever.<br>
+        <code>if (!printkit.works())</code> then every product idea is a full sprint forever.<br><br>
+        You don't have a product problem. You have 40 products. You have a <strong style="color:var(--green);">product velocity problem</strong>. PrintKit is the only path that solves the actual bottleneck. Build the factory, then run the factory.<br><br>
+        But also &mdash; you're 3 builders in a room. The energy matters. If PrintKit turns into infrastructure slog by Wednesday, pivot to shipping one maker tool ON PrintKit, even if it's janky. The goal isn't "PrintKit is perfect." The goal is <strong style="color:var(--green);">"one product shipped through PrintKit, proving it works."</strong>
+      </div>
+      <div class="verdict-timeline">
+        <div class="vt-block vt-a">
+          <div class="vt-day">Mon-Tue</div>
+          <div class="vt-task">PrintKit core pipeline</div>
+        </div>
+        <div class="vt-block vt-a">
+          <div class="vt-day">Wed</div>
+          <div class="vt-task">First product on PrintKit</div>
+        </div>
+        <div class="vt-block vt-b">
+          <div class="vt-day">Thu</div>
+          <div class="vt-task">Second product maker</div>
+        </div>
+        <div class="vt-block vt-c">
+          <div class="vt-day">Fri</div>
+          <div class="vt-task">Ship something weird</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Real Talk -->
+    <div class="real-talk">
+      <div class="rt-header">
+        <span>// The Uncomfortable Truth</span>
+      </div>
+      <div class="rt-body">
+        SPS makes <strong>$6.3M/yr</strong> selling 40+ products with no shared infrastructure. Every new product is a hand-built artisan snowflake. That worked when you were a small team doing small things. It doesn't work when you want to go from <strong>$6M to $20M</strong>.<br><br>
+        The companies that scale product catalogs fast &mdash; Shutterfly, Printful, Canva &mdash; all built the factory first. <strong>PrintKit IS the strategy.</strong> Not because it's the most fun thing to build this week, but because it's the thing that makes next week 10x easier, and the week after that 100x easier.<br><br>
+        That said: <strong>a factory that never ships a product is just a hobby.</strong> The week ends with at least one real product live on PrintKit or you've failed. Ship the factory AND the product. That's the game.
+      </div>
+    </div>
+
+    <!-- DECISION MADE -->
+    <div class="decision-made">
+      <div class="dm-banner">
+        <div class="dm-stamp">DECISION MADE</div>
+        <div class="dm-subtitle">Path A selected. Factory mode activated. Photo generated with <a href="https://family.saved.work/" target="_blank">All Together</a>.</div>
+      </div>
+      <div class="dm-content">
+        <div class="dm-photo-wrap">
+          <img src="spacemen.jpeg" alt="The SPS build week crew — George, Ben, Alejo, and the dog — in cosmic pop art glory">
+          <div class="dm-photo-tag">THE BUILD WEEK CREW &mdash; March 2026</div>
+        </div>
+        <div class="dm-details">
+          <div class="dm-chosen">
+            <div class="dm-chosen-label">Selected Path</div>
+            <div class="dm-chosen-title">PrintKit Week</div>
+            <div class="dm-chosen-desc">
+              Build the factory. Three builders. One room. One week to prove that printkit.dev can ship a real product end-to-end. Everything after this gets easier.<br><br>
+              The dog is moral support.
+            </div>
+          </div>
+          <div class="dm-rejected">
+            <div class="dm-rej-card">
+              <div class="dm-rej-title cyan">Path B: Products</div>
+              <div class="dm-rej-sub">Not this week</div>
+            </div>
+            <div class="dm-rej-card">
+              <div class="dm-rej-title purple">Path C: Weird Stuff</div>
+              <div class="dm-rej-sub">Maybe Friday</div>
+            </div>
+          </div>
+          <div class="dm-app-credit">
+            <div class="dm-app-dot"></div>
+            Team portrait generated with <a href="https://family.saved.work/" target="_blank">All Together</a> &mdash; the first product built on PrintKit?
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status bar -->
+    <div class="status-bar">
+      <div>SPS Lab &middot; Build Week Decision Matrix &middot; v1.0</div>
+      <div><span class="sb-live">DECISION LOCKED</span> &middot; Path A: PrintKit &middot; Let's go</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Matrix rain
+  const rain = document.getElementById('matrixRain');
+  const phrases = [
+    'printkit.dev', 'shopify.connect()', 'upload(photo)', 'render(cube)',
+    'deploy --prod', 'git push origin', 'npm run build', 'facecube.init()',
+    'inchByInch(12)', 'magneticStrip()', 'revenue += $$$', 'ship_it(now)',
+    'demand.test()', 'conversion: 4.2%', 'ROAS: 3.1x', 'builder.mode()',
+    'factory.run()', 'product.new()', 'velocity++', 'scale(infinity)',
+    'photo.crop()', 'grid.align(3,3)', 'cube.scramble()', 'fridge.stick()',
+    'grandma.gift()', 'repeat_rate: 31%', 'ltv.calculate()', '$20M.path()',
+    'baby.firstYear()', 'calendar.q4()', 'flow.klaviyo()', 'meta.ads.run()',
+    'SPS.Lab.v0.1', 'BUILD_WEEK=true', 'alejo.engineer()', 'ben.design()',
+    'george.idea()', 'while(true){ship}', 'try{build}catch{pivot}',
+  ];
+  const colCount = Math.floor(window.innerWidth / 48);
+  for (let i = 0; i < colCount; i++) {
+    const col = document.createElement('div');
+    col.className = 'rain-col';
+    col.style.left = (i * 48 + Math.random() * 20) + 'px';
+    col.style.animationDuration = (8 + Math.random() * 16) + 's';
+    col.style.animationDelay = (-Math.random() * 20) + 's';
+    col.style.opacity = 0.3 + Math.random() * 0.7;
+    // Build a string of random phrases
+    let str = '';
+    for (let j = 0; j < 6; j++) {
+      str += phrases[Math.floor(Math.random() * phrases.length)] + ' ';
+    }
+    col.textContent = str;
+    rain.appendChild(col);
+  }
+
+  console.log('%c SPS WAR ROOM INITIALIZED ', 'background: #00ff88; color: #000; font-weight: bold; padding: 4px 8px;');
+  console.log('%c 3 paths. 1 week. Ship or die. ', 'color: #00ff88;');
+</script>
+
+</body>
+</html>

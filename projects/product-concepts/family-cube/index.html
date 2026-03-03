@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FaceCube — Your Family on a Rubik's Cube | Social Print Studio</title>
+<meta name="description" content="6 faces. 6 family members. Solve it to see everyone. Scramble it to make everyone laugh.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0D0D0F;
+    --bg2: #161619;
+    --bg3: #1E1E22;
+    --surface: #232328;
+    --border: #2E2E34;
+    --text: #F5F5F7;
+    --text2: #A0A0A8;
+    --text3: #6B6B74;
+    --accent: #FF6B4A;
+    --accent2: #FF8F6B;
+    --blue: #4A9EFF;
+    --green: #4ADE80;
+    --purple: #A78BFA;
+    --pink: #F472B6;
+    --yellow: #FBBF24;
+    --cyan: #22D3EE;
+    --sps-green: #465E59;
+
+    /* Face colors for the cube */
+    --face-mom: #FF8FA3;
+    --face-dad: #64B5F6;
+    --face-kid1: #FFD54F;
+    --face-kid2: #81C784;
+    --face-gram: #CE93D8;
+    --face-dog: #FFB74D;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Nav */
+  nav {
+    padding: 20px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .logo span { color: var(--text3); font-size: 13px; font-family: 'Inter', sans-serif; font-weight: 500; margin-left: 8px; }
+  .nav-cta {
+    background: var(--accent);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 100px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { background: var(--accent2); transform: translateY(-1px); }
+
+  /* Hero */
+  .hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 32px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .hero-text .lab-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,107,74,0.12);
+    color: var(--accent);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 20px;
+  }
+  .lab-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .hero-text h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 56px;
+    line-height: 1.05;
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: -2px;
+  }
+  .hero-text h1 .highlight {
+    background: linear-gradient(135deg, var(--accent), var(--yellow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-text .subtitle {
+    font-size: 19px;
+    color: var(--text2);
+    margin-bottom: 12px;
+    line-height: 1.6;
+    max-width: 480px;
+  }
+  .hero-text .subtitle-small {
+    font-size: 15px;
+    color: var(--text3);
+    margin-bottom: 32px;
+    max-width: 440px;
+  }
+  .hero-cta-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    padding: 16px 36px;
+    border-radius: 100px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 4px 24px rgba(255,107,74,0.3); }
+  .price-tag { font-size: 28px; font-weight: 700; }
+  .price-tag span { font-size: 14px; color: var(--text3); font-weight: 500; }
+  .hero-note { font-size: 13px; color: var(--text3); }
+
+  /* Interactive Cube */
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .cube-scene {
+    width: 300px;
+    height: 300px;
+    perspective: 800px;
+    cursor: grab;
+  }
+  .cube-scene:active { cursor: grabbing; }
+  .cube-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.1s ease-out;
+    transform: rotateX(-20deg) rotateY(30deg);
+  }
+  .cube-face {
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    left: 30px;
+    top: 30px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 3px;
+    padding: 3px;
+    background: var(--bg);
+    border-radius: 8px;
+    backface-visibility: hidden;
+  }
+  .cube-face.front  { transform: translateZ(123px); }
+  .cube-face.back   { transform: rotateY(180deg) translateZ(123px); }
+  .cube-face.left   { transform: rotateY(-90deg) translateZ(123px); }
+  .cube-face.right  { transform: rotateY(90deg) translateZ(123px); }
+  .cube-face.top    { transform: rotateX(90deg) translateZ(123px); }
+  .cube-face.bottom { transform: rotateX(-90deg) translateZ(123px); }
+
+  .tile {
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Solved state - face portraits with grid lines */
+  .face-mom .tile { background: var(--face-mom); }
+  .face-dad .tile { background: var(--face-dad); }
+  .face-kid1 .tile { background: var(--face-kid1); }
+  .face-kid2 .tile { background: var(--face-kid2); }
+  .face-gram .tile { background: var(--face-gram); }
+  .face-dog .tile { background: var(--face-dog); }
+
+  /* Face features drawn in CSS */
+  .tile .feature {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    opacity: 0.6;
+  }
+
+  /* Scrambled mode overrides */
+  .cube-wrapper.scrambled .face-mom .tile:nth-child(1) { background: var(--face-dad); }
+  .cube-wrapper.scrambled .face-mom .tile:nth-child(2) { background: var(--face-gram); }
+  .cube-wrapper.scrambled .face-mom .tile:nth-child(4) { background: var(--face-dog); }
+  .cube-wrapper.scrambled .face-mom .tile:nth-child(6) { background: var(--face-kid1); }
+  .cube-wrapper.scrambled .face-mom .tile:nth-child(8) { background: var(--face-kid2); }
+  .cube-wrapper.scrambled .face-dad .tile:nth-child(1) { background: var(--face-mom); }
+  .cube-wrapper.scrambled .face-dad .tile:nth-child(3) { background: var(--face-gram); }
+  .cube-wrapper.scrambled .face-dad .tile:nth-child(5) { background: var(--face-kid2); }
+  .cube-wrapper.scrambled .face-dad .tile:nth-child(7) { background: var(--face-dog); }
+  .cube-wrapper.scrambled .face-kid1 .tile:nth-child(2) { background: var(--face-dad); }
+  .cube-wrapper.scrambled .face-kid1 .tile:nth-child(4) { background: var(--face-mom); }
+  .cube-wrapper.scrambled .face-kid1 .tile:nth-child(8) { background: var(--face-gram); }
+  .cube-wrapper.scrambled .face-kid2 .tile:nth-child(1) { background: var(--face-dog); }
+  .cube-wrapper.scrambled .face-kid2 .tile:nth-child(3) { background: var(--face-kid1); }
+  .cube-wrapper.scrambled .face-kid2 .tile:nth-child(7) { background: var(--face-mom); }
+  .cube-wrapper.scrambled .face-gram .tile:nth-child(2) { background: var(--face-kid1); }
+  .cube-wrapper.scrambled .face-gram .tile:nth-child(4) { background: var(--face-dad); }
+  .cube-wrapper.scrambled .face-gram .tile:nth-child(6) { background: var(--face-kid2); }
+  .cube-wrapper.scrambled .face-gram .tile:nth-child(9) { background: var(--face-mom); }
+  .cube-wrapper.scrambled .face-dog .tile:nth-child(1) { background: var(--face-gram); }
+  .cube-wrapper.scrambled .face-dog .tile:nth-child(5) { background: var(--face-mom); }
+  .cube-wrapper.scrambled .face-dog .tile:nth-child(9) { background: var(--face-kid1); }
+
+  .mode-toggle {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    background: var(--surface);
+    border-radius: 100px;
+    padding: 4px;
+    gap: 2px;
+    z-index: 5;
+  }
+  .mode-btn {
+    padding: 8px 20px;
+    border-radius: 100px;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    color: var(--text3);
+    font-family: 'Inter', sans-serif;
+  }
+  .mode-btn.active {
+    background: var(--accent);
+    color: white;
+  }
+
+  .float-label {
+    position: absolute;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--text2);
+    z-index: 4;
+    white-space: nowrap;
+  }
+  .float-label.fl-top { top: -10px; right: -20px; }
+  .float-label.fl-bottom { bottom: -10px; left: -30px; }
+  .float-label strong { color: var(--text); }
+
+  /* Dual mode section */
+  .dual-mode {
+    padding: 80px 32px;
+    background: var(--bg2);
+  }
+  .dual-mode-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .section-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 48px;
+    letter-spacing: -1px;
+  }
+  .modes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .mode-card {
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 40px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .mode-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+  }
+  .mode-card.solve::before { background: linear-gradient(90deg, var(--blue), var(--green)); }
+  .mode-card.remix::before { background: linear-gradient(90deg, var(--accent), var(--yellow)); }
+  .mode-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  .mode-card.solve .mode-icon { background: rgba(74,158,255,0.12); }
+  .mode-card.remix .mode-icon { background: rgba(255,107,74,0.12); }
+  .mode-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .mode-card p { color: var(--text2); font-size: 15px; line-height: 1.6; }
+  .mode-demo {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .mode-demo .dt {
+    border-radius: 2px;
+  }
+
+  /* How it works */
+  .how-section {
+    padding: 80px 32px;
+  }
+  .how-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+  .step {
+    text-align: center;
+    position: relative;
+  }
+  .step-num {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 auto 16px;
+  }
+  .step h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .step p {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+  .step-arrow {
+    position: absolute;
+    right: -22px;
+    top: 24px;
+    color: var(--text3);
+    font-size: 18px;
+  }
+
+  /* Face picker visual */
+  .face-picker {
+    padding: 80px 32px;
+    background: var(--bg2);
+  }
+  .picker-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .picker-text h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  .picker-text p {
+    color: var(--text2);
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .picker-text .callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  .callout strong { color: var(--text); }
+  .picker-visual {
+    display: flex;
+    justify-content: center;
+  }
+  .face-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 12px;
+    width: 360px;
+  }
+  .face-slot {
+    aspect-ratio: 1;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+  .face-slot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.4) 100%);
+  }
+  .fs-mom { background: var(--face-mom); }
+  .fs-dad { background: var(--face-dad); }
+  .fs-kid1 { background: var(--face-kid1); }
+  .fs-kid2 { background: var(--face-kid2); }
+  .fs-gram { background: var(--face-gram); }
+  .fs-dog { background: var(--face-dog); }
+  .face-slot .fs-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+    margin-bottom: 10px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .face-slot .fs-icon {
+    font-size: 28px;
+    position: relative;
+    z-index: 2;
+  }
+  .face-grid-overlay {
+    position: absolute;
+    inset: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 2px;
+    z-index: 3;
+    opacity: 0.25;
+    pointer-events: none;
+  }
+  .grid-line {
+    border: 1px solid white;
+    border-radius: 2px;
+  }
+
+  /* The alignment / editor section */
+  .editor-section {
+    padding: 80px 32px;
+  }
+  .editor-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .editor-demo {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .editor-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    width: 260px;
+    text-align: center;
+  }
+  .editor-card h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .editor-preview {
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+  }
+  .ep-face {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .ep-face .ep-tile { border-radius: 3px; }
+  .editor-preview .grid-lines {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 2px;
+    pointer-events: none;
+  }
+  .grid-lines .gl {
+    border: 1px dashed rgba(255,255,255,0.4);
+    border-radius: 3px;
+  }
+  .editor-card p { font-size: 13px; color: var(--text3); line-height: 1.5; }
+
+  /* Social / virality section */
+  .virality {
+    background: linear-gradient(135deg, #1a0a05, #0a1a15);
+    padding: 80px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .virality::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255,107,74,0.06) 0%, transparent 70%);
+  }
+  .virality-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .virality h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  .virality p {
+    color: var(--text2);
+    font-size: 17px;
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto 32px;
+  }
+  .mashup-strip {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .mashup-face {
+    width: 100px;
+    height: 100px;
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 2px;
+    padding: 2px;
+    background: var(--bg);
+    overflow: hidden;
+    transition: transform 0.3s;
+  }
+  .mashup-face:hover { transform: scale(1.08) rotate(-2deg); }
+  .mashup-face .mt { border-radius: 2px; }
+  .mashup-label {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 6px;
+    text-align: center;
+  }
+  .mashup-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Specs */
+  .specs-section {
+    padding: 80px 32px;
+    background: var(--bg2);
+  }
+  .specs-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .specs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 40px;
+  }
+  .spec-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+  }
+  .spec-card .sc-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text3);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .spec-card .sc-value {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .spec-card .sc-note {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 4px;
+  }
+
+  /* FAQ */
+  .faq {
+    padding: 80px 32px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .faq h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+  .faq-q {
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .faq-q::after {
+    content: '+';
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 300;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .faq-item.open .faq-q::after { transform: rotate(45deg); }
+  .faq-a {
+    font-size: 15px;
+    color: var(--text2);
+    line-height: 1.7;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+  .faq-item.open .faq-a {
+    max-height: 200px;
+    padding-top: 12px;
+  }
+
+  /* Final CTA */
+  .final-cta {
+    padding: 100px 32px;
+    text-align: center;
+    background: var(--bg2);
+    position: relative;
+  }
+  .final-cta h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+  .final-cta h2 .highlight {
+    background: linear-gradient(135deg, var(--accent), var(--yellow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .final-cta p {
+    font-size: 17px;
+    color: var(--text2);
+    max-width: 500px;
+    margin: 0 auto 32px;
+  }
+  .cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    padding: 16px 32px;
+    border-radius: 100px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .btn-secondary:hover { border-color: var(--text3); background: var(--surface); }
+  .cta-note { font-size: 13px; color: var(--text3); }
+
+  /* Footer */
+  footer {
+    padding: 32px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text3);
+    border-top: 1px solid var(--border);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding: 24px 20px 40px;
+    }
+    .hero-text h1 { font-size: 38px; }
+    .hero-visual { order: 0; }
+    .hero-text { order: 1; }
+    .cube-scene { width: 250px; height: 250px; }
+    .cube-face { width: 200px; height: 200px; left: 25px; top: 25px; }
+    .cube-face.front  { transform: translateZ(103px); }
+    .cube-face.back   { transform: rotateY(180deg) translateZ(103px); }
+    .cube-face.left   { transform: rotateY(-90deg) translateZ(103px); }
+    .cube-face.right  { transform: rotateY(90deg) translateZ(103px); }
+    .cube-face.top    { transform: rotateX(90deg) translateZ(103px); }
+    .cube-face.bottom { transform: rotateX(-90deg) translateZ(103px); }
+    .modes-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .step-arrow { display: none; }
+    .picker-inner { grid-template-columns: 1fr; }
+    .face-grid { width: 100%; max-width: 320px; }
+    .specs-grid { grid-template-columns: 1fr 1fr; }
+    .section-title { font-size: 32px; }
+    .final-cta h2 { font-size: 36px; }
+    .hero-cta-row { flex-direction: column; align-items: flex-start; }
+    .float-label { display: none; }
+    .editor-demo { gap: 20px; }
+    .editor-card { width: 100%; max-width: 280px; }
+    nav { padding: 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <a href="https://www.socialprintstudio.com" class="logo">Social Print Studio <span>Lab</span></a>
+  <a href="#order" class="nav-cta">Make Yours</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="lab-badge"><span class="lab-dot"></span> SPS Lab Concept</div>
+    <h1>Your family.<br>On a <span class="highlight">Rubik's Cube.</span></h1>
+    <p class="subtitle">6 faces. 6 family members. Solve it to see everyone clearly. Scramble it to make everyone laugh.</p>
+    <p class="subtitle-small">Each face is one person's portrait. When scrambled, you get grandpa's forehead on the dog's nose on mom's chin. It's a puzzle AND a toy.</p>
+    <div class="hero-cta-row">
+      <a href="#order" class="btn-primary">Build Your Cube</a>
+      <div class="price-tag">$35 <span>+ free shipping</span></div>
+    </div>
+    <p class="hero-note">Standard 3x3 cube. Full-color printed. Gift box included.</p>
+  </div>
+  <div class="hero-visual">
+    <div class="cube-scene" id="cubeScene">
+      <div class="cube-wrapper" id="cubeWrapper">
+        <!-- Front: Mom -->
+        <div class="cube-face front face-mom">
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+        </div>
+        <!-- Back: Kid 2 -->
+        <div class="cube-face back face-kid2">
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+        </div>
+        <!-- Left: Dad -->
+        <div class="cube-face left face-dad">
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+        </div>
+        <!-- Right: Grandma -->
+        <div class="cube-face right face-gram">
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+        </div>
+        <!-- Top: Kid 1 -->
+        <div class="cube-face top face-kid1">
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+        </div>
+        <!-- Bottom: Dog -->
+        <div class="cube-face bottom face-dog">
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+          <div class="tile"></div><div class="tile"></div><div class="tile"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="btnSolved" onclick="setMode('solved')">Solved</button>
+      <button class="mode-btn" id="btnScrambled" onclick="setMode('scrambled')">Scrambled</button>
+    </div>
+    <div class="float-label fl-top"><strong>Mom</strong> - front face</div>
+    <div class="float-label fl-bottom"><strong>6 faces</strong> = 6 family members</div>
+  </div>
+</section>
+
+<!-- Two Modes -->
+<section class="dual-mode">
+  <div class="dual-mode-inner">
+    <div class="section-label">Two products in one</div>
+    <h2 class="section-title">Solve it. Or scramble it.</h2>
+    <div class="modes-grid">
+      <div class="mode-card solve">
+        <div class="mode-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="var(--blue)" stroke-width="2"/></svg>
+        </div>
+        <h3>Puzzle Mode</h3>
+        <p>Twist and turn to line up each face. When you solve a side, a family member's portrait snaps into focus. Six faces to solve. Real satisfaction when grandma finally comes together.</p>
+        <div class="mode-demo">
+          <div class="dt" style="background:var(--face-mom);"></div>
+          <div class="dt" style="background:var(--face-mom);"></div>
+          <div class="dt" style="background:var(--face-mom);"></div>
+          <div class="dt" style="background:var(--face-mom);"></div>
+          <div class="dt" style="background:var(--face-mom);"></div>
+          <div class="dt" style="background:var(--face-mom);"></div>
+          <div class="dt" style="background:var(--face-mom);"></div>
+          <div class="dt" style="background:var(--face-mom);"></div>
+          <div class="dt" style="background:var(--face-mom);"></div>
+        </div>
+      </div>
+      <div class="mode-card remix">
+        <div class="mode-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M16 3l4 4-4 4M8 21l-4-4 4-4" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 7H12a5 5 0 00-5 5M4 17h8a5 5 0 005-5" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Remix Mode</h3>
+        <p>Scramble it on purpose. Dad's forehead, the dog's nose, your kid's chin. The mashups are absurd, hilarious, and absolutely filmable. This is the mode kids won't put down.</p>
+        <div class="mode-demo">
+          <div class="dt" style="background:var(--face-dad);"></div>
+          <div class="dt" style="background:var(--face-gram);"></div>
+          <div class="dt" style="background:var(--face-mom);"></div>
+          <div class="dt" style="background:var(--face-dog);"></div>
+          <div class="dt" style="background:var(--face-mom);"></div>
+          <div class="dt" style="background:var(--face-kid1);"></div>
+          <div class="dt" style="background:var(--face-kid2);"></div>
+          <div class="dt" style="background:var(--face-mom);"></div>
+          <div class="dt" style="background:var(--face-dog);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="how-section">
+  <div class="how-inner">
+    <div class="section-label">How it works</div>
+    <h2 class="section-title">Four steps to your family cube.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Upload 6 faces</h3>
+        <p>One portrait per face. Mom, dad, kids, grandparents, the dog. You pick who makes the cut.</p>
+        <span class="step-arrow">&rarr;</span>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Align the grid</h3>
+        <p>Our editor shows the 3x3 grid overlay. Position eyes, nose, mouth in the right rows so the scrambles look perfect.</p>
+        <span class="step-arrow">&rarr;</span>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Preview the mashups</h3>
+        <p>See a preview of what the scrambled combos look like before you order. Adjust until the mashups make you laugh.</p>
+        <span class="step-arrow">&rarr;</span>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>We print & ship</h3>
+        <p>High-resolution UV print on a smooth-turning 3x3 cube. Arrives in a gift box ready to unwrap.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Face picker -->
+<section class="face-picker">
+  <div class="picker-inner">
+    <div class="picker-text">
+      <div class="section-label">Your cast</div>
+      <h2>6 faces. You choose who.</h2>
+      <p>Mom, dad, two kids, grandma, and the dog? Or three kids and both grandparents? Your family, your cube. Every face gets one side.</p>
+      <div class="callout">
+        <strong>The pet face is the best face.</strong> A scrambled cube with the dog's snout where dad's nose should be? That's the clip that gets 2 million views. We strongly recommend including at least one pet.
+      </div>
+    </div>
+    <div class="picker-visual">
+      <div class="face-grid">
+        <div class="face-slot fs-mom">
+          <div class="face-grid-overlay">
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+          </div>
+          <span class="fs-icon"></span>
+          <span class="fs-label">Mom</span>
+        </div>
+        <div class="face-slot fs-dad">
+          <div class="face-grid-overlay">
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+          </div>
+          <span class="fs-icon"></span>
+          <span class="fs-label">Dad</span>
+        </div>
+        <div class="face-slot fs-kid1">
+          <div class="face-grid-overlay">
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+          </div>
+          <span class="fs-icon"></span>
+          <span class="fs-label">Emma</span>
+        </div>
+        <div class="face-slot fs-kid2">
+          <div class="face-grid-overlay">
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+          </div>
+          <span class="fs-icon"></span>
+          <span class="fs-label">Jake</span>
+        </div>
+        <div class="face-slot fs-gram">
+          <div class="face-grid-overlay">
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+          </div>
+          <span class="fs-icon"></span>
+          <span class="fs-label">Grandma</span>
+        </div>
+        <div class="face-slot fs-dog">
+          <div class="face-grid-overlay">
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+          </div>
+          <span class="fs-icon"></span>
+          <span class="fs-label">Biscuit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Smart Editor -->
+<section class="editor-section">
+  <div class="editor-inner">
+    <div class="section-label">The secret sauce</div>
+    <h2 class="section-title">Smart grid alignment.</h2>
+    <p style="color:var(--text2); font-size:17px; max-width:600px; margin:0 auto 12px;">The magic (and the challenge) is making sure the scrambled faces line up. Our editor solves this with a simple rule: <strong style="color:var(--text);">eyes in row 1, nose in row 2, mouth in row 3.</strong></p>
+    <p style="color:var(--text3); font-size:15px; max-width:540px; margin:0 auto;">Position each face on the grid and the mashups just work. Every scramble produces a coherent (absurd) face because the features are always in the right rows.</p>
+    <div class="editor-demo">
+      <div class="editor-card">
+        <h4>Upload</h4>
+        <div class="editor-preview" style="background:var(--face-mom);">
+          <div class="grid-lines">
+            <div class="gl"></div><div class="gl"></div><div class="gl"></div>
+            <div class="gl"></div><div class="gl"></div><div class="gl"></div>
+            <div class="gl"></div><div class="gl"></div><div class="gl"></div>
+          </div>
+        </div>
+        <p>Drag to position the face on the 3x3 grid overlay</p>
+      </div>
+      <div class="editor-card">
+        <h4>Align</h4>
+        <div class="editor-preview">
+          <div class="ep-face">
+            <div class="ep-tile" style="background:var(--face-mom); opacity:0.6;"></div>
+            <div class="ep-tile" style="background:var(--face-mom); opacity:0.8;"></div>
+            <div class="ep-tile" style="background:var(--face-mom); opacity:0.6;"></div>
+            <div class="ep-tile" style="background:var(--face-mom); opacity:0.7;"></div>
+            <div class="ep-tile" style="background:var(--face-mom);"></div>
+            <div class="ep-tile" style="background:var(--face-mom); opacity:0.7;"></div>
+            <div class="ep-tile" style="background:var(--face-mom); opacity:0.6;"></div>
+            <div class="ep-tile" style="background:var(--face-mom); opacity:0.8;"></div>
+            <div class="ep-tile" style="background:var(--face-mom); opacity:0.6;"></div>
+          </div>
+        </div>
+        <p>Eyes in row 1. Nose in row 2. Mouth in row 3.</p>
+      </div>
+      <div class="editor-card">
+        <h4>Preview mashup</h4>
+        <div class="editor-preview">
+          <div class="ep-face">
+            <div class="ep-tile" style="background:var(--face-dad);"></div>
+            <div class="ep-tile" style="background:var(--face-dad);"></div>
+            <div class="ep-tile" style="background:var(--face-dad);"></div>
+            <div class="ep-tile" style="background:var(--face-dog);"></div>
+            <div class="ep-tile" style="background:var(--face-dog);"></div>
+            <div class="ep-tile" style="background:var(--face-dog);"></div>
+            <div class="ep-tile" style="background:var(--face-mom);"></div>
+            <div class="ep-tile" style="background:var(--face-mom);"></div>
+            <div class="ep-tile" style="background:var(--face-mom);"></div>
+          </div>
+        </div>
+        <p>Dad's eyes + dog's nose + mom's chin. Perfect.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Virality / Social -->
+<section class="virality">
+  <div class="virality-inner">
+    <div class="section-label">Built to be shared</div>
+    <h2>The scrambles sell the cube.</h2>
+    <p>A kid mashing grandpa's eyes onto the dog's nose onto mom's mouth is the kind of moment people film and post. The product markets itself every time someone picks it up.</p>
+    <div class="mashup-strip">
+      <div class="mashup-item">
+        <div class="mashup-face">
+          <div class="mt" style="background:var(--face-dad);"></div>
+          <div class="mt" style="background:var(--face-dad);"></div>
+          <div class="mt" style="background:var(--face-dad);"></div>
+          <div class="mt" style="background:var(--face-dog);"></div>
+          <div class="mt" style="background:var(--face-dog);"></div>
+          <div class="mt" style="background:var(--face-dog);"></div>
+          <div class="mt" style="background:var(--face-kid1);"></div>
+          <div class="mt" style="background:var(--face-kid1);"></div>
+          <div class="mt" style="background:var(--face-kid1);"></div>
+        </div>
+        <span class="mashup-label">Dad + Dog + Emma</span>
+      </div>
+      <div class="mashup-item">
+        <div class="mashup-face">
+          <div class="mt" style="background:var(--face-gram);"></div>
+          <div class="mt" style="background:var(--face-gram);"></div>
+          <div class="mt" style="background:var(--face-gram);"></div>
+          <div class="mt" style="background:var(--face-mom);"></div>
+          <div class="mt" style="background:var(--face-mom);"></div>
+          <div class="mt" style="background:var(--face-mom);"></div>
+          <div class="mt" style="background:var(--face-dad);"></div>
+          <div class="mt" style="background:var(--face-dad);"></div>
+          <div class="mt" style="background:var(--face-dad);"></div>
+        </div>
+        <span class="mashup-label">Gram + Mom + Dad</span>
+      </div>
+      <div class="mashup-item">
+        <div class="mashup-face">
+          <div class="mt" style="background:var(--face-kid2);"></div>
+          <div class="mt" style="background:var(--face-kid2);"></div>
+          <div class="mt" style="background:var(--face-kid2);"></div>
+          <div class="mt" style="background:var(--face-gram);"></div>
+          <div class="mt" style="background:var(--face-gram);"></div>
+          <div class="mt" style="background:var(--face-gram);"></div>
+          <div class="mt" style="background:var(--face-dog);"></div>
+          <div class="mt" style="background:var(--face-dog);"></div>
+          <div class="mt" style="background:var(--face-dog);"></div>
+        </div>
+        <span class="mashup-label">Jake + Gram + Biscuit</span>
+      </div>
+      <div class="mashup-item">
+        <div class="mashup-face">
+          <div class="mt" style="background:var(--face-dog);"></div>
+          <div class="mt" style="background:var(--face-dog);"></div>
+          <div class="mt" style="background:var(--face-dog);"></div>
+          <div class="mt" style="background:var(--face-kid1);"></div>
+          <div class="mt" style="background:var(--face-kid1);"></div>
+          <div class="mt" style="background:var(--face-kid1);"></div>
+          <div class="mt" style="background:var(--face-gram);"></div>
+          <div class="mt" style="background:var(--face-gram);"></div>
+          <div class="mt" style="background:var(--face-gram);"></div>
+        </div>
+        <span class="mashup-label">Biscuit + Emma + Gram</span>
+      </div>
+    </div>
+    <p style="font-size:14px; color:var(--text3);">Every scramble creates 6 Frankenstein faces. With 6 family members, the combinations are basically infinite.</p>
+  </div>
+</section>
+
+<!-- Specs -->
+<section class="specs-section">
+  <div class="specs-inner">
+    <div class="section-label">The details</div>
+    <h2 class="section-title">What you get.</h2>
+    <div class="specs-grid">
+      <div class="spec-card">
+        <div class="sc-label">Cube</div>
+        <div class="sc-value">Standard 3x3</div>
+        <div class="sc-note">56mm. Smooth-turning mechanism. Same quality as speed cubes.</div>
+      </div>
+      <div class="spec-card">
+        <div class="sc-label">Print</div>
+        <div class="sc-value">UV full-color</div>
+        <div class="sc-note">High-resolution UV print. Won't peel, scratch, or fade with use.</div>
+      </div>
+      <div class="spec-card">
+        <div class="sc-label">Faces</div>
+        <div class="sc-value">6 portraits</div>
+        <div class="sc-note">People, pets, or both. Each face divided into a 3x3 grid.</div>
+      </div>
+      <div class="spec-card">
+        <div class="sc-label">Price</div>
+        <div class="sc-value">$35</div>
+        <div class="sc-note">Includes gift box. Free shipping on all orders.</div>
+      </div>
+      <div class="spec-card">
+        <div class="sc-label">Shipping</div>
+        <div class="sc-value">3-5 days</div>
+        <div class="sc-note">Gift-boxed. Arrives ready to scramble.</div>
+      </div>
+      <div class="spec-card">
+        <div class="sc-label">Editor</div>
+        <div class="sc-value">Smart grid</div>
+        <div class="sc-note">Grid overlay positions features for perfect mashups. Preview before you buy.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <h2>Questions?</h2>
+  <div class="faq-item open">
+    <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What if my family has fewer than 6 people?</div>
+    <div class="faq-a">Use any face you want. 4 family members + 2 pets works great. Or use 5 family members and make one face a group photo. You could even do the same person at different ages for a baby's first year cube.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How good is the photo quality?</div>
+    <div class="faq-a">Each face tile is about 18mm x 18mm. At that size, UV printing produces sharp, vivid results from any modern phone photo. We'll flag it during upload if your photo resolution is too low.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do the faces line up perfectly when solved?</div>
+    <div class="faq-a">Yes. Our grid alignment editor makes sure the tiles form a coherent portrait when the side is solved. The printing is registered to the tile edges so alignment is precise. It's not pixel-perfect photography, but it's instantly recognizable and that's the whole point.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is this a good-quality Rubik's cube?</div>
+    <div class="faq-a">It's a smooth-turning 56mm cube — the same mechanism used in speed cubes. It won't lock up or feel cheap. The UV print adds no noticeable thickness to the tiles.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I include pets?</div>
+    <div class="faq-a">Absolutely. We strongly recommend it. The scrambled combinations with a pet face (dog nose where dad's nose should be) are by far the funniest results. One pet minimum is our unofficial recommendation.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is this a good gift?</div>
+    <div class="faq-a">It's the best gift. Arrives in a gift box. The moment someone opens it and sees their family on a Rubik's cube, the reaction is guaranteed. Then the scrambling starts and it's 30 minutes of laughing. We've seen it.</div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta" id="order">
+  <h2>Put your family <span class="highlight">on a cube.</span></h2>
+  <p>6 faces. 6 people you love. Infinite ridiculous combinations. The photo product that's actually fun to play with.</p>
+  <div class="cta-buttons">
+    <a href="#" class="btn-primary" onclick="alert('Coming soon! This is an SPS Lab concept.'); return false;">Build Your Cube &mdash; $35</a>
+    <a href="#" class="btn-secondary" onclick="alert('Coming soon! This is an SPS Lab concept.'); return false;">Gift a Cube &mdash; $39</a>
+  </div>
+  <p class="cta-note">Free shipping. Gift box included. UV-printed on a smooth-turning 3x3.</p>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p><a href="https://www.socialprintstudio.com">Social Print Studio</a> &middot; SPS Lab Concept &middot; Your family. Scrambled.</p>
+</footer>
+
+<script>
+  // Cube rotation via drag
+  const scene = document.getElementById('cubeScene');
+  const wrapper = document.getElementById('cubeWrapper');
+  let isDragging = false;
+  let startX, startY, rotX = -20, rotY = 30;
+
+  scene.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    scene.style.cursor = 'grabbing';
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    rotY += dx * 0.5;
+    rotX -= dy * 0.5;
+    rotX = Math.max(-60, Math.min(60, rotX));
+    wrapper.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+    startX = e.clientX;
+    startY = e.clientY;
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+    scene.style.cursor = 'grab';
+  });
+
+  // Touch support
+  scene.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const dx = e.touches[0].clientX - startX;
+    const dy = e.touches[0].clientY - startY;
+    rotY += dx * 0.5;
+    rotX -= dy * 0.5;
+    rotX = Math.max(-60, Math.min(60, rotX));
+    wrapper.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => { isDragging = false; });
+
+  // Solved / Scrambled toggle
+  function setMode(mode) {
+    const wrapper = document.getElementById('cubeWrapper');
+    const btnSolved = document.getElementById('btnSolved');
+    const btnScrambled = document.getElementById('btnScrambled');
+    if (mode === 'scrambled') {
+      wrapper.classList.add('scrambled');
+      btnScrambled.classList.add('active');
+      btnSolved.classList.remove('active');
+    } else {
+      wrapper.classList.remove('scrambled');
+      btnSolved.classList.add('active');
+      btnScrambled.classList.remove('active');
+    }
+  }
+
+  // Gentle auto-rotate when not interacting
+  let autoRotate = true;
+  let animFrame;
+  function animate() {
+    if (autoRotate && !isDragging) {
+      rotY += 0.15;
+      wrapper.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+    }
+    animFrame = requestAnimationFrame(animate);
+  }
+  animate();
+
+  scene.addEventListener('mouseenter', () => { autoRotate = false; });
+  scene.addEventListener('mouseleave', () => { autoRotate = true; });
+  scene.addEventListener('touchstart', () => { autoRotate = false; }, { passive: true });
+  scene.addEventListener('touchend', () => { setTimeout(() => { autoRotate = true; }, 3000); });
+</script>
+
+</body>
+</html>

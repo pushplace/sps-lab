@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baby's First Year Calendar — A New Photo Every Day</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #faf8f5;
+      --bg-warm: #f5f0ea;
+      --bg-soft: #f0ebe4;
+      --text: #1a1816;
+      --text-mid: #4a4540;
+      --text-soft: #7a746c;
+      --text-faint: #b0a89e;
+      --accent: #c47a5a;
+      --accent-deep: #a85d3e;
+      --accent-light: rgba(196,122,90,0.08);
+      --sage: #7a9a82;
+      --sage-light: rgba(122,154,130,0.08);
+      --rose: #c4888a;
+      --serif: 'DM Serif Display', serif;
+      --sans: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── ANNOUNCEMENT BAR ─── */
+    .announce {
+      background: var(--text);
+      color: #fff;
+      text-align: center;
+      padding: 10px 20px;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+    .announce strong { font-weight: 600; }
+
+    /* ─── NAV ─── */
+    nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-brand {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-cta {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .nav-cta:hover { background: var(--accent-deep); transform: scale(1.03); }
+
+    /* ─── HERO ─── */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 32px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      min-height: 80vh;
+    }
+    .hero-text { max-width: 480px; }
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: 3.4rem;
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -0.01em;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-mid);
+      font-weight: 300;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    .hero-price {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .hero-price .price {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+    }
+    .hero-price .price-note {
+      font-size: 0.82rem;
+      color: var(--text-soft);
+      font-weight: 300;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 16px 36px;
+      border-radius: 100px;
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary:hover {
+      background: var(--accent-deep);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(196,122,90,0.25);
+    }
+    .btn-secondary {
+      color: var(--text-mid);
+      font-size: 0.85rem;
+      font-weight: 400;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .hero-proof {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+    .stars { color: var(--accent); letter-spacing: 2px; font-size: 0.85rem; }
+
+    /* ─── HERO PRODUCT ─── */
+    .hero-product {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .calendar-scene {
+      position: relative;
+      width: 380px;
+      height: 460px;
+    }
+    /* Desk surface */
+    .desk {
+      position: absolute;
+      bottom: 0;
+      left: -40px;
+      right: -40px;
+      height: 60px;
+      background: linear-gradient(180deg, #e8ddd2, #ddd0c2);
+      border-radius: 8px 8px 0 0;
+      z-index: 0;
+    }
+    /* Calendar base */
+    .cal-body {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 360px;
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+      z-index: 1;
+      overflow: hidden;
+    }
+    /* Photo area */
+    .cal-photo {
+      width: 100%;
+      height: 250px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cal-photo-bg {
+      width: 100%;
+      height: 100%;
+      /* CSS baby illustration - soft abstract shapes suggesting a sleeping baby */
+      background:
+        radial-gradient(ellipse at 50% 55%, #f5e6d8 0%, #f0dcc8 30%, transparent 60%),
+        radial-gradient(circle at 45% 42%, #fce8d5 0%, transparent 25%),
+        radial-gradient(circle at 55% 48%, #fdd9c4 0%, transparent 20%),
+        radial-gradient(ellipse at 50% 70%, #e8d5c4 0%, transparent 40%),
+        linear-gradient(180deg, #fdf6ef, #f8ede2);
+    }
+    /* Tiny hands illustration */
+    .cal-photo::after {
+      content: '';
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #f8e4d4, #f0d4be);
+      box-shadow:
+        -35px 10px 0 -5px #f4dcc8,
+        35px 10px 0 -5px #f4dcc8,
+        -28px 5px 0 -8px #f6e0cc,
+        28px 5px 0 -8px #f6e0cc;
+      opacity: 0.7;
+    }
+    .cal-date-strip {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .cal-day-big {
+      font-family: var(--serif);
+      font-size: 3.2rem;
+      line-height: 1;
+      color: var(--text);
+    }
+    .cal-day-label {
+      text-align: right;
+    }
+    .cal-day-name {
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .cal-day-date {
+      font-family: var(--serif);
+      font-size: 1rem;
+      color: var(--text-mid);
+    }
+    .cal-day-milestone {
+      font-size: 0.7rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    /* Peeling page effect */
+    .cal-peel {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%) perspective(200px) rotateX(8deg);
+      width: 296px;
+      height: 30px;
+      background: linear-gradient(180deg, #fff, #f8f4f0);
+      border-radius: 4px 4px 0 0;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.04);
+      z-index: 0;
+    }
+    .cal-peel::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 2px;
+      right: 2px;
+      height: 20px;
+      background: linear-gradient(180deg, #faf6f2, #f4efe8);
+      border-radius: 3px 3px 0 0;
+      box-shadow: 0 -1px 4px rgba(0,0,0,0.03);
+    }
+
+    /* Floating badges around calendar */
+    .float-badge {
+      position: absolute;
+      background: #fff;
+      border-radius: 100px;
+      padding: 8px 16px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      z-index: 3;
+      white-space: nowrap;
+    }
+    .badge-day {
+      top: 30px;
+      right: -10px;
+      color: var(--sage);
+      animation: floatBadge 3s ease-in-out infinite;
+    }
+    .badge-photos {
+      bottom: 90px;
+      left: -20px;
+      color: var(--accent);
+      animation: floatBadge 3s ease-in-out 1s infinite;
+    }
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* ─── EMOTIONAL BAND ─── */
+    .emotion-band {
+      background: var(--text);
+      color: #fff;
+      padding: 80px 32px;
+      text-align: center;
+      margin-top: 80px;
+    }
+    .emotion-band blockquote {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1.35;
+      max-width: 680px;
+      margin: 0 auto 16px;
+      font-style: italic;
+    }
+    .emotion-band cite {
+      font-family: var(--sans);
+      font-style: normal;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+    }
+
+    /* ─── TIMELINE ─── */
+    .timeline-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 32px;
+    }
+    .timeline-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .timeline-header .label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .timeline-header h2 {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      font-weight: 400;
+      margin-bottom: 12px;
+    }
+    .timeline-header p {
+      font-size: 1rem;
+      color: var(--text-soft);
+      font-weight: 300;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .timeline-track {
+      display: flex;
+      gap: 0;
+      position: relative;
+      padding: 0 0 40px;
+    }
+    .timeline-track::before {
+      content: '';
+      position: absolute;
+      top: 120px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--sage), var(--rose), var(--accent));
+    }
+    .tl-month {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+    .tl-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .tl-photo-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    /* Different baby "growth" colors for each month */
+    .tl-m1 .tl-photo-inner { background: linear-gradient(135deg, #fce8d8, #f8d8c4); }
+    .tl-m2 .tl-photo-inner { background: linear-gradient(135deg, #fce4d0, #f6d0b8); }
+    .tl-m3 .tl-photo-inner { background: linear-gradient(135deg, #faded0, #f2ccb4); }
+    .tl-m4 .tl-photo-inner { background: linear-gradient(135deg, #f8dcd0, #eec8b0); }
+    .tl-m5 .tl-photo-inner { background: linear-gradient(135deg, #f4dcd4, #e8c4b0); }
+    .tl-m6 .tl-photo-inner { background: linear-gradient(135deg, #f0dcd8, #e4c0b0); }
+    .tl-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid var(--bg);
+      margin: 10px auto;
+      position: relative;
+      z-index: 2;
+    }
+    .tl-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-faint);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .tl-moment {
+      font-size: 0.78rem;
+      color: var(--text-mid);
+      font-weight: 400;
+    }
+
+    /* 365 dot visualization */
+    .dot-viz {
+      margin-top: 48px;
+      text-align: center;
+    }
+    .dot-viz-label {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+      color: var(--text-mid);
+    }
+    .dots-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      max-width: 680px;
+      margin: 0 auto;
+      justify-content: center;
+    }
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-faint);
+      opacity: 0.25;
+      transition: all 0.3s;
+    }
+    .dot.filled {
+      opacity: 1;
+      background: var(--accent);
+    }
+    .dot-viz-caption {
+      margin-top: 16px;
+      font-size: 0.82rem;
+      color: var(--text-soft);
+      font-weight: 300;
+    }
+
+    /* ─── HOW IT WORKS ─── */
+    .how-section {
+      background: var(--bg-warm);
+      padding: 100px 32px;
+    }
+    .how-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .how-header {
+      margin-bottom: 56px;
+    }
+    .how-header .label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .how-header h2 {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      font-weight: 400;
+    }
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+    .how-step {
+      position: relative;
+    }
+    .how-num {
+      font-family: var(--serif);
+      font-size: 3rem;
+      color: var(--accent);
+      opacity: 0.2;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .how-title {
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+    .how-desc {
+      font-size: 0.88rem;
+      color: var(--text-soft);
+      font-weight: 300;
+      line-height: 1.65;
+    }
+
+    /* ─── DAILY RITUAL ─── */
+    .ritual-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .ritual-text .label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .ritual-text h2 {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 400;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .ritual-text p {
+      font-size: 0.95rem;
+      color: var(--text-mid);
+      font-weight: 300;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .ritual-list {
+      list-style: none;
+      margin-top: 24px;
+    }
+    .ritual-list li {
+      padding: 10px 0;
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    .ritual-list li:last-child { border: none; }
+    .ritual-check {
+      color: var(--sage);
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Calendar flip animation */
+    .ritual-visual {
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+    .flip-stack {
+      position: relative;
+      width: 280px;
+      height: 340px;
+    }
+    .flip-page {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+    .flip-page:nth-child(1) {
+      transform: rotate(-2deg) translateY(8px);
+      z-index: 1;
+      opacity: 0.5;
+    }
+    .flip-page:nth-child(2) {
+      transform: rotate(1deg) translateY(4px);
+      z-index: 2;
+      opacity: 0.75;
+    }
+    .flip-page:nth-child(3) {
+      z-index: 3;
+    }
+    .flip-photo {
+      width: 100%;
+      height: 220px;
+    }
+    .flip-photo-1 {
+      background: linear-gradient(135deg, #e8f0e8, #d4e4d4);
+    }
+    .flip-photo-2 {
+      background: linear-gradient(135deg, #e8e4f0, #d4d0e4);
+    }
+    .flip-photo-3 {
+      background: linear-gradient(135deg, #f0e8e4, #e4d8cc);
+    }
+    .flip-bottom {
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .flip-day {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      line-height: 1;
+    }
+    .flip-meta {
+      text-align: right;
+      font-size: 0.7rem;
+      color: var(--text-soft);
+    }
+    .flip-meta strong {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* ─── SOCIAL PROOF ─── */
+    .proof-section {
+      background: var(--bg-warm);
+      padding: 80px 32px;
+    }
+    .proof-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .proof-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 28px;
+      position: relative;
+    }
+    .proof-stars {
+      color: var(--accent);
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+    .proof-text {
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      font-weight: 300;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+    .proof-author {
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      font-weight: 500;
+    }
+
+    /* ─── GIFT SECTION ─── */
+    .gift-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 32px;
+      text-align: center;
+    }
+    .gift-section .label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .gift-section h2 {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+    .gift-section > p {
+      font-size: 1rem;
+      color: var(--text-soft);
+      font-weight: 300;
+      max-width: 520px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
+    }
+    .gift-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .gift-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 12px;
+      padding: 32px 24px;
+      transition: all 0.2s;
+    }
+    .gift-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+    .gift-icon {
+      font-size: 2rem;
+      margin-bottom: 14px;
+    }
+    .gift-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+    .gift-desc {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
+    /* ─── SPECS ─── */
+    .specs-section {
+      background: var(--text);
+      color: #fff;
+      padding: 80px 32px;
+    }
+    .specs-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .specs-left h2 {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 400;
+      margin-bottom: 12px;
+    }
+    .specs-left p {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+    }
+    .specs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .spec-item {
+      padding: 20px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .spec-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .spec-value {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    /* ─── FINAL CTA ─── */
+    .final-cta {
+      padding: 120px 32px;
+      text-align: center;
+      position: relative;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+    .final-cta .kicker {
+      font-size: 0.88rem;
+      color: var(--text-soft);
+      font-weight: 300;
+      margin-bottom: 16px;
+    }
+    .final-cta h2 {
+      font-family: var(--serif);
+      font-size: 3rem;
+      font-weight: 400;
+      line-height: 1.15;
+      max-width: 600px;
+      margin: 0 auto 12px;
+    }
+    .final-cta h2 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .final-cta .final-sub {
+      font-size: 1rem;
+      color: var(--text-soft);
+      font-weight: 300;
+      max-width: 420px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+    .final-price {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+    .final-shipping {
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      margin-bottom: 28px;
+    }
+    .final-trust {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 32px;
+    }
+    .trust-item {
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .trust-icon { font-size: 0.9rem; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 32px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-left {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      font-weight: 300;
+    }
+    .footer-left a {
+      color: var(--text-soft);
+      text-decoration: none;
+    }
+    .footer-left a:hover { color: var(--text); }
+    .footer-right {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-faint);
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-text { animation: fadeUp 0.8s ease both; }
+    .hero-product { animation: fadeUp 0.8s ease 0.2s both; }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: all 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 40px;
+        min-height: auto;
+      }
+      .hero h1 { font-size: 2.4rem; }
+      .hero-product { order: -1; }
+      .calendar-scene { width: 280px; height: 360px; }
+      .cal-body { width: 220px; height: 280px; }
+      .cal-photo { height: 180px; }
+      .how-grid { grid-template-columns: 1fr; }
+      .ritual-section { grid-template-columns: 1fr; gap: 40px; }
+      .proof-grid { grid-template-columns: 1fr; }
+      .gift-options { grid-template-columns: 1fr; }
+      .specs-inner { grid-template-columns: 1fr; }
+      .timeline-track { overflow-x: auto; padding-bottom: 20px; }
+      .tl-month { min-width: 100px; }
+      .final-cta h2 { font-size: 2.2rem; }
+      .final-trust { flex-direction: column; gap: 12px; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement bar -->
+  <div class="announce">
+    <strong>Starts the day they're born.</strong> &nbsp;Not January 1st — <em>their</em> Day 1.
+  </div>
+
+  <nav>
+    <a href="../../index.html" class="nav-brand">Social Print Studio</a>
+    <a href="#order" class="nav-cta">Make yours &rarr;</a>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <div class="hero">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Baby's First Year Calendar</div>
+      <h1>365 days.<br>365 photos.<br>One <em>incredible</em> year.</h1>
+      <p class="hero-sub">A daily desk calendar that starts the day your baby is born. Upload a photo for every day of their first year. Tear one off each morning. Watch them grow.</p>
+      <div class="hero-price">
+        <span class="price">$38</span>
+        <span class="price-note">365 pages &bull; ships in 5 days</span>
+      </div>
+      <div class="hero-actions">
+        <a href="#order" class="btn-primary">Start your calendar</a>
+        <button class="btn-secondary" onclick="document.querySelector('.timeline-section').scrollIntoView({behavior:'smooth'})">See how it works</button>
+      </div>
+      <div class="hero-proof">
+        <span class="stars">&starf;&starf;&starf;&starf;&starf;</span>
+        <span>4.9 from 2,400+ calendars shipped</span>
+      </div>
+    </div>
+
+    <div class="hero-product">
+      <div class="calendar-scene">
+        <div class="cal-peel"></div>
+        <div class="cal-body">
+          <div class="cal-photo">
+            <div class="cal-photo-bg"></div>
+          </div>
+          <div class="cal-date-strip">
+            <div class="cal-day-big">1</div>
+            <div class="cal-day-label">
+              <div class="cal-day-name">Tuesday</div>
+              <div class="cal-day-date">March 4, 2026</div>
+              <div class="cal-day-milestone">Day 1 &bull; Welcome home</div>
+            </div>
+          </div>
+        </div>
+        <div class="desk"></div>
+        <div class="float-badge badge-day">Day 1 of 365</div>
+        <div class="float-badge badge-photos">A photo a day</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── EMOTIONAL BAND ─── -->
+  <div class="emotion-band">
+    <blockquote>"You have 4,000 photos on your phone and zero on your desk. This fixes that."</blockquote>
+    <cite>The whole idea, in one sentence.</cite>
+  </div>
+
+  <!-- ─── TIMELINE ─── -->
+  <div class="timeline-section reveal">
+    <div class="timeline-header">
+      <div class="label">Their whole first year</div>
+      <h2>Every month is a chapter</h2>
+      <p>First smile. First food. First steps. Every milestone gets its own page — and you'll have 365 of them.</p>
+    </div>
+
+    <div class="timeline-track">
+      <div class="tl-month tl-m1">
+        <div class="tl-photo"><div class="tl-photo-inner"></div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-label">Month 1</div>
+        <div class="tl-moment">First yawn</div>
+      </div>
+      <div class="tl-month tl-m2">
+        <div class="tl-photo"><div class="tl-photo-inner"></div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-label">Month 2</div>
+        <div class="tl-moment">First smile</div>
+      </div>
+      <div class="tl-month tl-m3">
+        <div class="tl-photo"><div class="tl-photo-inner"></div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-label">Month 3</div>
+        <div class="tl-moment">Laughing</div>
+      </div>
+      <div class="tl-month tl-m4">
+        <div class="tl-photo"><div class="tl-photo-inner"></div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-label">Month 4</div>
+        <div class="tl-moment">Grabbing things</div>
+      </div>
+      <div class="tl-month tl-m5">
+        <div class="tl-photo"><div class="tl-photo-inner"></div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-label">Month 5</div>
+        <div class="tl-moment">Sitting up</div>
+      </div>
+      <div class="tl-month tl-m6">
+        <div class="tl-photo"><div class="tl-photo-inner"></div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-label">Month 6</div>
+        <div class="tl-moment">First food</div>
+      </div>
+    </div>
+
+    <!-- 365 dots visualization -->
+    <div class="dot-viz reveal">
+      <div class="dot-viz-label">365 tiny moments. One for every day.</div>
+      <div class="dots-container" id="dotsContainer"></div>
+      <div class="dot-viz-caption">Each dot is a day. Each day is a photo. Each photo is a memory you almost forgot.</div>
+    </div>
+  </div>
+
+  <!-- ─── HOW IT WORKS ─── -->
+  <div class="how-section">
+    <div class="how-inner reveal">
+      <div class="how-header">
+        <div class="label">Dead simple</div>
+        <h2>Here's how it works</h2>
+      </div>
+      <div class="how-grid">
+        <div class="how-step">
+          <div class="how-num">1</div>
+          <div class="how-title">Pick their birthday</div>
+          <div class="how-desc">Tell us when your baby was born (or is due). Your calendar starts that day — not January 1st. Day 1 is <em>their</em> Day 1.</div>
+        </div>
+        <div class="how-step">
+          <div class="how-num">2</div>
+          <div class="how-title">Upload your photos</div>
+          <div class="how-desc">Drag in photos from your phone. Fill as many days as you want — every day, every week, just the highlights. We'll arrange them beautifully.</div>
+        </div>
+        <div class="how-step">
+          <div class="how-num">3</div>
+          <div class="how-title">Tear off a page each day</div>
+          <div class="how-desc">A new photo of your baby, every single morning. On your desk. On the kitchen counter. In Grandma's house. For a whole year.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── DAILY RITUAL ─── -->
+  <div class="ritual-section reveal">
+    <div class="ritual-visual">
+      <div class="flip-stack">
+        <div class="flip-page">
+          <div class="flip-photo flip-photo-1"></div>
+          <div class="flip-bottom">
+            <div class="flip-day">47</div>
+            <div class="flip-meta"><strong>Week 7</strong>Tummy time champ</div>
+          </div>
+        </div>
+        <div class="flip-page">
+          <div class="flip-photo flip-photo-2"></div>
+          <div class="flip-bottom">
+            <div class="flip-day">48</div>
+            <div class="flip-meta"><strong>Week 7</strong>That face again</div>
+          </div>
+        </div>
+        <div class="flip-page">
+          <div class="flip-photo flip-photo-3"></div>
+          <div class="flip-bottom">
+            <div class="flip-day">49</div>
+            <div class="flip-meta"><strong>Week 7</strong>Milk drunk</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ritual-text">
+      <div class="label">The best part</div>
+      <h2>A reason to pause, every morning</h2>
+      <p>You tear off yesterday's page. There's today's photo — a moment from their first year you'd already forgotten. It's been on your phone this whole time, buried under 3,000 other photos.</p>
+      <p>Now it's on your desk. Right in front of you. For a whole day.</p>
+      <ul class="ritual-list">
+        <li><span class="ritual-check">&check;</span> Thick, premium card stock — no flimsy pages</li>
+        <li><span class="ritual-check">&check;</span> Vivid photo printing on every single page</li>
+        <li><span class="ritual-check">&check;</span> Sturdy built-in stand — no separate holder needed</li>
+        <li><span class="ritual-check">&check;</span> Date, day number, and custom caption on each page</li>
+        <li><span class="ritual-check">&check;</span> Keep your favorite pages as mini prints</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ─── SOCIAL PROOF ─── -->
+  <div class="proof-section">
+    <div class="proof-inner reveal">
+      <div class="proof-grid">
+        <div class="proof-card">
+          <div class="proof-stars">&starf;&starf;&starf;&starf;&starf;</div>
+          <div class="proof-text">"I cry approximately once a week tearing off a page. In the best way. Seeing how tiny she was on Day 12 when she's now on Day 200 is just... a lot."</div>
+          <div class="proof-author">Sarah M. &bull; Mom of Lily</div>
+        </div>
+        <div class="proof-card">
+          <div class="proof-stars">&starf;&starf;&starf;&starf;&starf;</div>
+          <div class="proof-text">"Made one for our house and one for my mom. She calls me every morning to tell me which photo came up. It's become our little ritual."</div>
+          <div class="proof-author">Jessica T. &bull; Mom of Owen</div>
+        </div>
+        <div class="proof-card">
+          <div class="proof-stars">&starf;&starf;&starf;&starf;&starf;</div>
+          <div class="proof-text">"Better than any baby book I ever tried to keep up with. I just dumped my camera roll in and it did the rest. 365 pages of my favorite tiny human."</div>
+          <div class="proof-author">Amanda K. &bull; Mom of Theo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── GIFT SECTION ─── -->
+  <div class="gift-section reveal">
+    <div class="label">The grandparent play</div>
+    <h2>The gift they'll talk about all year</h2>
+    <p>One for your desk. One for Grandma's kitchen. One for Grandpa's office. Same baby, same year, three very happy people.</p>
+    <div class="gift-options">
+      <div class="gift-card">
+        <div class="gift-icon">&#128197;</div>
+        <div class="gift-name">Just mine</div>
+        <div class="gift-desc">One calendar, 365 days. For your desk or kitchen counter. $38.</div>
+      </div>
+      <div class="gift-card" style="border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent);">
+        <div class="gift-icon">&#10024;</div>
+        <div class="gift-name">The Grandparent Bundle</div>
+        <div class="gift-desc">Three calendars — same photos, three homes. You + two grandparents. $99 (save $15).</div>
+      </div>
+      <div class="gift-card">
+        <div class="gift-icon">&#127873;</div>
+        <div class="gift-name">Gift it</div>
+        <div class="gift-desc">Send a gift card so they can make their own. Perfect for baby showers. $42.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SPECS ─── -->
+  <div class="specs-section">
+    <div class="specs-inner reveal">
+      <div class="specs-left">
+        <h2>The details</h2>
+        <p>Everything you need to know before you order.</p>
+      </div>
+      <div class="specs-grid">
+        <div class="spec-item">
+          <div class="spec-label">Pages</div>
+          <div class="spec-value">365 tear-off pages + cover</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Size</div>
+          <div class="spec-value">4.5" &times; 4.5" (fits any desk)</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Paper</div>
+          <div class="spec-value">Premium 100lb card stock</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Print</div>
+          <div class="spec-value">Full-color photo on every page</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Start date</div>
+          <div class="spec-value">Any day — birthdate, due date, today</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Shipping</div>
+          <div class="spec-value">Free over $50 &bull; 3-5 day delivery</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Photos needed</div>
+          <div class="spec-value">As many or few as you want</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Captions</div>
+          <div class="spec-value">Add a note to any day</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── FINAL CTA ─── -->
+  <div class="final-cta" id="order">
+    <div class="kicker">They're only this small right now.</div>
+    <h2>Don't let year one disappear into your <em>camera roll.</em></h2>
+    <p class="final-sub">365 photos. 365 pages. A year of your baby's life, on your desk, one day at a time.</p>
+    <div class="final-price">$38</div>
+    <div class="final-shipping">Free shipping on the Grandparent Bundle</div>
+    <a href="#" class="btn-primary" onclick="alert('This is a concept — not yet shoppable!'); return false;">
+      Start your calendar &rarr;
+    </a>
+    <div class="final-trust">
+      <span class="trust-item"><span class="trust-icon">&#128666;</span> Ships in 5 days</span>
+      <span class="trust-item"><span class="trust-icon">&#128249;</span> Upload from any device</span>
+      <span class="trust-item"><span class="trust-icon">&#10084;</span> Happiness guaranteed</span>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-left"><a href="../../index.html">SPS Lab</a> &mdash; Social Print Studio</div>
+    <div class="footer-right">concept v0.1</div>
+  </footer>
+
+  <script>
+    // Generate 365 dots
+    const container = document.getElementById('dotsContainer');
+    for (let i = 0; i < 365; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      container.appendChild(dot);
+    }
+
+    // Animate dots filling in on scroll
+    let dotsAnimated = false;
+    function animateDots() {
+      if (dotsAnimated) return;
+      const rect = container.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.8) {
+        dotsAnimated = true;
+        const dots = container.querySelectorAll('.dot');
+        dots.forEach((dot, i) => {
+          setTimeout(() => {
+            dot.classList.add('filled');
+          }, i * 4);
+        });
+      }
+    }
+
+    // Scroll reveal
+    function revealOnScroll() {
+      document.querySelectorAll('.reveal').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.85) {
+          el.classList.add('visible');
+        }
+      });
+      animateDots();
+    }
+
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+  </script>
+</body>
+</html>

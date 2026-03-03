@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>/print — Midjourney to Your Wall</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0b0b0f;
+      --bg-raised: #13131a;
+      --bg-card: #1a1a24;
+      --bg-input: #0f0f16;
+      --border: #2a2a38;
+      --border-hover: #3a3a50;
+      --text: #e8e8ec;
+      --text-dim: #8888a0;
+      --text-faint: #55556a;
+      --accent: #5b7ff5;
+      --accent-glow: rgba(91, 127, 245, 0.15);
+      --green: #3ecf8e;
+      --green-glow: rgba(62, 207, 142, 0.12);
+      --orange: #f59e42;
+      --pink: #e05dba;
+      --sans: 'Space Grotesk', sans-serif;
+      --body: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      font-family: var(--body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── Ambient background ─── */
+    .ambient {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .ambient::before {
+      content: '';
+      position: absolute;
+      top: -30%; left: -10%;
+      width: 60%; height: 60%;
+      background: radial-gradient(circle, rgba(91,127,245,0.06) 0%, transparent 70%);
+      animation: ambientDrift1 20s ease-in-out infinite;
+    }
+    .ambient::after {
+      content: '';
+      position: absolute;
+      bottom: -20%; right: -10%;
+      width: 50%; height: 50%;
+      background: radial-gradient(circle, rgba(224,93,186,0.05) 0%, transparent 70%);
+      animation: ambientDrift2 25s ease-in-out infinite;
+    }
+    @keyframes ambientDrift1 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(5%, 10%); }
+    }
+    @keyframes ambientDrift2 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-8%, -5%); }
+    }
+
+    /* ─── Top bar ─── */
+    .topbar {
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--pink), var(--orange), var(--accent));
+      background-size: 200% 100%;
+      animation: shimmer 4s linear infinite;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+    }
+    @keyframes shimmer {
+      0% { background-position: 0% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 0;
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-link {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--text); }
+    .nav-badge {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--orange);
+      border: 1px solid rgba(245,158,66,0.3);
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      text-align: center;
+      padding: 80px 0 60px;
+    }
+    .hero-command {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .hero-command .cursor {
+      display: inline-block;
+      width: 7px;
+      height: 16px;
+      background: var(--accent);
+      animation: blink 1s step-end infinite;
+      position: relative;
+      top: 1px;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .hero h1 {
+      font-family: var(--sans);
+      font-size: 3.8rem;
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+    .hero h1 .grad {
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--text-dim);
+      max-width: 520px;
+      margin: 0 auto 40px;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    /* ─── PASTE INPUT ─── */
+    .paste-zone {
+      max-width: 640px;
+      margin: 0 auto 16px;
+      position: relative;
+    }
+    .paste-input {
+      width: 100%;
+      padding: 18px 130px 18px 52px;
+      background: var(--bg-input);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      outline: none;
+      transition: all 0.25s;
+    }
+    .paste-input::placeholder {
+      color: var(--text-faint);
+    }
+    .paste-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-glow);
+    }
+    .paste-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-faint);
+      font-size: 1.1rem;
+    }
+    .paste-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 10px;
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .paste-btn:hover {
+      background: #4a6ee4;
+      transform: translateY(-50%) scale(1.02);
+    }
+    .paste-hint {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--text-faint);
+      font-family: var(--mono);
+    }
+
+    /* ─── AI ART PLACEHOLDER (CSS-generated) ─── */
+    .art-canvas {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      background: #1a1020;
+    }
+    .art-canvas::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 40%, rgba(120,60,200,0.7) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 60%, rgba(40,100,220,0.6) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 80%, rgba(200,60,120,0.5) 0%, transparent 40%),
+        radial-gradient(ellipse at 20% 70%, rgba(60,180,160,0.4) 0%, transparent 35%),
+        radial-gradient(ellipse at 80% 30%, rgba(240,160,40,0.3) 0%, transparent 30%);
+    }
+    .art-canvas::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-conic-gradient(from 0deg at 30% 35%, transparent 0deg 8deg, rgba(255,255,255,0.02) 8deg 10deg),
+        repeating-conic-gradient(from 45deg at 70% 65%, transparent 0deg 12deg, rgba(255,255,255,0.015) 12deg 15deg);
+      mix-blend-mode: overlay;
+    }
+
+    /* ─── PREVIEW SECTION ─── */
+    .preview-section {
+      padding: 40px 0 80px;
+      display: none;
+    }
+    .preview-section.active { display: block; }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .preview-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .status-text {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--green);
+    }
+    .resolution-badge {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      padding: 5px 12px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .res-ok {
+      background: var(--green-glow);
+      color: var(--green);
+      border: 1px solid rgba(62,207,142,0.2);
+    }
+    .res-warn {
+      background: rgba(245,158,66,0.1);
+      color: var(--orange);
+      border: 1px solid rgba(245,158,66,0.2);
+    }
+
+    /* ─── PRODUCT CAROUSEL ─── */
+    .carousel-label {
+      font-family: var(--sans);
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .carousel-sub {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-bottom: 28px;
+      font-weight: 300;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 20px;
+      scrollbar-width: none;
+    }
+    .carousel-track::-webkit-scrollbar { display: none; }
+
+    .product-card {
+      flex: 0 0 280px;
+      scroll-snap-align: start;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .product-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .product-card.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow), 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .product-mockup {
+      width: 100%;
+      aspect-ratio: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Mockup environments ── */
+    .mockup-env {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    /* Framed print */
+    .env-framed {
+      background: linear-gradient(135deg, #f5f0eb, #e8e2da);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .env-framed .frame-outer {
+      width: 65%;
+      aspect-ratio: 1;
+      background: #1a1410;
+      padding: 8px;
+      box-shadow: 4px 6px 20px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,255,255,0.05);
+    }
+    .env-framed .frame-mat {
+      width: 100%;
+      height: 100%;
+      background: #f8f6f2;
+      padding: 14%;
+    }
+    .env-framed .frame-art {
+      width: 100%;
+      height: 100%;
+      border-radius: 1px;
+    }
+
+    /* Fridge magnet */
+    .env-magnet {
+      background: linear-gradient(180deg, #d4d8dc, #c0c4c8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .env-magnet::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent 0, transparent 49%,
+        rgba(0,0,0,0.02) 49%, rgba(0,0,0,0.02) 51%,
+        transparent 51%
+      );
+    }
+    .env-magnet .magnet-photo {
+      width: 48%;
+      aspect-ratio: 1;
+      border-radius: 4px;
+      box-shadow: 2px 3px 10px rgba(0,0,0,0.2);
+      transform: rotate(-2deg);
+      position: relative;
+    }
+    .env-magnet .magnet-clip {
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 18px;
+      background: #e34;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      z-index: 2;
+    }
+
+    /* Metal print */
+    .env-metal {
+      background: linear-gradient(135deg, #2a2a30, #1a1a20);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .env-metal .metal-print {
+      width: 70%;
+      aspect-ratio: 1;
+      border-radius: 2px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    .env-metal .metal-print::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+      pointer-events: none;
+    }
+
+    /* Mounted / Float mount */
+    .env-mounted {
+      background: linear-gradient(135deg, #f2ede6, #e5dfd6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .env-mounted .mount-print {
+      width: 60%;
+      aspect-ratio: 1;
+      border-radius: 2px;
+      box-shadow: 8px 12px 30px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.04);
+      position: relative;
+    }
+    .env-mounted .mount-shadow {
+      position: absolute;
+      bottom: -10px;
+      left: 8px;
+      right: 8px;
+      height: 20px;
+      background: rgba(0,0,0,0.08);
+      border-radius: 50%;
+      filter: blur(8px);
+    }
+
+    /* Wallet size */
+    .env-wallet {
+      background: linear-gradient(135deg, #2e2822, #1e1a16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .env-wallet .wallet-stack {
+      position: relative;
+      width: 50%;
+    }
+    .env-wallet .wallet-card {
+      width: 100%;
+      aspect-ratio: 1.6;
+      border-radius: 4px;
+      box-shadow: 2px 4px 12px rgba(0,0,0,0.3);
+    }
+    .env-wallet .wallet-behind {
+      position: absolute;
+      top: 4px; left: 6px;
+      width: 100%;
+      aspect-ratio: 1.6;
+      background: var(--bg-card);
+      border-radius: 4px;
+      z-index: -1;
+      transform: rotate(3deg);
+    }
+    .env-wallet .wallet-behind2 {
+      position: absolute;
+      top: 8px; left: -4px;
+      width: 100%;
+      aspect-ratio: 1.6;
+      background: var(--border);
+      border-radius: 4px;
+      z-index: -2;
+      transform: rotate(-2deg);
+    }
+
+    /* Canvas wrap */
+    .env-canvas {
+      background: linear-gradient(135deg, #f0ebe4, #ddd6cc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 600px;
+    }
+    .env-canvas .canvas-wrap {
+      width: 60%;
+      aspect-ratio: 1;
+      position: relative;
+      transform: rotateY(-8deg);
+      transform-style: preserve-3d;
+    }
+    .env-canvas .canvas-face {
+      width: 100%;
+      height: 100%;
+      border-radius: 1px;
+      box-shadow: 4px 6px 20px rgba(0,0,0,0.15);
+    }
+    .env-canvas .canvas-side {
+      position: absolute;
+      top: 0;
+      right: -12px;
+      width: 12px;
+      height: 100%;
+      background: linear-gradient(90deg, #8060a0, #6a4890);
+      transform: rotateY(90deg);
+      transform-origin: left center;
+    }
+
+    /* Poster */
+    .env-poster {
+      background: linear-gradient(180deg, #f8f5f0, #ece7e0);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 15%;
+    }
+    .env-poster .poster-print {
+      width: 50%;
+      aspect-ratio: 0.7;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .env-poster .poster-clip {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 10px;
+      background: #c8b8a8;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .product-info {
+      padding: 18px 20px 20px;
+    }
+    .product-name {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+    .product-size {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
+    .product-price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .product-price {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+    .product-tag {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .tag-popular { background: var(--accent-glow); color: var(--accent); }
+    .tag-new { background: rgba(224,93,186,0.1); color: var(--pink); }
+    .tag-premium { background: rgba(245,158,66,0.1); color: var(--orange); }
+
+    /* ─── UPSCALE CTA ─── */
+    .upscale-bar {
+      margin-top: 32px;
+      background: var(--bg-card);
+      border: 1px solid rgba(245,158,66,0.2);
+      border-radius: 14px;
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .upscale-info {
+      flex: 1;
+    }
+    .upscale-title {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .upscale-title .warn-icon {
+      color: var(--orange);
+      font-size: 1rem;
+    }
+    .upscale-desc {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      font-weight: 300;
+    }
+    .upscale-btn {
+      background: linear-gradient(135deg, var(--orange), #e08a30);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .upscale-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 16px rgba(245,158,66,0.3);
+    }
+
+    /* ─── HOW IT WORKS ─── */
+    .how-section {
+      padding: 100px 0;
+    }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: var(--sans);
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 48px;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    .step {
+      position: relative;
+    }
+    .step-num {
+      font-family: var(--mono);
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--border);
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+    .step-title {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+    .step-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+    .step-connector {
+      position: absolute;
+      top: 32px;
+      right: -20px;
+      color: var(--text-faint);
+      font-size: 1.2rem;
+    }
+
+    /* ─── FORMATS GRID ─── */
+    .formats-section {
+      padding: 0 0 100px;
+    }
+    .formats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .format-cell {
+      background: var(--bg-raised);
+      padding: 32px 28px;
+      transition: background 0.2s;
+    }
+    .format-cell:hover {
+      background: var(--bg-card);
+    }
+    .format-icon {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+    }
+    .format-name {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+    .format-desc {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      font-weight: 300;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .format-price {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+    }
+
+    /* ─── PROMPT GALLERY ─── */
+    .gallery-section {
+      padding: 0 0 100px;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .gallery-item {
+      aspect-ratio: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .gallery-item:hover {
+      transform: scale(1.03);
+    }
+    .gallery-item .art-canvas {
+      border-radius: 0;
+    }
+    .gallery-prompt {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 40px 12px 12px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.4;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .gallery-item:hover .gallery-prompt { opacity: 1; }
+
+    /* Different art styles for gallery */
+    .art-style-2::before {
+      background:
+        radial-gradient(ellipse at 60% 30%, rgba(240,80,40,0.7) 0%, transparent 50%),
+        radial-gradient(ellipse at 30% 70%, rgba(40,60,200,0.6) 0%, transparent 45%),
+        radial-gradient(ellipse at 80% 80%, rgba(240,200,40,0.4) 0%, transparent 35%) !important;
+    }
+    .art-style-3::before {
+      background:
+        radial-gradient(ellipse at 50% 50%, rgba(20,180,120,0.7) 0%, transparent 40%),
+        radial-gradient(ellipse at 20% 20%, rgba(80,40,180,0.5) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(200,100,40,0.4) 0%, transparent 35%) !important;
+    }
+    .art-style-4::before {
+      background:
+        radial-gradient(ellipse at 40% 60%, rgba(200,40,100,0.7) 0%, transparent 45%),
+        radial-gradient(ellipse at 70% 30%, rgba(40,160,220,0.5) 0%, transparent 50%),
+        radial-gradient(ellipse at 30% 30%, rgba(240,220,40,0.3) 0%, transparent 40%) !important;
+    }
+
+    /* ─── FINAL CTA ─── */
+    .final-cta {
+      text-align: center;
+      padding: 80px 0 120px;
+    }
+    .final-cta h2 {
+      font-family: var(--sans);
+      font-size: 2.4rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .final-cta p {
+      font-size: 1rem;
+      color: var(--text-dim);
+      max-width: 400px;
+      margin: 0 auto 32px;
+      font-weight: 300;
+    }
+    .cta-big {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 16px 36px;
+      border-radius: 14px;
+      font-family: var(--sans);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-decoration: none;
+    }
+    .cta-big:hover {
+      background: #4a6ee4;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(91,127,245,0.3);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-left {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-weight: 300;
+    }
+    .footer-left a {
+      color: var(--text-dim);
+      text-decoration: none;
+    }
+    .footer-left a:hover { color: var(--text); }
+    .footer-right {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-faint);
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero { animation: fadeUp 0.7s ease both; }
+    .paste-zone { animation: fadeUp 0.7s ease 0.15s both; }
+    .paste-hint { animation: fadeUp 0.7s ease 0.25s both; }
+
+    .preview-section.active {
+      animation: fadeUp 0.5s ease both;
+    }
+
+    /* Selection animation */
+    @keyframes selectPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(0.97); }
+      100% { transform: scale(1); }
+    }
+    .product-card.just-selected {
+      animation: selectPop 0.3s ease;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.4rem; }
+      .steps { grid-template-columns: 1fr; gap: 24px; }
+      .step-connector { display: none; }
+      .formats-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .product-card { flex: 0 0 240px; }
+      .upscale-bar { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 1.8rem; }
+      .section-title { font-size: 1.6rem; }
+      .product-card { flex: 0 0 220px; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient"></div>
+  <div class="topbar"></div>
+
+  <div class="container">
+    <nav>
+      <div class="nav-logo"><span>/</span>print</div>
+      <div class="nav-right">
+        <a href="#how" class="nav-link">How it works</a>
+        <a href="#formats" class="nav-link">Formats</a>
+        <span class="nav-badge">SPS Labs</span>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-command">/print<span class="cursor"></span></div>
+      <h1>Your prompts,<br><span class="grad">printed.</span></h1>
+      <p class="hero-sub">Paste any Midjourney image URL. We'll show you how it looks as a framed print, metal print, fridge magnet, and more. Then we print it and ship it to your door.</p>
+    </div>
+
+    <!-- PASTE INPUT -->
+    <div class="paste-zone">
+      <span class="paste-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      </span>
+      <input type="text" class="paste-input" id="urlInput" placeholder="Paste a Midjourney image URL..." />
+      <button class="paste-btn" id="goBtn">Print it</button>
+    </div>
+    <p class="paste-hint">Try it — paste any cdn.midjourney.com URL or click "Print it" for a demo</p>
+
+    <!-- PREVIEW (hidden until URL entered) -->
+    <div class="preview-section" id="previewSection">
+
+      <div class="preview-header">
+        <div class="preview-status">
+          <span class="status-dot"></span>
+          <span class="status-text">Image loaded</span>
+        </div>
+        <span class="resolution-badge res-warn" id="resBadge">
+          <span class="warn-icon">&#9888;</span>
+          1024 &times; 1024 — upscale recommended
+        </span>
+      </div>
+
+      <!-- Product carousel -->
+      <div class="carousel-label">Pick your format</div>
+      <div class="carousel-sub">Swipe through product types. Each one ships in 3-5 days.</div>
+
+      <div class="carousel-track" id="carousel">
+        <!-- Framed Print -->
+        <div class="product-card selected" onclick="selectCard(this)">
+          <div class="product-mockup">
+            <div class="mockup-env env-framed">
+              <div class="frame-outer">
+                <div class="frame-mat">
+                  <div class="frame-art art-canvas"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Framed Print</div>
+            <div class="product-size">12" &times; 12" &bull; Black wood frame, white mat</div>
+            <div class="product-price-row">
+              <span class="product-price">$42</span>
+              <span class="product-tag tag-popular">Popular</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fridge Magnet -->
+        <div class="product-card" onclick="selectCard(this)">
+          <div class="product-mockup">
+            <div class="mockup-env env-magnet">
+              <div class="magnet-photo art-canvas">
+                <span class="magnet-clip"></span>
+              </div>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Fridge Magnet</div>
+            <div class="product-size">4" &times; 4" &bull; Thick, vibrant, magnetic</div>
+            <div class="product-price-row">
+              <span class="product-price">$8</span>
+              <span class="product-tag tag-new">Fun</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metal Print -->
+        <div class="product-card" onclick="selectCard(this)">
+          <div class="product-mockup">
+            <div class="mockup-env env-metal">
+              <div class="metal-print art-canvas"></div>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Metal Print</div>
+            <div class="product-size">12" &times; 12" &bull; HD aluminum, vivid colors</div>
+            <div class="product-price-row">
+              <span class="product-price">$65</span>
+              <span class="product-tag tag-premium">Premium</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mounted Print -->
+        <div class="product-card" onclick="selectCard(this)">
+          <div class="product-mockup">
+            <div class="mockup-env env-mounted">
+              <div class="mount-shadow"></div>
+              <div class="mount-print art-canvas"></div>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Float Mount</div>
+            <div class="product-size">16" &times; 16" &bull; 1" standoff, gallery look</div>
+            <div class="product-price-row">
+              <span class="product-price">$55</span>
+              <span class="product-tag tag-premium">Gallery</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wallet Size -->
+        <div class="product-card" onclick="selectCard(this)">
+          <div class="product-mockup">
+            <div class="mockup-env env-wallet">
+              <div class="wallet-stack">
+                <div class="wallet-behind2"></div>
+                <div class="wallet-behind"></div>
+                <div class="wallet-card art-canvas"></div>
+              </div>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Wallet Prints</div>
+            <div class="product-size">2.5" &times; 3.5" &bull; Set of 8 mini prints</div>
+            <div class="product-price-row">
+              <span class="product-price">$12</span>
+              <span class="product-tag tag-new">New</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Canvas Wrap -->
+        <div class="product-card" onclick="selectCard(this)">
+          <div class="product-mockup">
+            <div class="mockup-env env-canvas">
+              <div class="canvas-wrap">
+                <div class="canvas-face art-canvas"></div>
+                <div class="canvas-side"></div>
+              </div>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Canvas Wrap</div>
+            <div class="product-size">16" &times; 16" &bull; 1.5" gallery wrap</div>
+            <div class="product-price-row">
+              <span class="product-price">$48</span>
+              <span class="product-tag tag-popular">Classic</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Poster -->
+        <div class="product-card" onclick="selectCard(this)">
+          <div class="product-mockup">
+            <div class="mockup-env env-poster">
+              <div class="poster-print art-canvas">
+                <div class="poster-clip"></div>
+              </div>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Poster Print</div>
+            <div class="product-size">24" &times; 36" &bull; Matte or glossy</div>
+            <div class="product-price-row">
+              <span class="product-price">$22</span>
+              <span class="product-tag tag-new">Big</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upscale bar -->
+      <div class="upscale-bar">
+        <div class="upscale-info">
+          <div class="upscale-title">
+            <span class="warn-icon">&#9888;</span>
+            Low resolution detected
+          </div>
+          <div class="upscale-desc">Your image is 1024&times;1024px. For prints larger than 8", we recommend upscaling to 4096&times;4096. We'll handle it — free, takes ~30 seconds.</div>
+        </div>
+        <button class="upscale-btn" onclick="upscaleDemo()">Upscale Free</button>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="how-section" id="how">
+      <div class="section-label">How it works</div>
+      <div class="section-title">Three steps. That's it.</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-title">Paste your URL</div>
+          <div class="step-desc">Grab any Midjourney image link — from Discord, the web app, or your gallery. Paste it here.</div>
+          <span class="step-connector">&rarr;</span>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-title">Pick your format</div>
+          <div class="step-desc">Swipe through product types — framed, metal, magnet, canvas, wallet, poster. See a realistic preview of each.</div>
+          <span class="step-connector">&rarr;</span>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-title">We print & ship</div>
+          <div class="step-desc">Professional printing on real materials. Ships in 3-5 days. Your AI art, made physical.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALL FORMATS -->
+    <div class="formats-section" id="formats">
+      <div class="section-label">All formats</div>
+      <div class="section-title">Seven ways to print your imagination</div>
+      <div class="formats-grid">
+        <div class="format-cell">
+          <div class="format-icon">&#128444;</div>
+          <div class="format-name">Framed Print</div>
+          <div class="format-desc">Black or white wood frame with archival mat. Ready to hang. The instant-gallery option.</div>
+          <div class="format-price">from $42</div>
+        </div>
+        <div class="format-cell">
+          <div class="format-icon">&#129522;</div>
+          <div class="format-name">Fridge Magnet</div>
+          <div class="format-desc">Thick, durable, glossy. Stick your best prompts on the fridge. Great stocking stuffer.</div>
+          <div class="format-price">from $8</div>
+        </div>
+        <div class="format-cell">
+          <div class="format-icon">&#10024;</div>
+          <div class="format-name">Metal Print</div>
+          <div class="format-desc">HD dye-sublimation on brushed aluminum. Colors pop like nothing else. Zero frame needed.</div>
+          <div class="format-price">from $65</div>
+        </div>
+        <div class="format-cell">
+          <div class="format-icon">&#128200;</div>
+          <div class="format-name">Float Mount</div>
+          <div class="format-desc">Print on rigid board with 1" standoffs. Floats off the wall. Modern gallery aesthetic.</div>
+          <div class="format-price">from $55</div>
+        </div>
+        <div class="format-cell">
+          <div class="format-icon">&#127912;</div>
+          <div class="format-name">Canvas Wrap</div>
+          <div class="format-desc">Museum-quality canvas, 1.5" gallery wrap. Image wraps around the edges. A classic.</div>
+          <div class="format-price">from $48</div>
+        </div>
+        <div class="format-cell">
+          <div class="format-icon">&#128196;</div>
+          <div class="format-name">Poster</div>
+          <div class="format-desc">Large format prints up to 24"&times;36". Matte or glossy finish. The budget hero.</div>
+          <div class="format-price">from $22</div>
+        </div>
+        <div class="format-cell">
+          <div class="format-icon">&#127183;</div>
+          <div class="format-name">Wallet Prints</div>
+          <div class="format-desc">Set of 8 mini prints. Trade with friends. Tuck into books. Miniature art collection.</div>
+          <div class="format-price">from $12</div>
+        </div>
+        <div class="format-cell">
+          <div class="format-icon">&#128230;</div>
+          <div class="format-name">Gift Set</div>
+          <div class="format-desc">Magnet + wallet prints + framed print in a gift box. The complete collection for gifting.</div>
+          <div class="format-price">from $68</div>
+        </div>
+        <div class="format-cell">
+          <div class="format-icon">&#9889;</div>
+          <div class="format-name">Request a format</div>
+          <div class="format-desc">Want something we don't offer? Acrylic? Wood? Tiles? Tell us and we'll see what we can do.</div>
+          <div class="format-price">let us know</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROMPT GALLERY -->
+    <div class="gallery-section">
+      <div class="section-label">Prompt gallery</div>
+      <div class="section-title">From imagination to your wall</div>
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <div class="art-canvas"></div>
+          <div class="gallery-prompt">ethereal jellyfish in bioluminescent ocean --ar 1:1 --v 6</div>
+        </div>
+        <div class="gallery-item">
+          <div class="art-canvas art-style-2"></div>
+          <div class="gallery-prompt">brutalist architecture at golden hour, warm tones --ar 1:1 --stylize 750</div>
+        </div>
+        <div class="gallery-item">
+          <div class="art-canvas art-style-3"></div>
+          <div class="gallery-prompt">enchanted forest with glowing mushrooms, studio ghibli --ar 1:1 --niji 6</div>
+        </div>
+        <div class="gallery-item">
+          <div class="art-canvas art-style-4"></div>
+          <div class="gallery-prompt">abstract fluid art, neon pink and electric blue --ar 1:1 --v 6 --chaos 50</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINAL CTA -->
+    <div class="final-cta">
+      <h2>Your best prompt deserves<br>better than a screen.</h2>
+      <p>Print it. Frame it. Put it on your fridge. Make it real.</p>
+      <button class="cta-big" onclick="document.getElementById('urlInput').focus(); window.scrollTo({top: 0, behavior: 'smooth'});">
+        Paste a URL &amp; start
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+
+    <footer>
+      <div class="footer-left"><a href="../../index.html">SPS Lab</a> &mdash; Social Print Studio</div>
+      <div class="footer-right">/print concept v0.1</div>
+    </footer>
+  </div>
+
+  <script>
+    // Demo: clicking "Print it" shows the preview section
+    const goBtn = document.getElementById('goBtn');
+    const urlInput = document.getElementById('urlInput');
+    const previewSection = document.getElementById('previewSection');
+    const resBadge = document.getElementById('resBadge');
+
+    goBtn.addEventListener('click', () => {
+      const url = urlInput.value.trim();
+      // Show preview regardless (demo mode)
+      previewSection.classList.add('active');
+      previewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // If they pasted a real URL, show OK resolution
+      if (url && url.includes('midjourney')) {
+        resBadge.className = 'resolution-badge res-ok';
+        resBadge.innerHTML = '&#10003; 4096 &times; 4096 — print ready';
+      }
+    });
+
+    // Also trigger on Enter
+    urlInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') goBtn.click();
+    });
+
+    // Card selection
+    function selectCard(card) {
+      document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected', 'just-selected');
+      setTimeout(() => card.classList.remove('just-selected'), 300);
+    }
+
+    // Upscale demo
+    function upscaleDemo() {
+      const btn = document.querySelector('.upscale-btn');
+      btn.textContent = 'Upscaling...';
+      btn.style.opacity = '0.7';
+      setTimeout(() => {
+        btn.textContent = 'Done!';
+        btn.style.background = 'linear-gradient(135deg, var(--green), #2aaf72)';
+        btn.style.opacity = '1';
+        resBadge.className = 'resolution-badge res-ok';
+        resBadge.innerHTML = '&#10003; 4096 &times; 4096 — print ready';
+        // Hide upscale bar
+        setTimeout(() => {
+          document.querySelector('.upscale-bar').style.display = 'none';
+        }, 1200);
+      }, 2000);
+    }
+  </script>
+</body>
+</html>

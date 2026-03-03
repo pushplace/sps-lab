@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mother's Day — The Easy Way | Social Print Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #faf9f7;
+      --bg-warm: #f3f0eb;
+      --bg-dark: #1c1b18;
+      --text: #1a1816;
+      --text-mid: #4a4540;
+      --text-soft: #7a746c;
+      --text-faint: #b0a89e;
+      --accent: #2c6e4f;
+      --accent-light: rgba(44,110,79,0.06);
+      --accent-hover: #245d42;
+      --warm: #c47a5a;
+      --warm-light: rgba(196,122,90,0.08);
+      --serif: 'DM Serif Display', serif;
+      --sans: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── URGENCY BAR ─── */
+    .urgency-bar {
+      background: var(--accent);
+      color: #fff;
+      text-align: center;
+      padding: 12px 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+    .urgency-bar strong { font-weight: 700; }
+    .countdown {
+      font-family: var(--mono);
+      font-weight: 400;
+      font-size: 0.75rem;
+      margin-left: 6px;
+      opacity: 0.85;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-brand {
+      font-family: var(--serif);
+      font-size: 1rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-cta {
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: all 0.2s;
+    }
+    .nav-cta:hover { background: var(--accent-hover); }
+
+    /* ─── HERO ─── */
+    .hero {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 72px 32px 64px;
+      text-align: center;
+    }
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: 3.6rem;
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -0.01em;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--text-mid);
+      font-weight: 300;
+      line-height: 1.75;
+      max-width: 560px;
+      margin: 0 auto 36px;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #fff;
+      padding: 17px 40px;
+      border-radius: 100px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: all 0.25s;
+      margin-bottom: 16px;
+    }
+    .hero-cta:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(44,110,79,0.2);
+    }
+    .hero-time {
+      font-size: 0.82rem;
+      color: var(--text-soft);
+      font-weight: 400;
+    }
+    .hero-time strong {
+      color: var(--text-mid);
+      font-weight: 600;
+    }
+
+    /* ─── THE SETUP ─── */
+    .setup-section {
+      background: var(--bg-dark);
+      color: #fff;
+      padding: 80px 32px;
+    }
+    .setup-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .setup-inner p {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      font-weight: 300;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 20px;
+    }
+    .setup-inner p strong {
+      color: #fff;
+      font-weight: 500;
+    }
+    .setup-inner .setup-kicker {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      color: #fff;
+      font-weight: 400;
+      line-height: 1.35;
+      margin-bottom: 28px;
+      font-style: italic;
+    }
+    .setup-divider {
+      width: 40px;
+      height: 2px;
+      background: var(--accent);
+      margin: 32px 0;
+    }
+    .setup-inner .setup-closer {
+      font-size: 1.3rem;
+      color: #fff;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+    .setup-closer em {
+      color: var(--warm);
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    /* ─── PRODUCT PICKER ─── */
+    .picker-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 100px 32px;
+    }
+    .picker-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .picker-header .label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .picker-header h2 {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+    .picker-header p {
+      font-size: 0.95rem;
+      color: var(--text-soft);
+      font-weight: 300;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .product {
+      background: #fff;
+      border: 2px solid transparent;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s;
+      position: relative;
+    }
+    .product:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+    }
+    .product.recommended {
+      border-color: var(--accent);
+    }
+    .product-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      z-index: 2;
+    }
+
+    /* Product mockups */
+    .product-visual {
+      width: 100%;
+      aspect-ratio: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Tiny Book mockup */
+    .vis-tinybook {
+      background: linear-gradient(135deg, #f8f5f0, #ede8e0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 32px;
+    }
+    .tb-book {
+      width: 28%;
+      aspect-ratio: 0.72;
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 2px 4px 12px rgba(0,0,0,0.08);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .product:hover .tb-book { transform: translateY(-4px); }
+    .tb-book:nth-child(2) { transform: translateY(-8px); }
+    .product:hover .tb-book:nth-child(2) { transform: translateY(-12px); }
+    .tb-cover {
+      width: 100%;
+      height: 70%;
+    }
+    .tb-c1 { background: linear-gradient(135deg, #e8ddd4, #d8ccc0); }
+    .tb-c2 { background: linear-gradient(135deg, #d4dce8, #c0c8d8); }
+    .tb-c3 { background: linear-gradient(135deg, #e0d8e8, #ccc4d8); }
+    .tb-spine {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 30%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tb-dots {
+      display: flex;
+      gap: 3px;
+    }
+    .tb-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--text-faint);
+    }
+
+    /* Calendar mockup */
+    .vis-calendar {
+      background: linear-gradient(135deg, #f0ede8, #e6e0d8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cal-mock {
+      width: 55%;
+      background: #fff;
+      border-radius: 5px;
+      box-shadow: 3px 6px 20px rgba(0,0,0,0.08);
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .product:hover .cal-mock { transform: translateY(-4px) scale(1.02); }
+    .cal-mock-photo {
+      width: 100%;
+      aspect-ratio: 1.1;
+      background: linear-gradient(135deg, #f4e8dc, #ecdccc);
+    }
+    .cal-mock-strip {
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .cal-mock-day {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+    .cal-mock-date {
+      font-size: 0.55rem;
+      color: var(--text-soft);
+      text-align: right;
+    }
+
+    /* Framed print mockup */
+    .vis-framed {
+      background: linear-gradient(135deg, #f5f0ea, #eae4da);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .frame-mock {
+      width: 55%;
+      aspect-ratio: 0.8;
+      background: #1a1410;
+      padding: 6px;
+      box-shadow: 4px 6px 20px rgba(0,0,0,0.12);
+      transition: transform 0.3s;
+    }
+    .product:hover .frame-mock { transform: rotate(-1deg) translateY(-4px); }
+    .frame-mat {
+      width: 100%;
+      height: 100%;
+      background: #f6f3ee;
+      padding: 15%;
+    }
+    .frame-photo {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #e8dcd4, #dcd0c4);
+      border-radius: 1px;
+    }
+
+    .product-info {
+      padding: 22px 24px 26px;
+    }
+    .product-name {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+    .product-desc {
+      font-size: 0.82rem;
+      color: var(--text-soft);
+      font-weight: 300;
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+    .product-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .product-price {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+    }
+    .product-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .product-btn:hover { background: var(--accent-hover); }
+
+    /* ─── SPEED SECTION ─── */
+    .speed-section {
+      background: var(--bg-warm);
+      padding: 100px 32px;
+    }
+    .speed-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .speed-inner .label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .speed-inner h2 {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      font-weight: 400;
+      margin-bottom: 48px;
+    }
+    .speed-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .speed-step {}
+    .speed-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 1.6rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .speed-time {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+    .speed-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+    .speed-desc {
+      font-size: 0.82rem;
+      color: var(--text-soft);
+      font-weight: 300;
+      line-height: 1.55;
+    }
+    .speed-total {
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 32px;
+      border-radius: 100px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .speed-total-time {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      color: var(--accent);
+    }
+    .speed-total-label {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      font-weight: 400;
+      text-align: left;
+      line-height: 1.3;
+    }
+
+    /* ─── REACTION SECTION ─── */
+    .reaction-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 100px 32px;
+    }
+    .reaction-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .reaction-header .label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .reaction-header h2 {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+    .reaction-header p {
+      font-size: 0.95rem;
+      color: var(--text-soft);
+      font-weight: 300;
+    }
+
+    .reactions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .reaction-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 32px;
+      position: relative;
+    }
+    .reaction-card.big {
+      grid-column: 1 / -1;
+      background: var(--accent-light);
+      border: 1px solid rgba(44,110,79,0.1);
+      text-align: center;
+      padding: 48px 32px;
+    }
+    .reaction-quote {
+      font-size: 1rem;
+      color: var(--text-mid);
+      font-weight: 300;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+    .reaction-card.big .reaction-quote {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.4;
+      max-width: 600px;
+      margin: 0 auto 16px;
+      color: var(--text);
+    }
+    .reaction-from {
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      font-weight: 500;
+    }
+    .reaction-context {
+      font-size: 0.72rem;
+      color: var(--text-faint);
+      font-weight: 300;
+      margin-top: 2px;
+    }
+
+    /* ─── COMPARE SECTION ─── */
+    .compare-section {
+      background: var(--bg-warm);
+      padding: 80px 32px;
+    }
+    .compare-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .compare-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .compare-header h2 {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 400;
+    }
+    .compare-table {
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+    }
+    .compare-row {
+      display: grid;
+      grid-template-columns: 1fr 100px 100px;
+      padding: 16px 24px;
+      align-items: center;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      font-size: 0.88rem;
+    }
+    .compare-row:last-child { border: none; }
+    .compare-row.header {
+      background: var(--bg-warm);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-soft);
+    }
+    .compare-row .col-center {
+      text-align: center;
+    }
+    .compare-gift { font-weight: 400; color: var(--text-mid); }
+    .compare-check { color: var(--accent); font-size: 1.1rem; text-align: center; }
+    .compare-x { color: var(--text-faint); font-size: 1.1rem; text-align: center; }
+    .compare-row.highlight {
+      background: var(--accent-light);
+    }
+    .compare-row.highlight .compare-gift {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ─── GUARANTEE ─── */
+    .guarantee-section {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 80px 32px;
+      text-align: center;
+    }
+    .guarantee-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .guarantee-section h3 {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+    .guarantee-section p {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      font-weight: 300;
+      line-height: 1.65;
+    }
+
+    /* ─── FINAL CTA ─── */
+    .final-section {
+      background: var(--bg-dark);
+      color: #fff;
+      padding: 100px 32px;
+      text-align: center;
+    }
+    .final-section .kicker {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.45);
+      font-weight: 300;
+      margin-bottom: 16px;
+    }
+    .final-section h2 {
+      font-family: var(--serif);
+      font-size: 2.8rem;
+      font-weight: 400;
+      line-height: 1.15;
+      max-width: 550px;
+      margin: 0 auto 16px;
+    }
+    .final-section h2 em {
+      font-style: italic;
+      color: var(--warm);
+    }
+    .final-sub {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+      max-width: 400px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+    .final-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--warm);
+      color: #fff;
+      padding: 17px 40px;
+      border-radius: 100px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: all 0.25s;
+      margin-bottom: 20px;
+    }
+    .final-btn:hover {
+      background: #b56d4e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(196,122,90,0.3);
+    }
+    .final-details {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      margin-top: 8px;
+    }
+    .final-detail {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.35);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .final-detail-icon { font-size: 0.85rem; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 24px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(0,0,0,0.04);
+    }
+    .footer-left {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      font-weight: 300;
+    }
+    .footer-left a { color: var(--text-soft); text-decoration: none; }
+    .footer-left a:hover { color: var(--text); }
+    .footer-right {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-faint);
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero { animation: fadeUp 0.7s ease both; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.4rem; }
+      .products { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
+      .speed-steps { grid-template-columns: 1fr; gap: 28px; }
+      .reactions { grid-template-columns: 1fr; }
+      .compare-row { grid-template-columns: 1fr 80px 80px; font-size: 0.8rem; }
+      .final-section h2 { font-size: 2rem; }
+      .final-details { flex-direction: column; gap: 10px; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Urgency bar -->
+  <div class="urgency-bar">
+    <strong>Mother's Day is May 10th.</strong> Order by April 30 for guaranteed delivery.
+    <span class="countdown" id="countdown"></span>
+  </div>
+
+  <nav>
+    <a href="../../../index.html" class="nav-brand">Social Print Studio</a>
+    <a href="#pick" class="nav-cta">Pick a gift &rarr;</a>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <div class="hero">
+    <div class="hero-tag">Mother's Day Gift Guide for Dads</div>
+    <h1>She'll love it.<br>You'll be <em>done</em><br>in five minutes.</h1>
+    <p class="hero-sub">Pick a photo gift with the kids in it. We print it. She opens it on Mother's Day and you're the hero. It's genuinely that easy.</p>
+    <a href="#pick" class="hero-cta">Pick a gift &rarr;</a>
+    <div class="hero-time">Takes <strong>5 minutes</strong>. Ships in 3-5 days. She cries happy tears.</div>
+  </div>
+
+  <!-- ─── THE SETUP ─── -->
+  <div class="setup-section reveal">
+    <div class="setup-inner">
+      <p class="setup-kicker">Here's what she actually wants for Mother's Day.</p>
+      <p>It's not flowers. She likes flowers, but they die on Thursday. It's not a spa gift card she'll never use. And it's definitely not a "Happy Mother's Day!" text at 2pm.</p>
+      <p><strong>She wants to know that you see it.</strong> The 6am wake-ups. The school lunches. The way she documented every single milestone because she knew you'd both want to remember. She has thousands of photos of your kids on her phone. She took every one of them.</p>
+      <div class="setup-divider"></div>
+      <p class="setup-closer">This year, take <em>twenty of those photos</em> and turn them into something she can hold in her hands. That's it. That's the whole gift.</p>
+    </div>
+  </div>
+
+  <!-- ─── PRODUCT PICKER ─── -->
+  <div class="picker-section reveal" id="pick">
+    <div class="picker-header">
+      <div class="label">Pick one</div>
+      <h2>Three gifts. All winners.</h2>
+      <p>You literally cannot go wrong. Pick the one that feels right.</p>
+    </div>
+
+    <div class="products">
+      <!-- Tiny Book -->
+      <div class="product recommended" onclick="alert('This is a concept — not yet shoppable!')">
+        <span class="product-badge">Most popular</span>
+        <div class="product-visual vis-tinybook">
+          <div class="tb-book">
+            <div class="tb-cover tb-c1"></div>
+            <div class="tb-spine"><div class="tb-dots"><span class="tb-dot"></span><span class="tb-dot"></span><span class="tb-dot"></span></div></div>
+          </div>
+          <div class="tb-book">
+            <div class="tb-cover tb-c2"></div>
+            <div class="tb-spine"><div class="tb-dots"><span class="tb-dot"></span><span class="tb-dot"></span><span class="tb-dot"></span></div></div>
+          </div>
+          <div class="tb-book">
+            <div class="tb-cover tb-c3"></div>
+            <div class="tb-spine"><div class="tb-dots"><span class="tb-dot"></span><span class="tb-dot"></span><span class="tb-dot"></span></div></div>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Tiny Books</div>
+          <div class="product-desc">Set of 3 little magnetic photo books. 72 photos total. She'll put them on the fridge and look at them every single day.</div>
+          <div class="product-bottom">
+            <span class="product-price">$42</span>
+            <button class="product-btn">Make this</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendar -->
+      <div class="product" onclick="alert('This is a concept — not yet shoppable!')">
+        <div class="product-visual vis-calendar">
+          <div class="cal-mock">
+            <div class="cal-mock-photo"></div>
+            <div class="cal-mock-strip">
+              <span class="cal-mock-day">11</span>
+              <span class="cal-mock-date">Sunday<br>May 11</span>
+            </div>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Daily Calendar</div>
+          <div class="product-desc">A new photo of the kids on her desk every morning for a year. 365 pages. She'll think of you every time she tears one off.</div>
+          <div class="product-bottom">
+            <span class="product-price">$38</span>
+            <button class="product-btn">Make this</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Framed Print -->
+      <div class="product" onclick="alert('This is a concept — not yet shoppable!')">
+        <div class="product-visual vis-framed">
+          <div class="frame-mock">
+            <div class="frame-mat">
+              <div class="frame-photo"></div>
+            </div>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Framed Print</div>
+          <div class="product-desc">One perfect photo. Framed. Ready to hang. Pick the best one on your phone — you know which one it is.</div>
+          <div class="product-bottom">
+            <span class="product-price">$35</span>
+            <button class="product-btn">Make this</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SPEED ─── -->
+  <div class="speed-section reveal">
+    <div class="speed-inner">
+      <div class="label">No excuses</div>
+      <h2>Here's how fast this is</h2>
+      <div class="speed-steps">
+        <div class="speed-step">
+          <div class="speed-icon">&#128248;</div>
+          <div class="speed-time">1 min</div>
+          <div class="speed-title">Pick a product</div>
+          <div class="speed-desc">You just did this. Scroll up, click "Make this." One decision, done.</div>
+        </div>
+        <div class="speed-step">
+          <div class="speed-icon">&#128241;</div>
+          <div class="speed-time">3 min</div>
+          <div class="speed-title">Upload photos</div>
+          <div class="speed-desc">Open your camera roll. Pick the ones that make you smile. Drag them in. We arrange them.</div>
+        </div>
+        <div class="speed-step">
+          <div class="speed-icon">&#10003;</div>
+          <div class="speed-time">1 min</div>
+          <div class="speed-title">Checkout</div>
+          <div class="speed-desc">Apple Pay, done. We print it, box it up, and ship it to your door.</div>
+        </div>
+      </div>
+      <div class="speed-total">
+        <span class="speed-total-time">5 min</span>
+        <span class="speed-total-label">Total time.<br>Less than ordering pizza.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── REACTIONS ─── -->
+  <div class="reaction-section reveal">
+    <div class="reaction-header">
+      <div class="label">What she'll actually say</div>
+      <h2>Don't take our word for it</h2>
+      <p>These are from real dads who did this exact thing.</p>
+    </div>
+    <div class="reactions">
+      <div class="reaction-card big">
+        <div class="reaction-quote">"She opened the tiny books, looked at every single page, and then just held them and cried. I've never gotten that reaction from a gift in 11 years of marriage. Took me four minutes to make."</div>
+        <div class="reaction-from">Chris R.</div>
+        <div class="reaction-context">Ordered Tiny Books for his wife &bull; 3 kids</div>
+      </div>
+      <div class="reaction-card">
+        <div class="reaction-quote">"My wife said — and I quote — 'This is the most thoughtful thing you've ever done.' I picked 20 photos of our daughter on a Tuesday night. Best ROI of my life."</div>
+        <div class="reaction-from">Marcus T.</div>
+        <div class="reaction-context">Ordered Tiny Books</div>
+      </div>
+      <div class="reaction-card">
+        <div class="reaction-quote">"She keeps the calendar on her desk at work. Her coworkers ask about it. She lights up explaining that her husband made it. I'm living off that credit for years."</div>
+        <div class="reaction-from">Derek P.</div>
+        <div class="reaction-context">Ordered Daily Calendar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── COMPARE ─── -->
+  <div class="compare-section reveal">
+    <div class="compare-inner">
+      <div class="compare-header">
+        <h2>The honest comparison</h2>
+      </div>
+      <div class="compare-table">
+        <div class="compare-row header">
+          <span></span>
+          <span class="col-center">Photo gift</span>
+          <span class="col-center">Flowers</span>
+        </div>
+        <div class="compare-row">
+          <span class="compare-gift">Makes her cry (good tears)</span>
+          <span class="compare-check">&#10003;</span>
+          <span class="compare-x">&mdash;</span>
+        </div>
+        <div class="compare-row">
+          <span class="compare-gift">Still exists after Thursday</span>
+          <span class="compare-check">&#10003;</span>
+          <span class="compare-x">&mdash;</span>
+        </div>
+        <div class="compare-row">
+          <span class="compare-gift">Shows you actually tried</span>
+          <span class="compare-check">&#10003;</span>
+          <span class="compare-x">&mdash;</span>
+        </div>
+        <div class="compare-row">
+          <span class="compare-gift">Has the kids' faces in it</span>
+          <span class="compare-check">&#10003;</span>
+          <span class="compare-x">&mdash;</span>
+        </div>
+        <div class="compare-row">
+          <span class="compare-gift">Under $50</span>
+          <span class="compare-check">&#10003;</span>
+          <span class="compare-check">&#10003;</span>
+        </div>
+        <div class="compare-row highlight">
+          <span class="compare-gift">She'll show everyone who visits</span>
+          <span class="compare-check">&#10003;</span>
+          <span class="compare-x">&mdash;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── GUARANTEE ─── -->
+  <div class="guarantee-section reveal">
+    <div class="guarantee-icon">&#128588;</div>
+    <h3>The dad guarantee</h3>
+    <p>If she doesn't love it, we'll refund you. No questions, no hassle. But honestly? In 12 years of printing photos, the return rate on gifts is basically zero. She's going to love it.</p>
+  </div>
+
+  <!-- ─── FINAL CTA ─── -->
+  <div class="final-section">
+    <div class="kicker">You've been scrolling for 45 seconds. That's 10% of the total effort.</div>
+    <h2>Five minutes.<br>Best gift <em>she's ever gotten.</em></h2>
+    <p class="final-sub">Pick a gift. Upload some photos of the kids. Let us handle the rest. You've got this.</p>
+    <button class="final-btn" onclick="document.getElementById('pick').scrollIntoView({behavior:'smooth'})">
+      Pick a gift &rarr;
+    </button>
+    <div class="final-details">
+      <span class="final-detail"><span class="final-detail-icon">&#128666;</span> Order by April 30</span>
+      <span class="final-detail"><span class="final-detail-icon">&#127873;</span> Arrives gift-wrapped</span>
+      <span class="final-detail"><span class="final-detail-icon">&#9203;</span> 5 minutes, really</span>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-left"><a href="../../../index.html">SPS Lab</a> &mdash; Social Print Studio</div>
+    <div class="footer-right">concept v0.1</div>
+  </footer>
+
+  <script>
+    // Countdown to Mother's Day (May 10, 2026)
+    function updateCountdown() {
+      const md = new Date('2026-05-10T00:00:00');
+      const now = new Date();
+      const diff = md - now;
+      if (diff <= 0) {
+        document.getElementById('countdown').textContent = "— It's today!";
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      document.getElementById('countdown').textContent = `— ${days} days left`;
+    }
+    updateCountdown();
+
+    // Scroll reveal
+    function revealOnScroll() {
+      document.querySelectorAll('.reveal').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.85) {
+          el.classList.add('visible');
+        }
+      });
+    }
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+  </script>
+</body>
+</html>
