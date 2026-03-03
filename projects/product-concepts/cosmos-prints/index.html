@@ -1152,6 +1152,13 @@ function renderGallery(images) {
       </div>
     </div>
   `).join('');
+
+  // Hide cards whose images haven't loaded after 8 seconds
+  setTimeout(() => {
+    gallery.querySelectorAll('.gallery-card img:not(.loaded)').forEach(img => {
+      img.parentElement.style.display = 'none';
+    });
+  }, 8000);
 }
 
 function renderSkeletons(count = 9) {
