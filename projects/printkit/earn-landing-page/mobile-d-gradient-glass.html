@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PrintKit Earn — Revenue Share for Developers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg-deep:#0a0a1a;
+  --purple:#7c3aed;
+  --indigo:#4f46e5;
+  --teal:#0d9488;
+  --cyan:#22d3ee;
+  --mint:#34d399;
+  --glass-bg:rgba(255,255,255,0.06);
+  --glass-border:rgba(255,255,255,0.1);
+  --glass-strong:rgba(255,255,255,0.1);
+  --text-primary:#f1f5f9;
+  --text-secondary:#94a3b8;
+  --text-tertiary:#64748b;
+  --radius:16px;
+  --radius-sm:12px;
+  --safe-bottom:env(safe-area-inset-bottom, 0px);
+}
+
+html{scroll-behavior:smooth;font-size:16px;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg-deep);
+  color:var(--text-primary);
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding-bottom:calc(80px + var(--safe-bottom));
+  max-width:430px;
+  margin:0 auto;
+}
+
+/* Grain texture overlay */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  pointer-events:none;
+  opacity:0.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:128px 128px;
+}
+
+/* Background gradient */
+.bg-gradient{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(124,58,237,0.4) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 80% 30%, rgba(79,70,229,0.35) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 50% 70%, rgba(13,148,136,0.3) 0%, transparent 50%),
+    linear-gradient(180deg, #0a0a1a 0%, #0f0a2a 30%, #0a1a2a 60%, #0a0a1a 100%);
+}
+
+/* Glowing orbs */
+.orb{
+  position:fixed;
+  border-radius:50%;
+  filter:blur(60px);
+  z-index:-1;
+  pointer-events:none;
+  animation:orbFloat 12s ease-in-out infinite;
+}
+.orb-1{width:200px;height:200px;background:rgba(124,58,237,0.2);top:-40px;right:-60px;animation-delay:0s}
+.orb-2{width:160px;height:160px;background:rgba(13,148,136,0.18);bottom:20%;left:-40px;animation-delay:-4s}
+.orb-3{width:120px;height:120px;background:rgba(79,70,229,0.15);top:40%;right:-30px;animation-delay:-8s}
+
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(10px,-15px) scale(1.05)}
+  66%{transform:translate(-8px,10px) scale(0.95)}
+}
+
+/* Glass card base */
+.glass{
+  background:var(--glass-bg);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+}
+.glass-strong{
+  background:var(--glass-strong);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:var(--radius);
+}
+
+/* Sections */
+section{padding:0 20px}
+.section-label{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--mint);
+  background:rgba(52,211,153,0.1);
+  border:1px solid rgba(52,211,153,0.2);
+  border-radius:100px;
+  padding:6px 14px;
+  margin-bottom:16px;
+}
+.section-title{
+  font-size:24px;
+  font-weight:800;
+  line-height:1.2;
+  letter-spacing:-0.02em;
+  margin-bottom:12px;
+}
+.section-subtitle{
+  font-size:16px;
+  color:var(--text-secondary);
+  line-height:1.5;
+  margin-bottom:24px;
+}
+
+/* ========== TOP NAV ========== */
+.top-nav{
+  position:sticky;
+  top:0;
+  z-index:100;
+  padding:12px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:rgba(10,10,26,0.8);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.nav-logo{
+  font-size:18px;
+  font-weight:800;
+  letter-spacing:-0.03em;
+  background:linear-gradient(135deg,#fff 40%,var(--mint));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.nav-logo span{font-weight:400;opacity:0.7}
+.nav-cta{
+  font-size:13px;
+  font-weight:600;
+  color:#fff;
+  background:linear-gradient(135deg,var(--purple),var(--indigo));
+  border:none;
+  border-radius:100px;
+  padding:8px 18px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* ========== HERO ========== */
+.hero{
+  padding:40px 20px 32px;
+  text-align:center;
+}
+.hero-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  font-weight:600;
+  color:var(--mint);
+  background:rgba(52,211,153,0.08);
+  border:1px solid rgba(52,211,153,0.2);
+  border-radius:100px;
+  padding:8px 16px;
+  margin-bottom:24px;
+}
+.hero-badge .dot{
+  width:6px;height:6px;
+  background:var(--mint);
+  border-radius:50%;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+.hero h1{
+  font-size:32px;
+  font-weight:900;
+  line-height:1.1;
+  letter-spacing:-0.03em;
+  margin-bottom:16px;
+}
+.hero h1 .gradient-text{
+  background:linear-gradient(135deg,var(--mint),var(--cyan),var(--mint));
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:shimmer 4s ease-in-out infinite;
+}
+@keyframes shimmer{0%,100%{background-position:0% center}50%{background-position:200% center}}
+
+.hero p{
+  font-size:16px;
+  color:var(--text-secondary);
+  line-height:1.6;
+  max-width:340px;
+  margin:0 auto 28px;
+}
+.hero-cta{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:0 10px;
+}
+.btn-primary{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:100%;
+  padding:16px 24px;
+  font-size:16px;
+  font-weight:700;
+  color:#fff;
+  background:linear-gradient(135deg,var(--purple),var(--indigo));
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  position:relative;
+  overflow:hidden;
+  min-height:52px;
+}
+.btn-primary::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent 50%);
+  pointer-events:none;
+}
+.btn-secondary{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:100%;
+  padding:16px 24px;
+  font-size:16px;
+  font-weight:600;
+  color:var(--text-primary);
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);
+  border-radius:14px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  min-height:52px;
+}
+
+/* ========== EARNINGS MATH ========== */
+.earnings-section{padding-top:48px;padding-bottom:8px}
+.earnings-cards{display:flex;flex-direction:column;gap:12px}
+.earnings-card{
+  padding:20px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.earnings-card.featured{
+  border-color:rgba(52,211,153,0.25);
+  background:rgba(52,211,153,0.06);
+}
+.earnings-card.featured::before{
+  content:'MOST POPULAR';
+  position:absolute;
+  top:12px;
+  right:-28px;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:0.08em;
+  color:#0a0a1a;
+  background:var(--mint);
+  padding:3px 32px;
+  transform:rotate(45deg);
+}
+.ec-volume{
+  font-size:13px;
+  font-weight:600;
+  color:var(--text-tertiary);
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  margin-bottom:4px;
+}
+.ec-prints{
+  font-size:14px;
+  color:var(--text-secondary);
+  margin-bottom:12px;
+}
+.ec-amount{
+  font-size:40px;
+  font-weight:900;
+  letter-spacing:-0.03em;
+  color:var(--mint);
+  line-height:1;
+  margin-bottom:4px;
+}
+.ec-period{
+  font-size:13px;
+  color:var(--text-tertiary);
+}
+.earnings-note{
+  text-align:center;
+  font-size:13px;
+  color:var(--text-tertiary);
+  margin-top:16px;
+  padding:0 10px;
+}
+
+/* ========== HOW IT WORKS ========== */
+.how-section{padding-top:56px}
+.steps{display:flex;flex-direction:column;gap:16px}
+.step-card{
+  padding:20px;
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+}
+.step-num{
+  flex-shrink:0;
+  width:40px;
+  height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  font-weight:800;
+  color:var(--mint);
+  background:rgba(52,211,153,0.1);
+  border:1px solid rgba(52,211,153,0.2);
+  border-radius:12px;
+}
+.step-content h3{
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:4px;
+}
+.step-content p{
+  font-size:14px;
+  color:var(--text-secondary);
+  line-height:1.5;
+}
+
+/* ========== PRODUCTS CAROUSEL ========== */
+.products-section{padding-top:56px}
+.carousel-wrapper{
+  margin:0 -20px;
+  padding:0 20px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  display:flex;
+  gap:14px;
+  scrollbar-width:none;
+  padding-bottom:4px;
+}
+.carousel-wrapper::-webkit-scrollbar{display:none}
+
+.product-card{
+  flex-shrink:0;
+  width:260px;
+  scroll-snap-align:start;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.product-img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:var(--radius) var(--radius) 0 0;
+  display:block;
+}
+.product-info{
+  padding:16px;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  background:var(--glass-bg);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border);
+  border-top:none;
+  border-radius:0 0 var(--radius) var(--radius);
+}
+.product-name{
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+.product-prices{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:8px;
+}
+.product-retail{
+  font-size:14px;
+  color:var(--text-tertiary);
+}
+.product-retail span{text-decoration:line-through}
+.product-your-cost{
+  font-size:14px;
+  font-weight:700;
+  color:var(--cyan);
+}
+.product-margin{
+  margin-top:auto;
+  padding-top:10px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.product-margin-label{
+  font-size:12px;
+  color:var(--text-tertiary);
+}
+.product-margin-amount{
+  font-size:18px;
+  font-weight:800;
+  color:var(--mint);
+}
+
+/* Carousel indicators */
+.carousel-dots{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin-top:16px;
+}
+.carousel-dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.15);
+  transition:all 0.3s;
+}
+.carousel-dot.active{
+  width:20px;
+  border-radius:3px;
+  background:var(--mint);
+}
+
+/* Swipe hint */
+.swipe-hint{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-size:12px;
+  color:var(--text-tertiary);
+  margin-top:12px;
+  animation:swipeHint 2s ease-in-out infinite;
+}
+@keyframes swipeHint{
+  0%,100%{transform:translateX(0)}
+  50%{transform:translateX(-6px)}
+}
+
+/* ========== THE DEAL ========== */
+.deal-section{padding-top:56px}
+.deal-card{
+  padding:24px 20px;
+  position:relative;
+  overflow:hidden;
+}
+.deal-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--purple),var(--mint),var(--cyan));
+}
+.deal-items{display:flex;flex-direction:column;gap:16px}
+.deal-item{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+}
+.deal-icon{
+  flex-shrink:0;
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  background:rgba(52,211,153,0.1);
+  border-radius:10px;
+}
+.deal-item h4{
+  font-size:15px;
+  font-weight:700;
+  margin-bottom:2px;
+}
+.deal-item p{
+  font-size:14px;
+  color:var(--text-secondary);
+  line-height:1.5;
+}
+
+/* ========== USE CASES ========== */
+.use-cases-section{padding-top:56px}
+.use-case-cards{display:flex;flex-direction:column;gap:12px}
+.use-case-card{
+  padding:18px 20px;
+  display:flex;
+  gap:14px;
+  align-items:center;
+}
+.uc-icon{
+  flex-shrink:0;
+  font-size:28px;
+  width:48px;
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(124,58,237,0.1);
+  border-radius:12px;
+}
+.uc-text h4{
+  font-size:15px;
+  font-weight:700;
+  margin-bottom:2px;
+}
+.uc-text p{
+  font-size:13px;
+  color:var(--text-secondary);
+  line-height:1.4;
+}
+
+/* ========== IDEAS ========== */
+.ideas-section{padding-top:56px}
+.ideas-grid{display:flex;flex-direction:column;gap:10px}
+.idea-card{
+  padding:16px 18px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.idea-emoji{
+  font-size:24px;
+  flex-shrink:0;
+  width:40px;
+  text-align:center;
+}
+.idea-text{
+  font-size:14px;
+  font-weight:500;
+  color:var(--text-secondary);
+  line-height:1.4;
+}
+.idea-text strong{
+  color:var(--text-primary);
+  font-weight:700;
+}
+
+/* ========== FAQ ========== */
+.faq-section{padding-top:56px}
+.faq-list{display:flex;flex-direction:column;gap:8px}
+.faq-item{overflow:hidden;transition:all 0.3s}
+.faq-question{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 20px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+  gap:12px;
+  min-height:56px;
+}
+.faq-question span{flex:1}
+.faq-toggle{
+  flex-shrink:0;
+  width:28px;
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  color:var(--text-tertiary);
+  background:rgba(255,255,255,0.06);
+  border-radius:8px;
+  transition:transform 0.3s,background 0.3s;
+}
+.faq-item.open .faq-toggle{
+  transform:rotate(45deg);
+  background:rgba(52,211,153,0.15);
+  color:var(--mint);
+}
+.faq-answer{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.35s ease, padding 0.35s ease;
+}
+.faq-item.open .faq-answer{
+  max-height:300px;
+}
+.faq-answer-inner{
+  padding:0 20px 18px;
+  font-size:14px;
+  color:var(--text-secondary);
+  line-height:1.6;
+}
+
+/* ========== FINAL CTA ========== */
+.final-cta-section{
+  padding:56px 20px 40px;
+  text-align:center;
+}
+.final-cta-card{
+  padding:32px 24px;
+  position:relative;
+  overflow:hidden;
+}
+.final-cta-card::before{
+  content:'';
+  position:absolute;
+  inset:-1px;
+  border-radius:var(--radius);
+  padding:1px;
+  background:linear-gradient(135deg,var(--purple),var(--mint),var(--cyan));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  pointer-events:none;
+}
+.final-cta-card h2{
+  font-size:26px;
+  font-weight:900;
+  line-height:1.15;
+  letter-spacing:-0.02em;
+  margin-bottom:12px;
+}
+.final-cta-card p{
+  font-size:15px;
+  color:var(--text-secondary);
+  margin-bottom:24px;
+  line-height:1.5;
+}
+
+/* ========== BOTTOM STICKY CTA ========== */
+.bottom-cta{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:200;
+  padding:12px 20px calc(12px + var(--safe-bottom));
+  background:rgba(10,10,26,0.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid rgba(255,255,255,0.08);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  max-width:430px;
+  margin:0 auto;
+  transform:translateY(100%);
+  transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.bottom-cta.visible{transform:translateY(0)}
+.bottom-cta-info{flex:1;min-width:0}
+.bottom-cta-label{
+  font-size:12px;
+  color:var(--text-tertiary);
+  font-weight:500;
+}
+.bottom-cta-earn{
+  font-size:18px;
+  font-weight:800;
+  color:var(--mint);
+  letter-spacing:-0.02em;
+}
+.bottom-cta .btn-primary{
+  flex-shrink:0;
+  width:auto;
+  padding:14px 24px;
+  font-size:15px;
+  min-height:48px;
+  border-radius:12px;
+}
+
+/* ========== FOOTER ========== */
+footer{
+  padding:24px 20px 16px;
+  text-align:center;
+  font-size:12px;
+  color:var(--text-tertiary);
+}
+footer a{color:var(--text-secondary);text-decoration:none}
+
+/* ========== SCROLL ANIMATIONS ========== */
+.reveal{
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ========== RESPONSIVE MICRO-ADJUSTMENTS ========== */
+@media (max-width:374px){
+  .hero h1{font-size:28px}
+  .ec-amount{font-size:34px}
+  .product-card{width:240px}
+  .section-title{font-size:22px}
+}
+@media (min-width:400px){
+  .hero h1{font-size:34px}
+  .product-card{width:280px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-gradient"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- ==================== TOP NAV ==================== -->
+<nav class="top-nav">
+  <div class="nav-logo">PrintKit <span>Earn</span></div>
+  <button class="nav-cta" onclick="document.getElementById('final-cta').scrollIntoView({behavior:'smooth'})">Get Started</button>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Revenue Share Program
+  </div>
+  <h1>Earn on every print <span class="gradient-text">your app sends</span></h1>
+  <p>Add premium photo printing to your app or AI agent. Keep the margin on every order. Zero inventory, zero risk.</p>
+  <div class="hero-cta">
+    <button class="btn-primary" onclick="document.getElementById('final-cta').scrollIntoView({behavior:'smooth'})">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Start Earning Today
+    </button>
+    <button class="btn-secondary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+      View Products &amp; Margins
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- ==================== EARNINGS MATH ==================== -->
+<section class="earnings-section reveal">
+  <span class="section-label">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+    Earnings Potential
+  </span>
+  <h2 class="section-title">Set your price.<br>Keep the margin.</h2>
+  <p class="section-subtitle">You control what customers pay. Your wholesale cost is locked in.</p>
+
+  <div class="earnings-cards">
+    <div class="earnings-card glass">
+      <div class="ec-volume">Starter</div>
+      <div class="ec-prints">~50 prints / month</div>
+      <div class="ec-amount">$150</div>
+      <div class="ec-period">per month</div>
+    </div>
+    <div class="earnings-card glass featured">
+      <div class="ec-volume">Growing</div>
+      <div class="ec-prints">~500 prints / month</div>
+      <div class="ec-amount">$1,500</div>
+      <div class="ec-period">per month</div>
+    </div>
+    <div class="earnings-card glass">
+      <div class="ec-volume">Scale</div>
+      <div class="ec-prints">~5,000 prints / month</div>
+      <div class="ec-amount">$15,000</div>
+      <div class="ec-period">per month</div>
+    </div>
+  </div>
+  <p class="earnings-note">Based on average $3 margin per print. Your actual margins depend on the products and pricing you choose.</p>
+</section>
+
+<!-- ==================== HOW IT WORKS ==================== -->
+<section class="how-section reveal">
+  <span class="section-label">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+    How It Works
+  </span>
+  <h2 class="section-title">Four steps to revenue</h2>
+  <p class="section-subtitle">Integrate once, earn on every order forever.</p>
+
+  <div class="steps">
+    <div class="step-card glass">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Integrate the API</h3>
+        <p>Drop in our SDK or call the REST API. Ship printing in your app in under a day.</p>
+      </div>
+    </div>
+    <div class="step-card glass">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Set your prices</h3>
+        <p>Choose what customers pay per product. Your wholesale cost stays fixed.</p>
+      </div>
+    </div>
+    <div class="step-card glass">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Customers order</h3>
+        <p>Users pick products, upload photos, and checkout. We handle production and shipping.</p>
+      </div>
+    </div>
+    <div class="step-card glass">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>You get paid</h3>
+        <p>Keep the full margin between your retail price and our wholesale cost. Paid monthly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PRODUCTS ==================== -->
+<section class="products-section reveal" id="products">
+  <span class="section-label">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+    Products &amp; Pricing
+  </span>
+  <h2 class="section-title">Premium products,<br>serious margins</h2>
+  <p class="section-subtitle">Swipe to explore. Suggested retail vs. your wholesale cost.</p>
+
+  <div class="carousel-wrapper" id="productCarousel">
+    <!-- Metal Prints -->
+    <div class="product-card">
+      <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/metal-prints-1.jpg" alt="Metal Prints" loading="lazy">
+      <div class="product-info">
+        <div class="product-name">Metal Prints</div>
+        <div class="product-prices">
+          <span class="product-retail">Retail <span>$29</span></span>
+          <span class="product-your-cost">Your cost $9</span>
+        </div>
+        <div class="product-margin">
+          <span class="product-margin-label">Your margin</span>
+          <span class="product-margin-amount">+$20</span>
+        </div>
+      </div>
+    </div>
+    <!-- Wood Prints -->
+    <div class="product-card">
+      <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/wood-prints-1.jpg" alt="Wood Prints" loading="lazy">
+      <div class="product-info">
+        <div class="product-name">Wood Prints</div>
+        <div class="product-prices">
+          <span class="product-retail">Retail <span>$72</span></span>
+          <span class="product-your-cost">Your cost $22</span>
+        </div>
+        <div class="product-margin">
+          <span class="product-margin-label">Your margin</span>
+          <span class="product-margin-amount">+$50</span>
+        </div>
+      </div>
+    </div>
+    <!-- Gallery Frames -->
+    <div class="product-card">
+      <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/gallery-frames-3.jpg" alt="Gallery Frames" loading="lazy">
+      <div class="product-info">
+        <div class="product-name">Gallery Frames</div>
+        <div class="product-prices">
+          <span class="product-retail">Retail <span>$134</span></span>
+          <span class="product-your-cost">Your cost $34</span>
+        </div>
+        <div class="product-margin">
+          <span class="product-margin-label">Your margin</span>
+          <span class="product-margin-amount">+$100</span>
+        </div>
+      </div>
+    </div>
+    <!-- Large Format -->
+    <div class="product-card">
+      <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/large-format-3_b1256f8b.jpg" alt="Large Format Prints" loading="lazy">
+      <div class="product-info">
+        <div class="product-name">Large Format Prints</div>
+        <div class="product-prices">
+          <span class="product-retail">Retail <span>$36</span></span>
+          <span class="product-your-cost">Your cost $12</span>
+        </div>
+        <div class="product-margin">
+          <span class="product-margin-label">Your margin</span>
+          <span class="product-margin-amount">+$24</span>
+        </div>
+      </div>
+    </div>
+    <!-- Acrylic Blocks -->
+    <div class="product-card">
+      <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/acrylic-blocks-1.jpg" alt="Acrylic Blocks" loading="lazy">
+      <div class="product-info">
+        <div class="product-name">Acrylic Blocks</div>
+        <div class="product-prices">
+          <span class="product-retail">Retail <span>$48</span></span>
+          <span class="product-your-cost">Your cost $15</span>
+        </div>
+        <div class="product-margin">
+          <span class="product-margin-label">Your margin</span>
+          <span class="product-margin-amount">+$33</span>
+        </div>
+      </div>
+    </div>
+    <!-- Photo Magazine -->
+    <div class="product-card">
+      <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/softcover-photo-book-1.jpg" alt="Photo Magazine" loading="lazy">
+      <div class="product-info">
+        <div class="product-name">Photo Magazine</div>
+        <div class="product-prices">
+          <span class="product-retail">Retail <span>$26</span></span>
+          <span class="product-your-cost">Your cost $8</span>
+        </div>
+        <div class="product-margin">
+          <span class="product-margin-label">Your margin</span>
+          <span class="product-margin-amount">+$18</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="carousel-dots" id="carouselDots">
+    <div class="carousel-dot active"></div>
+    <div class="carousel-dot"></div>
+    <div class="carousel-dot"></div>
+    <div class="carousel-dot"></div>
+    <div class="carousel-dot"></div>
+    <div class="carousel-dot"></div>
+  </div>
+  <div class="swipe-hint">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    Swipe to see all products
+  </div>
+</section>
+
+<!-- ==================== THE DEAL ==================== -->
+<section class="deal-section reveal">
+  <span class="section-label">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+    The Deal
+  </span>
+  <h2 class="section-title">Everything included.<br>No gotchas.</h2>
+
+  <div class="deal-card glass-strong">
+    <div class="deal-items">
+      <div class="deal-item">
+        <div class="deal-icon">&#128176;</div>
+        <div>
+          <h4>You set the retail price</h4>
+          <p>Charge whatever you want. The difference between retail and wholesale is yours to keep.</p>
+        </div>
+      </div>
+      <div class="deal-item">
+        <div class="deal-icon">&#128666;</div>
+        <div>
+          <h4>We handle fulfillment</h4>
+          <p>Production, quality control, packaging, and shipping. White-label under your brand.</p>
+        </div>
+      </div>
+      <div class="deal-item">
+        <div class="deal-icon">&#128274;</div>
+        <div>
+          <h4>No minimum volume</h4>
+          <p>No commitments. Process one order or ten thousand. Scale at your own pace.</p>
+        </div>
+      </div>
+      <div class="deal-item">
+        <div class="deal-icon">&#9889;</div>
+        <div>
+          <h4>Simple API integration</h4>
+          <p>REST API and SDKs. Submit an image, get a printed product shipped to the customer.</p>
+        </div>
+      </div>
+      <div class="deal-item">
+        <div class="deal-icon">&#127919;</div>
+        <div>
+          <h4>White-label everything</h4>
+          <p>Your brand on the box, packing slip, and return label. Customers never see us.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== USE CASES ==================== -->
+<section class="use-cases-section reveal">
+  <span class="section-label">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+    Use Cases
+  </span>
+  <h2 class="section-title">Who's building<br>with PrintKit?</h2>
+  <p class="section-subtitle">From indie devs to AI startups, the use cases keep expanding.</p>
+
+  <div class="use-case-cards">
+    <div class="use-case-card glass">
+      <div class="uc-icon">&#128247;</div>
+      <div class="uc-text">
+        <h4>Photo Apps</h4>
+        <p>Turn gallery photos into wall art. Users already have the content.</p>
+      </div>
+    </div>
+    <div class="use-case-card glass">
+      <div class="uc-icon">&#129302;</div>
+      <div class="uc-text">
+        <h4>AI Image Generators</h4>
+        <p>Let users print their AI creations as premium physical products.</p>
+      </div>
+    </div>
+    <div class="use-case-card glass">
+      <div class="uc-icon">&#127912;</div>
+      <div class="uc-text">
+        <h4>Design Tools</h4>
+        <p>Add physical output to digital design workflows. From screen to wall.</p>
+      </div>
+    </div>
+    <div class="use-case-card glass">
+      <div class="uc-icon">&#128187;</div>
+      <div class="uc-text">
+        <h4>AI Agents &amp; Assistants</h4>
+        <p>Give your agent the ability to order physical prints for users.</p>
+      </div>
+    </div>
+    <div class="use-case-card glass">
+      <div class="uc-icon">&#127968;</div>
+      <div class="uc-text">
+        <h4>Interior Design Apps</h4>
+        <p>Recommend art then let customers order it printed and framed.</p>
+      </div>
+    </div>
+    <div class="use-case-card glass">
+      <div class="uc-icon">&#128640;</div>
+      <div class="uc-text">
+        <h4>Social Platforms</h4>
+        <p>Monetize user content with one-tap printing from feeds and stories.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== IDEAS ==================== -->
+<section class="ideas-section reveal">
+  <span class="section-label">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v6l4 2"/></svg>
+    Spark Ideas
+  </span>
+  <h2 class="section-title">What could you build?</h2>
+  <p class="section-subtitle">Inspiration for your next print-powered feature.</p>
+
+  <div class="ideas-grid">
+    <div class="idea-card glass">
+      <div class="idea-emoji">&#127756;</div>
+      <div class="idea-text"><strong>Travel journeys</strong> &mdash; Auto-generate photo books from trip albums and GPS data</div>
+    </div>
+    <div class="idea-card glass">
+      <div class="idea-emoji">&#128118;</div>
+      <div class="idea-text"><strong>Baby milestones</strong> &mdash; Monthly milestone prints with age overlays, shipped automatically</div>
+    </div>
+    <div class="idea-card glass">
+      <div class="idea-emoji">&#128054;</div>
+      <div class="idea-text"><strong>Pet portraits</strong> &mdash; AI-styled pet art on metal, wood, or acrylic blocks</div>
+    </div>
+    <div class="idea-card glass">
+      <div class="idea-emoji">&#127979;</div>
+      <div class="idea-text"><strong>Yearbook reimagined</strong> &mdash; Student-designed class magazines printed on demand</div>
+    </div>
+    <div class="idea-card glass">
+      <div class="idea-emoji">&#127936;</div>
+      <div class="idea-text"><strong>Game screenshots</strong> &mdash; Print epic gaming moments as metal or acrylic display pieces</div>
+    </div>
+    <div class="idea-card glass">
+      <div class="idea-emoji">&#128154;</div>
+      <div class="idea-text"><strong>Therapy &amp; journaling</strong> &mdash; Visual mood boards printed as weekly or monthly reflections</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FAQ ==================== -->
+<section class="faq-section reveal">
+  <span class="section-label">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r=".5"/></svg>
+    FAQ
+  </span>
+  <h2 class="section-title">Common questions</h2>
+
+  <div class="faq-list">
+    <div class="faq-item glass">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>How much does it cost to get started?</span>
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">Nothing. There's no signup fee, no monthly charge, and no minimum order volume. You only pay wholesale cost when a customer places an order. The margin between your retail price and wholesale cost is yours.</div>
+      </div>
+    </div>
+    <div class="faq-item glass">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>How do I set my prices?</span>
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">You have complete control. Set any retail price above the wholesale cost. We suggest a 2-3x markup for competitive pricing, but you can go higher for premium positioning or lower for volume.</div>
+      </div>
+    </div>
+    <div class="faq-item glass">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>What about shipping and handling?</span>
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">We handle all production, quality control, packaging, and shipping. Products ship from US facilities. Domestic orders typically arrive in 5-7 business days. You can also charge customers for shipping and keep that margin too.</div>
+      </div>
+    </div>
+    <div class="faq-item glass">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>Can I white-label the packaging?</span>
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">Yes. White-labeling is included at no extra cost. Your brand goes on the box, packing slip, and return label. Customers never see PrintKit mentioned anywhere in the experience.</div>
+      </div>
+    </div>
+    <div class="faq-item glass">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>How long does integration take?</span>
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">Most developers integrate the core ordering flow in a few hours to one day. Our REST API is straightforward: submit an image with product and shipping details, and we handle the rest. SDKs are available for popular platforms.</div>
+      </div>
+    </div>
+    <div class="faq-item glass">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>What's the print quality like?</span>
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">Professional-grade. We use the same production partners trusted by major photo brands. Metal prints are dye-sublimated on ChromaLuxe aluminum. Wood prints use direct UV printing. Frames use archival giclée printing. Every product goes through quality checks.</div>
+      </div>
+    </div>
+    <div class="faq-item glass">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>How and when do I get paid?</span>
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">You collect payment directly from your customers using your own payment processor (Stripe, etc). You pay us the wholesale cost per order. The margin stays in your account immediately. There's no waiting period or payout cycle on our end.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FINAL CTA ==================== -->
+<section class="final-cta-section reveal" id="final-cta">
+  <div class="final-cta-card glass-strong">
+    <h2>Ready to turn prints<br>into <span style="color:var(--mint)">revenue</span>?</h2>
+    <p>Join developers and AI builders already earning on every order. Free to start, no commitments.</p>
+    <button class="btn-primary" style="margin-bottom:12px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Get API Access
+    </button>
+    <button class="btn-secondary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+      Read the Docs
+    </button>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <p>&copy; 2026 PrintKit &middot; <a href="#">Terms</a> &middot; <a href="#">Privacy</a> &middot; <a href="#">API Docs</a></p>
+</footer>
+
+<!-- ==================== BOTTOM STICKY CTA ==================== -->
+<div class="bottom-cta" id="bottomCta">
+  <div class="bottom-cta-info">
+    <div class="bottom-cta-label">Earn up to</div>
+    <div class="bottom-cta-earn">$100 per print</div>
+  </div>
+  <button class="btn-primary" onclick="document.getElementById('final-cta').scrollIntoView({behavior:'smooth'})">
+    Get Started
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </button>
+</div>
+
+<script>
+// ===== FAQ TOGGLE =====
+function toggleFaq(el){
+  const item = el.parentElement;
+  const wasOpen = item.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  // Toggle current
+  if(!wasOpen) item.classList.add('open');
+}
+
+// ===== CAROUSEL DOT TRACKING =====
+(function(){
+  const carousel = document.getElementById('productCarousel');
+  const dots = document.querySelectorAll('#carouselDots .carousel-dot');
+  const hint = document.querySelector('.swipe-hint');
+  let hasScrolled = false;
+
+  function updateDots(){
+    if(!carousel) return;
+    const scrollLeft = carousel.scrollLeft;
+    const cardWidth = carousel.querySelector('.product-card').offsetWidth + 14; // gap
+    const activeIndex = Math.round(scrollLeft / cardWidth);
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === activeIndex);
+    });
+    // Hide swipe hint after first scroll
+    if(!hasScrolled && scrollLeft > 20){
+      hasScrolled = true;
+      if(hint) hint.style.opacity = '0';
+    }
+  }
+
+  if(carousel){
+    carousel.addEventListener('scroll', updateDots, {passive: true});
+  }
+})();
+
+// ===== BOTTOM STICKY CTA VISIBILITY =====
+(function(){
+  const bottomCta = document.getElementById('bottomCta');
+  const hero = document.querySelector('.hero');
+  const finalCta = document.getElementById('final-cta');
+  let ticking = false;
+
+  function checkScroll(){
+    const scrollY = window.scrollY;
+    const heroBottom = hero.offsetTop + hero.offsetHeight;
+    const finalTop = finalCta.offsetTop - window.innerHeight;
+    const show = scrollY > heroBottom && scrollY < finalTop;
+    bottomCta.classList.toggle('visible', show);
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function(){
+    if(!ticking){
+      requestAnimationFrame(checkScroll);
+      ticking = true;
+    }
+  }, {passive: true});
+})();
+
+// ===== SCROLL REVEAL ANIMATIONS =====
+(function(){
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -40px 0px'
+  });
+  reveals.forEach(function(el){ observer.observe(el); });
+})();
+
+// ===== PREVENT OVERSCROLL ON CAROUSEL =====
+(function(){
+  const carousel = document.getElementById('productCarousel');
+  if(!carousel) return;
+  carousel.addEventListener('touchmove', function(e){
+    // Allow horizontal scrolling, prevent vertical bounce
+    if(Math.abs(e.touches[0].clientX) > Math.abs(e.touches[0].clientY)){
+      e.stopPropagation();
+    }
+  }, {passive: true});
+})();
+</script>
+</body>
+</html>

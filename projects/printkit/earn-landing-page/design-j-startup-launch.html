@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrintKit Partner Program — Earn on Every Print</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --accent: #7c3aed;
+  --accent-light: #ede9fe;
+  --accent-dark: #5b21b6;
+  --coral: #ff6154;
+  --coral-light: #fff1f0;
+  --green: #10b981;
+  --green-light: #ecfdf5;
+  --blue: #3b82f6;
+  --blue-light: #eff6ff;
+  --orange: #f59e0b;
+  --orange-light: #fffbeb;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--gray-800);
+  background: #ffffff;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--gray-200);
+  transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: var(--shadow-md); }
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--gray-900);
+  text-decoration: none;
+}
+.nav-logo span { color: var(--accent); }
+.nav-badge-earn {
+  background: linear-gradient(135deg, var(--accent), var(--coral));
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-600);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--accent); }
+
+.nav-cta {
+  background: var(--accent) !important;
+  color: #fff !important;
+  padding: 8px 20px !important;
+  border-radius: 8px;
+  font-weight: 600 !important;
+  transition: background 0.2s, transform 0.1s !important;
+}
+.nav-cta:hover { background: var(--accent-dark) !important; transform: translateY(-1px); }
+
+.nav-mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.nav-mobile-toggle svg { width: 24px; height: 24px; color: var(--gray-700); }
+
+/* LAUNCH RIBBON */
+.launch-ribbon {
+  background: linear-gradient(90deg, var(--accent), #a855f7, var(--coral), var(--accent));
+  background-size: 300% 100%;
+  animation: ribbonShift 4s ease infinite;
+  color: #fff;
+  text-align: center;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 64px;
+  letter-spacing: 0.3px;
+}
+@keyframes ribbonShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.launch-ribbon .ribbon-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.25);
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+/* HERO */
+.hero {
+  padding: 80px 24px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--accent-light) 0%, #fff 100%);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255,97,84,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid var(--gray-200);
+  padding: 6px 16px 6px 8px;
+  border-radius: 40px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-sm);
+  animation: fadeUp 0.6s ease;
+}
+.hero-badge .badge-dot {
+  width: 8px; height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.hero h1 {
+  font-size: clamp(36px, 5.5vw, 64px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--gray-900);
+  margin-bottom: 20px;
+  letter-spacing: -1.5px;
+  animation: fadeUp 0.6s ease 0.1s both;
+}
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--accent), var(--coral));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: clamp(17px, 2vw, 20px);
+  color: var(--gray-500);
+  max-width: 580px;
+  margin: 0 auto 36px;
+  line-height: 1.6;
+  animation: fadeUp 0.6s ease 0.2s both;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+  animation: fadeUp 0.6s ease 0.3s both;
+}
+
+/* Animated gradient CTA */
+.cta-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 36px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  z-index: 1;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+.cta-primary::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--coral), #a855f7, var(--accent));
+  background-size: 300% 300%;
+  animation: gradientBorder 3s ease infinite;
+  z-index: -1;
+}
+.cta-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  z-index: -1;
+  transition: background 0.2s;
+}
+.cta-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124,58,237,0.35); }
+.cta-primary:hover::after { background: var(--accent-dark); }
+
+@keyframes gradientBorder {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gray-700);
+  background: #fff;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.cta-secondary:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+.hero-proof {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--gray-500);
+  animation: fadeUp 0.6s ease 0.4s both;
+}
+.hero-avatars {
+  display: flex;
+}
+.hero-avatars .avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  margin-left: -8px;
+  background: var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-600);
+}
+.hero-avatars .avatar:first-child { margin-left: 0; }
+.hero-avatars .avatar.a1 { background: #ddd6fe; color: var(--accent); }
+.hero-avatars .avatar.a2 { background: #fecaca; color: #dc2626; }
+.hero-avatars .avatar.a3 { background: #bfdbfe; color: #2563eb; }
+.hero-avatars .avatar.a4 { background: #bbf7d0; color: #16a34a; }
+.hero-avatars .avatar.a5 { background: #fef08a; color: #ca8a04; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* SECTION COMMON */
+section { padding: 80px 24px; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 800;
+  color: var(--gray-900);
+  margin-bottom: 16px;
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+}
+
+.section-desc {
+  font-size: 17px;
+  color: var(--gray-500);
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+/* QUICK START */
+.quick-start { background: var(--gray-50); }
+.quick-start-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.qs-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gray-200);
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.qs-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.qs-number {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+.qs-card:nth-child(1) .qs-number { background: var(--accent-light); color: var(--accent); }
+.qs-card:nth-child(2) .qs-number { background: var(--coral-light); color: var(--coral); }
+.qs-card:nth-child(3) .qs-number { background: var(--green-light); color: var(--green); }
+
+.qs-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 8px;
+}
+.qs-card p {
+  font-size: 15px;
+  color: var(--gray-500);
+  line-height: 1.5;
+}
+.qs-card .qs-time {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green);
+  background: var(--green-light);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+/* EARNINGS CALCULATOR */
+.earnings { background: #fff; }
+.earnings-header { text-align: center; margin-bottom: 48px; }
+.earnings-header .section-desc { margin: 0 auto; }
+
+.earnings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.earn-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  text-align: center;
+  border: 2px solid var(--gray-200);
+  position: relative;
+  transition: all 0.25s;
+}
+.earn-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.earn-card.featured {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, var(--accent-light) 0%, #fff 40%);
+  box-shadow: var(--shadow-lg);
+  transform: scale(1.04);
+}
+.earn-card.featured:hover { transform: scale(1.04) translateY(-4px); }
+.earn-card .popular-tag {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--accent), var(--coral));
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.earn-card .orders {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-500);
+  margin-bottom: 4px;
+}
+.earn-card .order-count {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--gray-900);
+  line-height: 1.1;
+  margin-bottom: 4px;
+  letter-spacing: -2px;
+}
+.earn-card .order-label {
+  font-size: 14px;
+  color: var(--gray-400);
+  margin-bottom: 20px;
+}
+.earn-card .divider {
+  width: 40px;
+  height: 3px;
+  background: var(--gray-200);
+  border-radius: 2px;
+  margin: 0 auto 20px;
+}
+.earn-card.featured .divider { background: var(--accent); }
+.earn-card .revenue {
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -1.5px;
+  margin-bottom: 4px;
+}
+.earn-card .revenue-label {
+  font-size: 14px;
+  color: var(--gray-500);
+}
+.earn-card .revenue-note {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--gray-400);
+  line-height: 1.4;
+}
+
+/* HOW IT WORKS */
+.how-it-works { background: var(--gray-50); }
+.how-header { text-align: center; margin-bottom: 56px; }
+.how-header .section-desc { margin: 0 auto; }
+
+.how-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  position: relative;
+}
+.how-steps::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--coral));
+  opacity: 0.2;
+  z-index: 0;
+}
+.step-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gray-200);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.step-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+.step-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 26px;
+}
+.step-card:nth-child(1) .step-icon { background: var(--accent-light); }
+.step-card:nth-child(2) .step-icon { background: var(--blue-light); }
+.step-card:nth-child(3) .step-icon { background: var(--orange-light); }
+.step-card:nth-child(4) .step-icon { background: var(--green-light); }
+
+.step-num {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--gray-400);
+  margin-bottom: 8px;
+}
+.step-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 6px;
+}
+.step-card p {
+  font-size: 14px;
+  color: var(--gray-500);
+  line-height: 1.5;
+}
+
+/* PRODUCTS */
+.products { background: #fff; }
+.products-header { text-align: center; margin-bottom: 48px; }
+.products-header .section-desc { margin: 0 auto; }
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.product-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.25s;
+}
+.product-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-xl); }
+
+.product-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+.product-body {
+  padding: 20px;
+}
+.product-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 12px;
+}
+.product-prices {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.product-retail {
+  font-size: 14px;
+  color: var(--gray-400);
+}
+.product-retail s { text-decoration: line-through; }
+.product-cost {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--green);
+}
+.product-margin {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--green-light);
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+.product-margin svg { width: 14px; height: 14px; }
+
+/* THE DEAL */
+.the-deal { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #3b1764 100%); color: #fff; }
+.deal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.deal-left .section-label { color: #a78bfa; }
+.deal-left .section-title { color: #fff; }
+.deal-left .section-desc { color: #c4b5fd; }
+.deal-left .deal-desc { color: rgba(255,255,255,0.7); font-size: 16px; line-height: 1.7; margin-top: 20px; }
+
+.deal-features {
+  display: grid;
+  gap: 16px;
+}
+.deal-feature {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  gap: 14px;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s;
+}
+.deal-feature:hover { background: rgba(255,255,255,0.12); }
+.deal-feature-icon {
+  width: 42px; height: 42px;
+  min-width: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.deal-feature:nth-child(1) .deal-feature-icon { background: rgba(124,58,237,0.3); }
+.deal-feature:nth-child(2) .deal-feature-icon { background: rgba(16,185,129,0.3); }
+.deal-feature:nth-child(3) .deal-feature-icon { background: rgba(255,97,84,0.3); }
+.deal-feature:nth-child(4) .deal-feature-icon { background: rgba(59,130,246,0.3); }
+
+.deal-feature h4 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+.deal-feature p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.4; }
+
+/* USE CASES */
+.use-cases { background: var(--gray-50); }
+.use-cases-header { text-align: center; margin-bottom: 48px; }
+.use-cases-header .section-desc { margin: 0 auto; }
+
+.use-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.use-case-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow);
+  border-top: 4px solid transparent;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.use-case-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.use-case-card:nth-child(1) { border-top-color: var(--accent); }
+.use-case-card:nth-child(2) { border-top-color: var(--coral); }
+.use-case-card:nth-child(3) { border-top-color: var(--green); }
+.use-case-card:nth-child(4) { border-top-color: var(--blue); }
+.use-case-card:nth-child(5) { border-top-color: var(--orange); }
+.use-case-card:nth-child(6) { border-top-color: #ec4899; }
+
+.use-case-icon {
+  font-size: 28px;
+  margin-bottom: 14px;
+}
+.use-case-card h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 8px;
+}
+.use-case-card p {
+  font-size: 14px;
+  color: var(--gray-500);
+  line-height: 1.5;
+}
+
+/* IDEAS */
+.ideas { background: #fff; }
+.ideas-header { text-align: center; margin-bottom: 48px; }
+.ideas-header .section-desc { margin: 0 auto; }
+
+.ideas-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.idea-card {
+  background: var(--gray-50);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  gap: 16px;
+  border: 1px solid var(--gray-200);
+  transition: all 0.2s;
+}
+.idea-card:hover { border-color: var(--accent); background: var(--accent-light); }
+.idea-emoji { font-size: 28px; min-width: 36px; }
+.idea-card h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 4px;
+}
+.idea-card p {
+  font-size: 14px;
+  color: var(--gray-500);
+  line-height: 1.4;
+}
+
+/* TESTIMONIALS */
+.testimonials { background: var(--gray-50); }
+.testimonials-header { text-align: center; margin-bottom: 48px; }
+.testimonials-header .section-desc { margin: 0 auto; }
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.testimonial-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--accent);
+  transition: transform 0.2s;
+}
+.testimonial-card:nth-child(2) { border-left-color: var(--coral); }
+.testimonial-card:nth-child(3) { border-left-color: var(--green); }
+.testimonial-card:hover { transform: translateY(-3px); }
+
+.testimonial-quote {
+  font-size: 15px;
+  color: var(--gray-600);
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.testimonial-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+.testimonial-card:nth-child(1) .testimonial-avatar { background: var(--accent); }
+.testimonial-card:nth-child(2) .testimonial-avatar { background: var(--coral); }
+.testimonial-card:nth-child(3) .testimonial-avatar { background: var(--green); }
+
+.testimonial-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+.testimonial-role {
+  font-size: 12px;
+  color: var(--gray-400);
+}
+.testimonial-tag {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--accent-light);
+  color: var(--accent);
+}
+.testimonial-card:nth-child(2) .testimonial-tag { background: var(--coral-light); color: var(--coral); }
+.testimonial-card:nth-child(3) .testimonial-tag { background: var(--green-light); color: var(--green); }
+
+/* FAQ */
+.faq { background: #fff; }
+.faq-header { text-align: center; margin-bottom: 48px; }
+.faq-header .section-desc { margin: 0 auto; }
+
+.faq-list {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.faq-item {
+  border-bottom: 1px solid var(--gray-200);
+}
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+.faq-question h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gray-900);
+}
+.faq-chevron {
+  width: 20px; height: 20px;
+  color: var(--gray-400);
+  transition: transform 0.25s;
+  flex-shrink: 0;
+  margin-left: 16px;
+}
+.faq-item.open .faq-chevron { transform: rotate(180deg); }
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+.faq-item.open .faq-answer { max-height: 300px; }
+.faq-answer p {
+  padding-bottom: 20px;
+  font-size: 15px;
+  color: var(--gray-500);
+  line-height: 1.6;
+}
+
+/* FINAL CTA */
+.final-cta {
+  background: linear-gradient(135deg, var(--accent) 0%, #a855f7 50%, var(--coral) 100%);
+  text-align: center;
+  padding: 100px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.final-cta::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.final-cta .section-label { color: rgba(255,255,255,0.7); }
+.final-cta h2 {
+  font-size: clamp(32px, 4.5vw, 52px);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+.final-cta p {
+  font-size: 18px;
+  color: rgba(255,255,255,0.85);
+  max-width: 520px;
+  margin: 0 auto 36px;
+}
+.final-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 44px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--accent);
+  background: #fff;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.final-cta-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 40px rgba(0,0,0,0.2); }
+.final-cta .cta-subtext {
+  margin-top: 16px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+}
+
+/* FOOTER */
+footer {
+  background: var(--gray-900);
+  color: var(--gray-400);
+  padding: 48px 24px 32px;
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-logo {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+}
+.footer-logo span { color: var(--accent); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a {
+  font-size: 14px;
+  color: var(--gray-400);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: #fff; }
+.footer-copy { font-size: 13px; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .quick-start-grid,
+  .earnings-grid,
+  .how-steps,
+  .products-grid,
+  .use-cases-grid,
+  .testimonials-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .ideas-grid {
+    grid-template-columns: 1fr;
+  }
+  .deal-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .earn-card.featured { transform: scale(1); }
+  .earn-card.featured:hover { transform: translateY(-4px); }
+  .how-steps::before { display: none; }
+}
+
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+  .nav-mobile-toggle { display: block; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    padding: 16px 24px 24px;
+    border-bottom: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-lg);
+    gap: 16px;
+  }
+
+  section { padding: 56px 16px; }
+
+  .quick-start-grid,
+  .earnings-grid,
+  .how-steps,
+  .products-grid,
+  .use-cases-grid,
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero { padding: 56px 16px 40px; }
+  .hero-ctas { flex-direction: column; align-items: center; }
+  .cta-primary, .cta-secondary { width: 100%; justify-content: center; }
+}
+
+/* SCROLL ANIMATIONS */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Print<span>Kit</span> <span class="nav-badge-earn">/earn</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="#quick-start">Quick Start</a>
+      <a href="#earnings">Earnings</a>
+      <a href="#products">Products</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#faq">FAQ</a>
+      <a href="#cta" class="nav-cta">Become a Partner</a>
+    </div>
+    <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- LAUNCH RIBBON -->
+<div class="launch-ribbon">
+  <span class="ribbon-badge">Just Launched</span>
+  PrintKit Partner Program is live! Be among the first 50 early partners.
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    Partner Program is LIVE
+  </div>
+  <h1>Earn on every print<br>your app sends. <span class="highlight">Starting today.</span></h1>
+  <p class="hero-sub">PrintKit is the agent-first photo printing API. Integrate once, offer premium prints to your users, and earn on every order. No inventory. No fulfillment. Just revenue.</p>
+  <div class="hero-ctas">
+    <a href="#cta" class="cta-primary">Become an Early Partner <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14m-6-6l6 6-6 6"/></svg></a>
+    <a href="#how-it-works" class="cta-secondary">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-3-3v6m-7 4h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      See How It Works
+    </a>
+  </div>
+  <div class="hero-proof">
+    <div class="hero-avatars">
+      <div class="avatar a1">S</div>
+      <div class="avatar a2">M</div>
+      <div class="avatar a3">J</div>
+      <div class="avatar a4">A</div>
+      <div class="avatar a5">+</div>
+    </div>
+    Join 50+ partners already earning
+  </div>
+</section>
+
+<!-- QUICK START -->
+<section class="quick-start" id="quick-start">
+  <div class="section-inner">
+    <div style="text-align:center; margin-bottom:48px;">
+      <div class="section-label">Quick Start</div>
+      <h2 class="section-title">Ship prints in three steps</h2>
+      <p class="section-desc" style="margin:0 auto;">From zero to revenue in under an hour. No meetings, no approvals, no waiting.</p>
+    </div>
+    <div class="quick-start-grid">
+      <div class="qs-card reveal">
+        <div class="qs-number">1</div>
+        <h3>Get your API key</h3>
+        <p>Sign up for a free partner account. Your API key and sandbox credentials arrive in seconds.</p>
+        <span class="qs-time">~2 minutes</span>
+      </div>
+      <div class="qs-card reveal">
+        <div class="qs-number">2</div>
+        <h3>Integrate the API</h3>
+        <p>Send an image URL plus shipping details. Our API handles the rest: printing, packing, and doorstep delivery.</p>
+        <span class="qs-time">~30 minutes</span>
+      </div>
+      <div class="qs-card reveal">
+        <div class="qs-number">3</div>
+        <h3>Start earning</h3>
+        <p>Set your own retail price. You pay wholesale; keep the margin. Every single order means revenue for you.</p>
+        <span class="qs-time">Ongoing $$$</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EARNINGS -->
+<section class="earnings" id="earnings">
+  <div class="section-inner">
+    <div class="earnings-header">
+      <div class="section-label">Earnings</div>
+      <h2 class="section-title">Your margin. Your rules.</h2>
+      <p class="section-desc">You set the retail price. You pay our wholesale cost. The difference is yours to keep on every single order.</p>
+    </div>
+    <div class="earnings-grid">
+      <div class="earn-card reveal">
+        <div class="orders">Getting started</div>
+        <div class="order-count">10</div>
+        <div class="order-label">orders / month</div>
+        <div class="divider"></div>
+        <div class="revenue">$150</div>
+        <div class="revenue-label">estimated monthly earnings</div>
+        <div class="revenue-note">~$15 average margin per order</div>
+      </div>
+      <div class="earn-card featured reveal">
+        <span class="popular-tag">Most Common</span>
+        <div class="orders">Growing</div>
+        <div class="order-count">100</div>
+        <div class="order-label">orders / month</div>
+        <div class="divider"></div>
+        <div class="revenue">$1,500</div>
+        <div class="revenue-label">estimated monthly earnings</div>
+        <div class="revenue-note">~$15 average margin per order</div>
+      </div>
+      <div class="earn-card reveal">
+        <div class="orders">Scaling</div>
+        <div class="order-count">1,000</div>
+        <div class="order-label">orders / month</div>
+        <div class="divider"></div>
+        <div class="revenue">$15,000</div>
+        <div class="revenue-label">estimated monthly earnings</div>
+        <div class="revenue-note">~$15 average margin per order</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works" id="how-it-works">
+  <div class="section-inner">
+    <div class="how-header">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">From API call to doorstep</h2>
+      <p class="section-desc">Four steps. Fully automated. You focus on the product; we handle the printing and shipping.</p>
+    </div>
+    <div class="how-steps">
+      <div class="step-card reveal">
+        <div class="step-icon">🔗</div>
+        <div class="step-num">Step 1</div>
+        <h3>Connect</h3>
+        <p>Integrate PrintKit's API into your app, agent, or workflow. REST + webhooks; any language.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-icon">🖼️</div>
+        <div class="step-num">Step 2</div>
+        <h3>Submit</h3>
+        <p>Your user picks a product. You send us the image, product type, and shipping address via one API call.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-icon">🏭</div>
+        <div class="step-num">Step 3</div>
+        <h3>We Print & Ship</h3>
+        <p>We route to the best facility, print on premium materials, and ship directly to your customer.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-icon">💰</div>
+        <div class="step-num">Step 4</div>
+        <h3>You Earn</h3>
+        <p>Charge your customer whatever you want. Pay us wholesale. Keep the entire margin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <div class="section-inner">
+    <div class="products-header">
+      <div class="section-label">Product Catalog</div>
+      <h2 class="section-title">Premium products, wholesale pricing</h2>
+      <p class="section-desc">Retail price is what your customers pay. Your cost is what you pay us. The margin is all yours.</p>
+    </div>
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/metal-prints-1.jpg?v=1723491477" alt="Metal Print 8x10" loading="lazy">
+        <div class="product-body">
+          <div class="product-name">Metal Print 8x10</div>
+          <div class="product-prices">
+            <span class="product-retail">Retail <s>$29</s></span>
+            <span class="product-cost">Your cost $9</span>
+          </div>
+          <div class="product-margin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+            $20 margin per unit
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/wood-prints-1.jpg?v=1723578559" alt="Wood Print 12x18" loading="lazy">
+        <div class="product-body">
+          <div class="product-name">Wood Print 12x18</div>
+          <div class="product-prices">
+            <span class="product-retail">Retail <s>$72</s></span>
+            <span class="product-cost">Your cost $22</span>
+          </div>
+          <div class="product-margin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+            $50 margin per unit
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/gallery-frames-3.jpg?v=1724964668" alt="Gallery Frame 16x20" loading="lazy">
+        <div class="product-body">
+          <div class="product-name">Gallery Frame 16x20</div>
+          <div class="product-prices">
+            <span class="product-retail">Retail <s>$134</s></span>
+            <span class="product-cost">Your cost $34</span>
+          </div>
+          <div class="product-margin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+            $100 margin per unit
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/large-format-3_b1256f8b-0ccf-4b79-8cc6-e451dd8565a4.jpg?v=1727135498" alt="Large Format 20x30" loading="lazy">
+        <div class="product-body">
+          <div class="product-name">Large Format 20x30</div>
+          <div class="product-prices">
+            <span class="product-retail">Retail <s>$36</s></span>
+            <span class="product-cost">Your cost $12</span>
+          </div>
+          <div class="product-margin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+            $24 margin per unit
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/acrylic-blocks-1.jpg?v=1718737872" alt="Acrylic Block 5x7" loading="lazy">
+        <div class="product-body">
+          <div class="product-name">Acrylic Block 5x7</div>
+          <div class="product-prices">
+            <span class="product-retail">Retail <s>$48</s></span>
+            <span class="product-cost">Your cost $15</span>
+          </div>
+          <div class="product-margin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+            $33 margin per unit
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/softcover-photo-book-1.jpg?v=1723572392" alt="Photo Magazine 8x10" loading="lazy">
+        <div class="product-body">
+          <div class="product-name">Photo Magazine 8x10</div>
+          <div class="product-prices">
+            <span class="product-retail">Retail <s>$26</s></span>
+            <span class="product-cost">Your cost $8</span>
+          </div>
+          <div class="product-margin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+            $18 margin per unit
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE DEAL -->
+<section class="the-deal" id="the-deal">
+  <div class="section-inner">
+    <div class="deal-grid">
+      <div class="deal-left">
+        <div class="section-label">The Deal</div>
+        <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
+        <p class="section-desc">No subscriptions. No monthly fees. No minimums. You only pay per order, at wholesale cost.</p>
+        <p class="deal-desc">As an early partner, you get priority access to new products, dedicated Slack support, and the best wholesale rates we'll ever offer. This is the ground floor.</p>
+      </div>
+      <div class="deal-features">
+        <div class="deal-feature reveal">
+          <div class="deal-feature-icon">🔑</div>
+          <div>
+            <h4>Free API Access</h4>
+            <p>No setup cost, no monthly fee. Pay only when orders ship.</p>
+          </div>
+        </div>
+        <div class="deal-feature reveal">
+          <div>
+            <div class="deal-feature-icon">📦</div>
+          </div>
+          <div>
+            <h4>White-Label Fulfillment</h4>
+            <p>Your brand, your packaging. Customers never see ours.</p>
+          </div>
+        </div>
+        <div class="deal-feature reveal">
+          <div class="deal-feature-icon">⚡</div>
+          <div>
+            <h4>2-5 Day Shipping</h4>
+            <p>US-based production. Fast, tracked, reliable delivery.</p>
+          </div>
+        </div>
+        <div class="deal-feature reveal">
+          <div class="deal-feature-icon">🛟</div>
+          <div>
+            <h4>Early Partner Support</h4>
+            <p>Direct Slack channel. Real humans. Response within the hour.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section class="use-cases" id="use-cases">
+  <div class="section-inner">
+    <div class="use-cases-header">
+      <div class="section-label">Use Cases</div>
+      <h2 class="section-title">Who's building with PrintKit?</h2>
+      <p class="section-desc">From AI photo apps to interior design tools, partners are shipping prints across every category.</p>
+    </div>
+    <div class="use-cases-grid">
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">🤖</div>
+        <h3>AI Photo Apps</h3>
+        <p>Let users turn AI-generated images into museum-quality prints. One tap from screen to wall.</p>
+      </div>
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">🏠</div>
+        <h3>Interior Design Tools</h3>
+        <p>Offer wall art and framed prints directly from room visualization tools and design platforms.</p>
+      </div>
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">📸</div>
+        <h3>Photography Platforms</h3>
+        <p>Give photographers a storefront. They upload; you print, ship, and split the revenue.</p>
+      </div>
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">🎮</div>
+        <h3>Gaming & NFT Platforms</h3>
+        <p>Print in-game screenshots, NFT art, and digital collectibles as physical keepsakes.</p>
+      </div>
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">🎁</div>
+        <h3>Gifting & E-commerce</h3>
+        <p>Add custom photo products to your gift or e-commerce catalog without managing inventory.</p>
+      </div>
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">🧠</div>
+        <h3>AI Agents & Assistants</h3>
+        <p>Equip AI agents with the ability to order prints on behalf of users. Agent-first API, built for automation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IDEAS -->
+<section class="ideas" id="ideas">
+  <div class="section-inner">
+    <div class="ideas-header">
+      <div class="section-label">Ideas to Get Started</div>
+      <h2 class="section-title">What will you build?</h2>
+      <p class="section-desc">Here are six real partner ideas to spark inspiration. Every one is buildable today.</p>
+    </div>
+    <div class="ideas-grid">
+      <div class="idea-card reveal">
+        <div class="idea-emoji">🖌️</div>
+        <div>
+          <h4>"Print My Masterpiece" — AI Art Print Store</h4>
+          <p>Users generate art with Midjourney or DALL-E, preview it on a wall mock-up, and order a metal print in one click.</p>
+        </div>
+      </div>
+      <div class="idea-card reveal">
+        <div class="idea-emoji">📅</div>
+        <div>
+          <h4>"Year in Photos" — Annual Photo Magazine</h4>
+          <p>Pull the top 30 photos from a user's camera roll, auto-layout a magazine, and ship it as a year-end gift.</p>
+        </div>
+      </div>
+      <div class="idea-card reveal">
+        <div class="idea-emoji">🐾</div>
+        <div>
+          <h4>"Pet Portrait Studio" — AI Pet Prints</h4>
+          <p>Upload a photo of your pet, choose an art style (watercolor, pop art, Renaissance), get a framed print delivered.</p>
+        </div>
+      </div>
+      <div class="idea-card reveal">
+        <div class="idea-emoji">🏔️</div>
+        <div>
+          <h4>"Trail Prints" — Hiking Memory Prints</h4>
+          <p>After completing a hike, get a beautiful wood print of the trail map with your GPS route overlaid.</p>
+        </div>
+      </div>
+      <div class="idea-card reveal">
+        <div class="idea-emoji">👶</div>
+        <div>
+          <h4>"Monthly Milestones" — Baby Photo Subscription</h4>
+          <p>Parents upload one photo per month. At month 12, an auto-designed photo magazine arrives at their door.</p>
+        </div>
+      </div>
+      <div class="idea-card reveal">
+        <div class="idea-emoji">🏢</div>
+        <div>
+          <h4>"Office Art" — Slack-to-Print Bot</h4>
+          <p>A Slack bot that lets teams vote on AI-generated art, then automatically orders a large-format print for the office.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="section-inner">
+    <div class="testimonials-header">
+      <div class="section-label">What Partners Are Building</div>
+      <h2 class="section-title">Early partners are already shipping</h2>
+      <p class="section-desc">Here's what our first cohort of partners are saying after launch week.</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <p class="testimonial-quote">"We added PrintKit to our AI photo editor in a single afternoon. Our users can now turn any creation into a metal print. We made $800 in the first week without even promoting it."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">S</div>
+          <div>
+            <div class="testimonial-name">Sarah Chen</div>
+            <div class="testimonial-role">Founder, PixelForge</div>
+          </div>
+        </div>
+        <span class="testimonial-tag">AI Photo App</span>
+      </div>
+      <div class="testimonial-card reveal">
+        <p class="testimonial-quote">"The API is clean, the docs are solid, and the print quality blew us away. We're building a pet portrait service and orders are already rolling in before we've even launched publicly."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">M</div>
+          <div>
+            <div class="testimonial-name">Marco Reyes</div>
+            <div class="testimonial-role">CTO, PawPrints.ai</div>
+          </div>
+        </div>
+        <span class="testimonial-tag">Pet Portraits</span>
+      </div>
+      <div class="testimonial-card reveal">
+        <p class="testimonial-quote">"I built an AI agent that takes a text description, generates wall art, and orders a framed print. The whole thing is 40 lines of code. PrintKit is what APIs should feel like."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">J</div>
+          <div>
+            <div class="testimonial-name">James Okafor</div>
+            <div class="testimonial-role">Indie Developer</div>
+          </div>
+        </div>
+        <span class="testimonial-tag">AI Agent</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="section-inner">
+    <div class="faq-header">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Common questions</h2>
+      <p class="section-desc">Everything you need to know before you start building.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <h3>Is there a cost to join the partner program?</h3>
+          <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-answer"><p>No. There are no setup fees, monthly fees, or minimums. You only pay wholesale cost when an order ships. If you never send an order, you never pay a cent.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <h3>How do I set my retail price?</h3>
+          <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-answer"><p>You charge your customers whatever price you want. You pay us the wholesale cost, and the margin in between is entirely yours. There are no caps or restrictions.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <h3>What does "agent-first" mean?</h3>
+          <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-answer"><p>Our API is designed so AI agents and automated workflows can order prints programmatically. No human in the loop required. Send an image URL, product type, and address; we handle the rest.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <h3>Where do you ship?</h3>
+          <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-answer"><p>We currently ship within the United States with 2-5 day delivery. International shipping is on our roadmap and coming soon for early partners.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <h3>Can I white-label the packaging?</h3>
+          <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-answer"><p>Yes. All shipments are white-label by default. Your customers receive the product with no PrintKit branding. Custom packing slips and branded inserts are available for early partners.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <h3>What if there's a quality issue or a print arrives damaged?</h3>
+          <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-answer"><p>We handle it. Every order has a satisfaction guarantee. If there's a defect or damage in transit, we reprint and reship at no cost to you or your customer.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <h3>How long does integration take?</h3>
+          <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-answer"><p>Most partners go from signup to first test order in under an hour. The API is a single REST endpoint. We provide SDKs for Python, Node, and Go, plus full OpenAPI docs.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="cta">
+  <div class="section-label">Limited Early Access</div>
+  <h2>Start earning today.</h2>
+  <p>Join the first cohort of PrintKit partners. Get priority support, the best rates, and a direct line to our team.</p>
+  <a href="#" class="final-cta-btn">Become an Early Partner <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14m-6-6l6 6-6 6"/></svg></a>
+  <div class="cta-subtext">Free to join. No credit card required. Start building in minutes.</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Print<span>Kit</span></div>
+    <div class="footer-links">
+      <a href="#">API Docs</a>
+      <a href="#">Pricing</a>
+      <a href="#">Support</a>
+      <a href="#">Terms</a>
+      <a href="#">Privacy</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 PrintKit. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+// Sticky nav shadow
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 10);
+});
+
+// Mobile menu toggle
+const mobileToggle = document.getElementById('mobileToggle');
+const navLinks = document.getElementById('navLinks');
+mobileToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+});
+// Close mobile menu on link click
+navLinks.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => navLinks.classList.remove('open'));
+});
+
+// FAQ toggle
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const wasOpen = item.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  // Toggle current
+  if (!wasOpen) item.classList.add('open');
+}
+
+// Scroll reveal
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => observer.observe(el));
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>

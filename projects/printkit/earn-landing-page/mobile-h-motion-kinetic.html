@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PrintKit — Earn With Every Print</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --violet: #6C3AED;
+  --violet-light: #8B5CF6;
+  --violet-glow: rgba(108, 58, 237, 0.15);
+  --violet-soft: rgba(108, 58, 237, 0.06);
+  --black: #0A0A0A;
+  --gray-900: #171717;
+  --gray-700: #404040;
+  --gray-500: #737373;
+  --gray-400: #A3A3A3;
+  --gray-200: #E5E5E5;
+  --gray-100: #F5F5F5;
+  --gray-50: #FAFAFA;
+  --white: #FFFFFF;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 8px;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--white);
+  color: var(--black);
+  line-height: 1.6;
+  font-size: 16px;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- Progress Bar ---- */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--violet);
+  width: 0%;
+  z-index: 9999;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px rgba(108, 58, 237, 0.5);
+}
+
+/* ---- Scroll Animations ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-scale.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-24px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ---- Section Base ---- */
+section {
+  padding: 56px 20px;
+}
+
+.section-label {
+  font-family: 'Sora', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--violet);
+  margin-bottom: 12px;
+  display: inline-block;
+}
+
+.section-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--black);
+  margin-bottom: 14px;
+}
+
+.section-sub {
+  font-size: 16px;
+  color: var(--gray-500);
+  line-height: 1.55;
+}
+
+/* ---- HERO ---- */
+.hero {
+  padding: 72px 20px 48px;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(108, 58, 237, 0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--violet-soft);
+  border: 1px solid rgba(108, 58, 237, 0.12);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-family: 'Sora', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--violet);
+  margin-bottom: 24px;
+  width: fit-content;
+  opacity: 0;
+  animation: fadeSlideUp 0.6s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-badge .dot {
+  width: 6px;
+  height: 6px;
+  background: var(--violet);
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.7); }
+}
+
+.hero-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--black);
+  margin-bottom: 20px;
+}
+
+.hero-title .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hero-title .word.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-title .highlight {
+  color: var(--violet);
+  position: relative;
+}
+
+.hero-title .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--violet);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hero-title .highlight.underline-show::after {
+  transform: scaleX(1);
+}
+
+.hero-sub {
+  font-size: 17px;
+  color: var(--gray-500);
+  line-height: 1.55;
+  margin-bottom: 32px;
+  max-width: 340px;
+  opacity: 0;
+  animation: fadeSlideUp 0.7s 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-cta-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  opacity: 0;
+  animation: fadeSlideUp 0.7s 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--violet);
+  color: var(--white);
+  font-family: 'Sora', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 16px 28px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(108, 58, 237, 0.3);
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-primary:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px rgba(108, 58, 237, 0.2);
+}
+
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  color: var(--gray-700);
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 14px 24px;
+  border-radius: 14px;
+  border: 1.5px solid var(--gray-200);
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.2s, transform 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-secondary:active {
+  transform: scale(0.97);
+  border-color: var(--violet-light);
+}
+
+.hero-social-proof {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 32px;
+  opacity: 0;
+  animation: fadeSlideUp 0.7s 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.avatar-stack {
+  display: flex;
+}
+.avatar-stack .avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--white);
+  margin-left: -8px;
+  background: var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-700);
+}
+.avatar-stack .avatar:first-child { margin-left: 0; }
+.avatar-stack .avatar.v { background: var(--violet-glow); color: var(--violet); }
+
+.hero-social-proof span {
+  font-size: 13px;
+  color: var(--gray-500);
+  line-height: 1.3;
+}
+.hero-social-proof strong {
+  color: var(--black);
+  font-weight: 600;
+}
+
+/* ---- Scroll Indicator ---- */
+.scroll-hint {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  animation: fadeSlideUp 0.7s 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.scroll-hint span {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gray-400);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 28px;
+  background: var(--gray-200);
+  position: relative;
+  overflow: hidden;
+}
+.scroll-line::after {
+  content: '';
+  position: absolute;
+  top: -28px;
+  left: 0;
+  width: 100%;
+  height: 28px;
+  background: var(--violet);
+  animation: scrollDown 1.8s ease-in-out infinite;
+}
+@keyframes scrollDown {
+  0% { top: -28px; }
+  50% { top: 0; }
+  100% { top: 28px; }
+}
+
+/* ---- EARNINGS ---- */
+.earnings {
+  background: var(--gray-50);
+  padding: 56px 20px;
+}
+
+.earnings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.earn-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+  border: 1px solid var(--gray-200);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.earn-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 0;
+  background: var(--violet);
+  border-radius: 0 2px 2px 0;
+  transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.earn-card.visible::before {
+  height: 100%;
+}
+
+.earn-card.featured {
+  border-color: var(--violet);
+  box-shadow: 0 4px 24px rgba(108, 58, 237, 0.1);
+}
+
+.earn-tier {
+  font-family: 'Sora', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.earn-amount {
+  font-family: 'Sora', sans-serif;
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--black);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.earn-amount .counter-value {
+  display: inline-block;
+  min-width: 2ch;
+}
+
+.earn-amount .dollar {
+  font-size: 24px;
+  font-weight: 600;
+  vertical-align: top;
+  margin-right: 2px;
+}
+
+.earn-period {
+  font-size: 14px;
+  color: var(--gray-500);
+  margin-bottom: 12px;
+}
+
+.earn-detail {
+  font-size: 13px;
+  color: var(--gray-400);
+  line-height: 1.5;
+}
+
+.earn-card.featured .earn-amount {
+  color: var(--violet);
+}
+
+.earn-card .popular-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--violet);
+  color: var(--white);
+  font-family: 'Sora', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+
+/* ---- HOW IT WORKS ---- */
+.how-it-works {
+  padding: 56px 20px;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 28px;
+  position: relative;
+}
+
+.step {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 32px;
+  position: relative;
+}
+
+.step:last-child { padding-bottom: 0; }
+
+.step-line {
+  position: absolute;
+  left: 19px;
+  top: 40px;
+  bottom: 0;
+  width: 2px;
+  background: var(--gray-200);
+}
+
+.step-line-fill {
+  width: 100%;
+  height: 0;
+  background: var(--violet);
+  border-radius: 1px;
+  transition: height 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.step.visible .step-line-fill {
+  height: 100%;
+}
+
+.step:last-child .step-line { display: none; }
+
+.step-num {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 12px;
+  background: var(--violet-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Sora', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--violet);
+  position: relative;
+  z-index: 1;
+  transition: background 0.3s, color 0.3s, transform 0.3s;
+}
+
+.step.visible .step-num {
+  background: var(--violet);
+  color: var(--white);
+  transform: scale(1.05);
+}
+
+.step-content h3 {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 4px;
+  margin-top: 6px;
+}
+
+.step-content p {
+  font-size: 15px;
+  color: var(--gray-500);
+  line-height: 1.5;
+}
+
+/* ---- PRODUCTS ---- */
+.products {
+  background: var(--gray-50);
+  padding: 56px 0;
+}
+
+.products .section-header {
+  padding: 0 20px;
+  margin-bottom: 24px;
+}
+
+.products-swipe-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0 20px 16px;
+}
+.products-swipe-container::-webkit-scrollbar { display: none; }
+
+.products-track {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+}
+
+.product-card {
+  width: 260px;
+  min-width: 260px;
+  background: var(--white);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--gray-200);
+  scroll-snap-align: start;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.product-card:active {
+  transform: scale(0.98);
+}
+
+.product-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: var(--gray-100);
+}
+
+.product-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:active .product-img-wrap img {
+  transform: scale(1.03);
+}
+
+.product-savings-tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--violet);
+  color: var(--white);
+  font-family: 'Sora', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+
+.product-info {
+  padding: 16px;
+}
+
+.product-name {
+  font-family: 'Sora', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 8px;
+}
+
+.product-prices {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.price-retail {
+  font-size: 14px;
+  color: var(--gray-400);
+  text-decoration: line-through;
+}
+
+.price-yours {
+  font-family: 'Sora', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--violet);
+}
+
+.product-margin {
+  font-size: 13px;
+  color: var(--gray-500);
+}
+.product-margin strong {
+  color: var(--black);
+  font-weight: 600;
+}
+
+.swipe-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+  padding: 0 20px;
+}
+
+.swipe-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gray-200);
+  transition: background 0.3s, width 0.3s;
+}
+.swipe-dot.active {
+  background: var(--violet);
+  width: 20px;
+  border-radius: 3px;
+}
+
+/* ---- THE DEAL ---- */
+.the-deal {
+  padding: 56px 20px;
+}
+
+.deal-card {
+  background: var(--black);
+  border-radius: 20px;
+  padding: 32px 24px;
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.deal-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(108, 58, 237, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.deal-card .section-label {
+  color: var(--violet-light);
+}
+
+.deal-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.deal-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.deal-list li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.deal-check {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  background: var(--violet);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.deal-check svg {
+  width: 12px;
+  height: 12px;
+  stroke: var(--white);
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.deal-price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.deal-price .amount {
+  font-family: 'Sora', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--white);
+}
+
+.deal-price .period {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ---- USE CASES ---- */
+.use-cases {
+  background: var(--gray-50);
+  padding: 56px 20px;
+}
+
+.use-cases-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.use-case-item {
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid var(--gray-200);
+  transition: border-color 0.3s, transform 0.2s;
+}
+.use-case-item:active {
+  transform: scale(0.98);
+  border-color: var(--violet-light);
+}
+
+.use-case-icon {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  background: var(--violet-soft);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.use-case-text h4 {
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 2px;
+}
+
+.use-case-text p {
+  font-size: 13px;
+  color: var(--gray-500);
+  line-height: 1.4;
+}
+
+/* ---- FAQ ---- */
+.faq {
+  padding: 56px 20px;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 24px;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--gray-200);
+}
+.faq-item:first-child {
+  border-top: 1px solid var(--gray-200);
+}
+
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 18px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  text-align: left;
+}
+
+.faq-question span {
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--black);
+  padding-right: 16px;
+  line-height: 1.4;
+}
+
+.faq-icon {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 8px;
+  background: var(--gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.faq-item.open .faq-icon {
+  background: var(--violet-soft);
+  transform: rotate(45deg);
+}
+
+.faq-icon svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--gray-700);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.faq-item.open .faq-icon svg {
+  stroke: var(--violet);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 300px;
+}
+
+.faq-answer p {
+  font-size: 15px;
+  color: var(--gray-500);
+  line-height: 1.6;
+  padding-bottom: 18px;
+}
+
+/* ---- IDEAS ---- */
+.ideas {
+  background: var(--gray-50);
+  padding: 56px 20px;
+}
+
+.ideas-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.idea-card {
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  padding: 20px 16px;
+  text-align: center;
+  border: 1px solid var(--gray-200);
+  transition: border-color 0.3s;
+}
+
+.idea-emoji {
+  font-size: 28px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.idea-card h4 {
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.idea-card p {
+  font-size: 12px;
+  color: var(--gray-500);
+  line-height: 1.4;
+}
+
+/* ---- FINAL CTA ---- */
+.final-cta {
+  padding: 56px 20px 120px;
+  text-align: center;
+}
+
+.final-cta .section-title {
+  font-size: 30px;
+}
+
+.final-cta .btn-primary {
+  width: 100%;
+  margin-top: 24px;
+}
+
+.final-cta .guarantee {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--gray-500);
+}
+
+.final-cta .guarantee svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--violet);
+  fill: none;
+  stroke-width: 2;
+}
+
+/* ---- STICKY CTA ---- */
+.sticky-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--gray-200);
+  padding: 12px 20px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  z-index: 999;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sticky-cta.show {
+  transform: translateY(0);
+}
+
+.sticky-cta-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.sticky-cta-text .price {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--black);
+}
+
+.sticky-cta-text .desc {
+  font-size: 12px;
+  color: var(--gray-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sticky-cta .btn-primary {
+  padding: 14px 24px;
+  font-size: 15px;
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+/* ---- COUNTER ANIMATION ---- */
+@keyframes countPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.counter-animated {
+  animation: countPulse 0.3s ease-out;
+}
+
+/* ---- Mobile fine-tuning ---- */
+@media (max-width: 374px) {
+  .hero-title { font-size: 32px; }
+  .earn-amount { font-size: 36px; }
+  .product-card { width: 240px; min-width: 240px; }
+}
+
+@media (min-width: 430px) {
+  section { padding: 64px 24px; }
+  .hero { padding: 80px 24px 56px; }
+  .hero-title { font-size: 42px; }
+  .products { padding: 64px 0; }
+  .products .section-header { padding: 0 24px; }
+  .products-swipe-container { padding: 0 24px 16px; }
+  .ideas-grid { gap: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Creator Program
+  </div>
+
+  <h1 class="hero-title" id="heroTitle">
+    Turn your <span class="highlight">photos</span> into a print business
+  </h1>
+
+  <p class="hero-sub">
+    Sell premium wall art and photo products. Keep the profit on every order. No inventory, no risk.
+  </p>
+
+  <div class="hero-cta-group">
+    <a href="#" class="btn-primary">
+      Start Earning Today
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <a href="#" class="btn-secondary">
+      See How It Works
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </a>
+  </div>
+
+  <div class="hero-social-proof">
+    <div class="avatar-stack">
+      <div class="avatar v">S</div>
+      <div class="avatar">M</div>
+      <div class="avatar v">J</div>
+      <div class="avatar">A</div>
+    </div>
+    <span><strong>2,400+</strong> creators already earning</span>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ===================== EARNINGS ===================== -->
+<section class="earnings" id="earnings">
+  <div class="section-label reveal">Earnings Potential</div>
+  <h2 class="section-title reveal reveal-delay-1">What you could earn</h2>
+  <p class="section-sub reveal reveal-delay-2">Real numbers from real creators on the platform.</p>
+
+  <div class="earnings-grid">
+    <div class="earn-card reveal reveal-delay-1">
+      <div class="earn-tier">Starter</div>
+      <div class="earn-amount"><span class="dollar">$</span><span class="counter-value" data-target="150" data-duration="1200">0</span></div>
+      <div class="earn-period">per month</div>
+      <div class="earn-detail">5-10 orders/month with a small following</div>
+    </div>
+
+    <div class="earn-card featured reveal reveal-delay-2">
+      <div class="popular-badge">Most Common</div>
+      <div class="earn-tier">Growing</div>
+      <div class="earn-amount"><span class="dollar">$</span><span class="counter-value" data-target="1500" data-duration="1600">0</span></div>
+      <div class="earn-period">per month</div>
+      <div class="earn-detail">50-100 orders/month with an engaged audience</div>
+    </div>
+
+    <div class="earn-card reveal reveal-delay-3">
+      <div class="earn-tier">Established</div>
+      <div class="earn-amount"><span class="dollar">$</span><span class="counter-value" data-target="15000" data-duration="2000">0</span></div>
+      <div class="earn-period">per month</div>
+      <div class="earn-detail">500+ orders/month with a loyal community</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOW IT WORKS ===================== -->
+<section class="how-it-works" id="howItWorks">
+  <div class="section-label reveal">How It Works</div>
+  <h2 class="section-title reveal reveal-delay-1">Three steps to profit</h2>
+  <p class="section-sub reveal reveal-delay-2">Launch your print store in under 10 minutes.</p>
+
+  <div class="steps">
+    <div class="step reveal reveal-delay-1">
+      <div class="step-num">1</div>
+      <div class="step-line"><div class="step-line-fill"></div></div>
+      <div class="step-content">
+        <h3>Upload your work</h3>
+        <p>Add your photos, art, or designs. We handle the mockups and product pages automatically.</p>
+      </div>
+    </div>
+
+    <div class="step reveal reveal-delay-2">
+      <div class="step-num">2</div>
+      <div class="step-line"><div class="step-line-fill"></div></div>
+      <div class="step-content">
+        <h3>Set your prices</h3>
+        <p>Choose your markup above our base cost. You decide exactly how much you earn per sale.</p>
+      </div>
+    </div>
+
+    <div class="step reveal reveal-delay-3">
+      <div class="step-num">3</div>
+      <div class="step-line"><div class="step-line-fill"></div></div>
+      <div class="step-content">
+        <h3>Share and earn</h3>
+        <p>Share your store link. We print, pack, and ship every order. You get paid weekly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PRODUCTS ===================== -->
+<section class="products" id="products">
+  <div class="section-header">
+    <div class="section-label reveal">Products</div>
+    <h2 class="section-title reveal reveal-delay-1">Premium products, your prices</h2>
+    <p class="section-sub reveal reveal-delay-2">Swipe to explore the catalog. Your cost shown below.</p>
+  </div>
+
+  <div class="products-swipe-container" id="productsSwipe">
+    <div class="products-track">
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://cdn.shopify.com/s/files/1/0092/7695/2891/products/metal-prints_1200x.jpg" alt="Metal Prints" loading="lazy">
+          <div class="product-savings-tag">Save 69%</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Metal Prints</div>
+          <div class="product-prices">
+            <span class="price-retail">$29</span>
+            <span class="price-yours">$9</span>
+          </div>
+          <div class="product-margin">Earn up to <strong>$20</strong> per print</div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://cdn.shopify.com/s/files/1/0092/7695/2891/products/wood-prints_1200x.jpg" alt="Wood Prints" loading="lazy">
+          <div class="product-savings-tag">Save 69%</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Wood Prints</div>
+          <div class="product-prices">
+            <span class="price-retail">$72</span>
+            <span class="price-yours">$22</span>
+          </div>
+          <div class="product-margin">Earn up to <strong>$50</strong> per print</div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://cdn.shopify.com/s/files/1/0092/7695/2891/products/gallery-frames_1200x.jpg" alt="Gallery Frames" loading="lazy">
+          <div class="product-savings-tag">Save 75%</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Gallery Frames</div>
+          <div class="product-prices">
+            <span class="price-retail">$134</span>
+            <span class="price-yours">$34</span>
+          </div>
+          <div class="product-margin">Earn up to <strong>$100</strong> per frame</div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://cdn.shopify.com/s/files/1/0092/7695/2891/products/large-format_1200x.jpg" alt="Large Format Prints" loading="lazy">
+          <div class="product-savings-tag">Save 67%</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Large Format Prints</div>
+          <div class="product-prices">
+            <span class="price-retail">$36</span>
+            <span class="price-yours">$12</span>
+          </div>
+          <div class="product-margin">Earn up to <strong>$24</strong> per print</div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://cdn.shopify.com/s/files/1/0092/7695/2891/products/acrylic-blocks_1200x.jpg" alt="Acrylic Blocks" loading="lazy">
+          <div class="product-savings-tag">Save 69%</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Acrylic Blocks</div>
+          <div class="product-prices">
+            <span class="price-retail">$48</span>
+            <span class="price-yours">$15</span>
+          </div>
+          <div class="product-margin">Earn up to <strong>$33</strong> per block</div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://cdn.shopify.com/s/files/1/0092/7695/2891/products/softcover-photo-book_1200x.jpg" alt="Softcover Photo Book" loading="lazy">
+          <div class="product-savings-tag">Save 69%</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Softcover Photo Book</div>
+          <div class="product-prices">
+            <span class="price-retail">$26</span>
+            <span class="price-yours">$8</span>
+          </div>
+          <div class="product-margin">Earn up to <strong>$18</strong> per book</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="swipe-indicator" id="swipeIndicator">
+    <div class="swipe-dot active"></div>
+    <div class="swipe-dot"></div>
+    <div class="swipe-dot"></div>
+    <div class="swipe-dot"></div>
+    <div class="swipe-dot"></div>
+    <div class="swipe-dot"></div>
+  </div>
+</section>
+
+<!-- ===================== THE DEAL ===================== -->
+<section class="the-deal" id="theDeal">
+  <div class="deal-card reveal-scale">
+    <div class="section-label">The Deal</div>
+    <h2 class="deal-title">Everything you need to run a print business</h2>
+    <ul class="deal-list">
+      <li>
+        <div class="deal-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
+        Your own branded storefront with custom domain support
+      </li>
+      <li>
+        <div class="deal-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
+        Premium printing on demand — no inventory ever
+      </li>
+      <li>
+        <div class="deal-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
+        Worldwide shipping handled and tracked
+      </li>
+      <li>
+        <div class="deal-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
+        Customer support for every order
+      </li>
+      <li>
+        <div class="deal-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
+        Weekly payouts — keep 100% of your markup
+      </li>
+      <li>
+        <div class="deal-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
+        Analytics dashboard to track sales and growth
+      </li>
+    </ul>
+    <div class="deal-price">
+      <span class="amount">Free</span>
+      <span class="period">to start — no monthly fees</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== USE CASES ===================== -->
+<section class="use-cases" id="useCases">
+  <div class="section-label reveal">Who It's For</div>
+  <h2 class="section-title reveal reveal-delay-1">Built for creators like you</h2>
+
+  <div class="use-cases-grid">
+    <div class="use-case-item reveal reveal-delay-1">
+      <div class="use-case-icon">&#x1f4f7;</div>
+      <div class="use-case-text">
+        <h4>Photographers</h4>
+        <p>Sell prints of your best shots directly to fans and clients</p>
+      </div>
+    </div>
+    <div class="use-case-item reveal reveal-delay-2">
+      <div class="use-case-icon">&#x1f3a8;</div>
+      <div class="use-case-text">
+        <h4>Artists & Illustrators</h4>
+        <p>Turn digital art into gallery-quality physical products</p>
+      </div>
+    </div>
+    <div class="use-case-item reveal reveal-delay-3">
+      <div class="use-case-icon">&#x1f4f1;</div>
+      <div class="use-case-text">
+        <h4>Influencers</h4>
+        <p>Monetize your audience with premium branded merch</p>
+      </div>
+    </div>
+    <div class="use-case-item reveal reveal-delay-4">
+      <div class="use-case-icon">&#x1f3e0;</div>
+      <div class="use-case-text">
+        <h4>Interior Designers</h4>
+        <p>Offer curated wall art collections to your clients</p>
+      </div>
+    </div>
+    <div class="use-case-item reveal">
+      <div class="use-case-icon">&#x1f6cd;&#xfe0f;</div>
+      <div class="use-case-text">
+        <h4>E-commerce Sellers</h4>
+        <p>Add high-margin print products to your existing store</p>
+      </div>
+    </div>
+    <div class="use-case-item reveal reveal-delay-1">
+      <div class="use-case-icon">&#x1f381;</div>
+      <div class="use-case-text">
+        <h4>Gift & Event Planners</h4>
+        <p>Create custom photo gifts for weddings and events</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section class="faq" id="faq">
+  <div class="section-label reveal">FAQ</div>
+  <h2 class="section-title reveal reveal-delay-1">Common questions</h2>
+
+  <div class="faq-list">
+    <div class="faq-item reveal">
+      <button class="faq-question" aria-expanded="false">
+        <span>How much does it cost to get started?</span>
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+      </button>
+      <div class="faq-answer">
+        <p>Nothing. PrintKit is completely free to join. There are no monthly fees, no setup costs, and no minimum orders. You only pay the base product cost when a customer places an order, and you keep the difference as profit.</p>
+      </div>
+    </div>
+
+    <div class="faq-item reveal reveal-delay-1">
+      <button class="faq-question" aria-expanded="false">
+        <span>How and when do I get paid?</span>
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+      </button>
+      <div class="faq-answer">
+        <p>We pay out every week via direct deposit. Your earnings dashboard shows real-time sales, and you can track every order from placement to delivery. No minimums required for withdrawal.</p>
+      </div>
+    </div>
+
+    <div class="faq-item reveal reveal-delay-2">
+      <button class="faq-question" aria-expanded="false">
+        <span>Do I need to handle shipping or inventory?</span>
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+      </button>
+      <div class="faq-answer">
+        <p>No. We handle everything — printing, quality control, packing, shipping, and tracking. Orders ship from our facilities with full tracking. You never touch a product.</p>
+      </div>
+    </div>
+
+    <div class="faq-item reveal">
+      <button class="faq-question" aria-expanded="false">
+        <span>What if a customer isn't happy with their order?</span>
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+      </button>
+      <div class="faq-answer">
+        <p>Our customer support team handles all returns, replacements, and customer inquiries. Every order comes with a satisfaction guarantee. Your reputation is protected.</p>
+      </div>
+    </div>
+
+    <div class="faq-item reveal reveal-delay-1">
+      <button class="faq-question" aria-expanded="false">
+        <span>Can I set my own prices?</span>
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+      </button>
+      <div class="faq-answer">
+        <p>Absolutely. You set the retail price for every product. We show you the base cost, and everything above that is your profit. Most creators mark up 2-4x for healthy margins.</p>
+      </div>
+    </div>
+
+    <div class="faq-item reveal reveal-delay-2">
+      <button class="faq-question" aria-expanded="false">
+        <span>What print quality can I expect?</span>
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+      </button>
+      <div class="faq-answer">
+        <p>Gallery-grade. We use archival inks, premium substrates, and professional-grade equipment. Our metal prints use ChromaLuxe panels, frames use real hardwood, and every product is inspected before shipping.</p>
+      </div>
+    </div>
+
+    <div class="faq-item reveal">
+      <button class="faq-question" aria-expanded="false">
+        <span>How long does shipping take?</span>
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+      </button>
+      <div class="faq-answer">
+        <p>Most orders ship within 2-4 business days and arrive within 5-8 business days domestically. International shipping is available to 30+ countries with tracking on every order.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== IDEAS ===================== -->
+<section class="ideas" id="ideas">
+  <div class="section-label reveal">Inspiration</div>
+  <h2 class="section-title reveal reveal-delay-1">Ideas to get started</h2>
+  <p class="section-sub reveal reveal-delay-2">Quick-start concepts that sell well on the platform.</p>
+
+  <div class="ideas-grid">
+    <div class="idea-card reveal">
+      <span class="idea-emoji">&#x1f305;</span>
+      <h4>Travel Series</h4>
+      <p>Curate your best travel photos as a themed collection</p>
+    </div>
+    <div class="idea-card reveal reveal-delay-1">
+      <span class="idea-emoji">&#x1f431;</span>
+      <h4>Pet Portraits</h4>
+      <p>Custom pet photos on metal or wood prints</p>
+    </div>
+    <div class="idea-card reveal reveal-delay-2">
+      <span class="idea-emoji">&#x1f30a;</span>
+      <h4>Nature & Landscapes</h4>
+      <p>Large format prints of stunning scenery</p>
+    </div>
+    <div class="idea-card reveal reveal-delay-3">
+      <span class="idea-emoji">&#x1f37d;&#xfe0f;</span>
+      <h4>Food Photography</h4>
+      <p>Gallery frames of culinary art for restaurants</p>
+    </div>
+    <div class="idea-card reveal">
+      <span class="idea-emoji">&#x1f3d9;&#xfe0f;</span>
+      <h4>City Prints</h4>
+      <p>Urban photography and architecture on metal</p>
+    </div>
+    <div class="idea-card reveal reveal-delay-1">
+      <span class="idea-emoji">&#x1f476;</span>
+      <h4>Family Photo Books</h4>
+      <p>Softcover books for holidays and milestones</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FINAL CTA ===================== -->
+<section class="final-cta" id="finalCta">
+  <div class="section-label reveal">Ready?</div>
+  <h2 class="section-title reveal reveal-delay-1">Start earning from your photos today</h2>
+  <p class="section-sub reveal reveal-delay-2">Free to join. No inventory. No risk. Just profit from every print sold.</p>
+
+  <a href="#" class="btn-primary reveal reveal-delay-3">
+    Create Your Free Store
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+
+  <div class="guarantee reveal reveal-delay-4">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <span>No credit card required. Cancel anytime.</span>
+  </div>
+</section>
+
+<!-- ===================== STICKY CTA ===================== -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="sticky-cta-text">
+    <div class="price">Free to Start</div>
+    <div class="desc">No fees. Keep 100% of your markup.</div>
+  </div>
+  <a href="#" class="btn-primary">
+    Get Started
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ---- Progress Bar ----
+  var progressBar = document.getElementById('progressBar');
+  function updateProgress() {
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = progress + '%';
+  }
+
+  // ---- Word-by-word Hero Reveal ----
+  var heroTitle = document.getElementById('heroTitle');
+  var heroHTML = heroTitle.innerHTML;
+  var words = heroHTML.split(/(\s+)/);
+  var wrappedHTML = '';
+  var wordIndex = 0;
+  var insideTag = false;
+
+  for (var i = 0; i < words.length; i++) {
+    var token = words[i];
+    if (token.indexOf('<') !== -1) insideTag = true;
+    if (insideTag) {
+      wrappedHTML += token;
+      if (token.indexOf('>') !== -1 && token.indexOf('</') !== -1) insideTag = false;
+      else if (token.indexOf('>') !== -1 && token.indexOf('<') === -1) insideTag = false;
+    } else if (token.trim() === '') {
+      wrappedHTML += token;
+    } else {
+      wrappedHTML += '<span class="word" style="transition-delay:' + (0.3 + wordIndex * 0.08) + 's">' + token + '</span>';
+      wordIndex++;
+    }
+  }
+  heroTitle.innerHTML = wrappedHTML;
+
+  // Reveal words on load
+  setTimeout(function() {
+    var wordEls = heroTitle.querySelectorAll('.word');
+    wordEls.forEach(function(w) { w.classList.add('show'); });
+    // Underline highlight
+    setTimeout(function() {
+      var hl = heroTitle.querySelector('.highlight');
+      if (hl) hl.classList.add('underline-show');
+    }, 300 + wordIndex * 80);
+  }, 200);
+
+  // ---- Scroll Reveal (Intersection Observer) ----
+  var revealElements = document.querySelectorAll('.reveal, .reveal-scale, .reveal-left');
+  var observerOptions = {
+    root: null,
+    rootMargin: '0px 0px -60px 0px',
+    threshold: 0.15
+  };
+
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  revealElements.forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+  // ---- Animated Counters ----
+  var counterElements = document.querySelectorAll('.counter-value');
+  var countersAnimated = new Set();
+
+  function animateCounter(el) {
+    var target = parseInt(el.getAttribute('data-target'), 10);
+    var duration = parseInt(el.getAttribute('data-duration'), 10) || 1500;
+    var start = 0;
+    var startTime = null;
+
+    function formatNumber(n) {
+      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var elapsed = timestamp - startTime;
+      var progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = Math.floor(eased * target);
+      el.textContent = formatNumber(current);
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = formatNumber(target);
+        el.classList.add('counter-animated');
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  var counterObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && !countersAnimated.has(entry.target)) {
+        countersAnimated.add(entry.target);
+        // Slight delay for card animation to settle
+        setTimeout(function() {
+          animateCounter(entry.target);
+        }, 300);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  counterElements.forEach(function(el) {
+    counterObserver.observe(el);
+  });
+
+  // ---- Sticky CTA ----
+  var stickyCta = document.getElementById('stickyCta');
+  var heroSection = document.querySelector('.hero');
+  var finalCtaSection = document.getElementById('finalCta');
+  var stickyVisible = false;
+
+  function updateStickyCta() {
+    var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    var heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+    var finalCtaTop = finalCtaSection.offsetTop - window.innerHeight;
+    var shouldShow = scrollY > heroBottom && scrollY < finalCtaTop;
+
+    if (shouldShow && !stickyVisible) {
+      stickyCta.classList.add('show');
+      stickyVisible = true;
+    } else if (!shouldShow && stickyVisible) {
+      stickyCta.classList.remove('show');
+      stickyVisible = false;
+    }
+  }
+
+  // ---- Product Swipe Dots ----
+  var productsSwipe = document.getElementById('productsSwipe');
+  var swipeDots = document.querySelectorAll('#swipeIndicator .swipe-dot');
+
+  function updateSwipeDots() {
+    if (!productsSwipe || swipeDots.length === 0) return;
+    var scrollLeft = productsSwipe.scrollLeft;
+    var cardWidth = 274; // card + gap
+    var activeIndex = Math.round(scrollLeft / cardWidth);
+    activeIndex = Math.min(activeIndex, swipeDots.length - 1);
+    activeIndex = Math.max(activeIndex, 0);
+
+    swipeDots.forEach(function(dot, i) {
+      dot.classList.toggle('active', i === activeIndex);
+    });
+  }
+
+  productsSwipe.addEventListener('scroll', updateSwipeDots, { passive: true });
+
+  // ---- FAQ Accordion ----
+  var faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(function(item) {
+    var btn = item.querySelector('.faq-question');
+    btn.addEventListener('click', function() {
+      var isOpen = item.classList.contains('open');
+
+      // Close all
+      faqItems.forEach(function(fi) {
+        fi.classList.remove('open');
+        fi.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+      });
+
+      // Toggle clicked
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  // ---- Step Line Fill Observer ----
+  var steps = document.querySelectorAll('.step');
+  var stepObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.4 });
+
+  steps.forEach(function(s) { stepObserver.observe(s); });
+
+  // ---- Throttled Scroll Handler ----
+  var ticking = false;
+  function onScroll() {
+    if (!ticking) {
+      requestAnimationFrame(function() {
+        updateProgress();
+        updateStickyCta();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Initial calls
+  updateProgress();
+  updateStickyCta();
+  updateSwipeDots();
+
+})();
+</script>
+
+</body>
+</html>

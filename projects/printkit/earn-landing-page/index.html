@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PrintKit Earn Page — Design Explorations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #f5f4f1;
+      --text: #1a1a1a;
+      --text-muted: #6b6b6b;
+      --text-faint: #a8a5a0;
+      --card-bg: #ffffff;
+      --card-border: #e5e3df;
+      --accent: #c45d3e;
+      --grid-line: rgba(0,0,0,0.028);
+      --serif: 'Instrument Serif', serif;
+      --sans: 'Hanken Grotesk', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .topbar {
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), #d4845a, var(--accent));
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+
+    .container {
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 32px;
+      transition: color 0.2s;
+    }
+
+    .back:hover { color: var(--accent); }
+
+    .hero {
+      margin-bottom: 48px;
+    }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      font-weight: 300;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 24px;
+      margin-top: 16px;
+    }
+
+    .hero-stat {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-faint);
+      letter-spacing: 0.02em;
+    }
+
+    .hero-stat strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .section-num {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--text-faint);
+      letter-spacing: 0.02em;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .card-letter {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 7px;
+      border-radius: 3px;
+      margin-top: 10px;
+      align-self: flex-start;
+    }
+
+    .tag-desktop { background: #f0f0ee; color: #6b6b6b; }
+    .tag-mobile { background: #e8f0e8; color: #2d6a2d; }
+
+    .card-arrow {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 1rem;
+      color: var(--text-muted);
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: all 0.2s ease;
+    }
+
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .footer {
+      margin-top: 56px;
+      padding-top: 20px;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 1.8rem; }
+      .container { padding: 40px 16px 60px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar"></div>
+  <div class="container">
+
+    <a href="../../index.html" class="back">&larr; SPS Lab</a>
+
+    <div class="hero">
+      <h1>PrintKit /earn Page</h1>
+      <p>10 desktop design directions and 10 mobile-native versions for the PrintKit Earn & Partners landing page — exploring the intersection of developer tools and fintech.</p>
+      <div class="hero-stats">
+        <span class="hero-stat"><strong>10</strong> desktop</span>
+        <span class="hero-stat"><strong>10</strong> mobile</span>
+        <span class="hero-stat"><strong>20</strong> total pages</span>
+      </div>
+    </div>
+
+    <!-- DESKTOP DESIGNS -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-title">Desktop Designs</h2>
+      </div>
+      <div class="grid">
+        <a href="design-a-neon-fintech.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">A</span>
+          <div>
+            <div class="card-title">Neon Fintech</div>
+            <div class="card-desc">Deep navy-black with neon green accents, JetBrains Mono for stats, glowing cards, dot-grid background.</div>
+          </div>
+          <span class="card-tag tag-desktop">Desktop</span>
+        </a>
+        <a href="design-b-swiss-modern.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">B</span>
+          <div>
+            <div class="card-title">Swiss Modernist</div>
+            <div class="card-desc">International Typographic Style with Inter, bold red accent, ruled lines, tabular numbers.</div>
+          </div>
+          <span class="card-tag tag-desktop">Desktop</span>
+        </a>
+        <a href="design-c-editorial.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">C</span>
+          <div>
+            <div class="card-title">Editorial Magazine</div>
+            <div class="card-desc">Fraunces serif headlines, drop caps, pull quotes, overlapping hero images, magazine feel.</div>
+          </div>
+          <span class="card-tag tag-desktop">Desktop</span>
+        </a>
+        <a href="design-d-gradient-glass.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">D</span>
+          <div>
+            <div class="card-title">Gradient Glass</div>
+            <div class="card-desc">Purple-indigo-teal gradients, frosted glass cards, animated orbs, grain texture, mint green earnings.</div>
+          </div>
+          <span class="card-tag tag-desktop">Desktop</span>
+        </a>
+        <a href="design-e-brutalist-code.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">E</span>
+          <div>
+            <div class="card-title">Brutalist Code</div>
+            <div class="card-desc">Terminal green on black, JetBrains Mono only, CRT scanlines, syntax-highlighted code blocks, ASCII art.</div>
+          </div>
+          <span class="card-tag tag-desktop">Desktop</span>
+        </a>
+        <a href="design-f-warm-luxury.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">F</span>
+          <div>
+            <div class="card-title">Warm Luxury</div>
+            <div class="card-desc">Cormorant Garamond headlines, muted gold accents, thin gold rules, generous whitespace, premium brand feel.</div>
+          </div>
+          <span class="card-tag tag-desktop">Desktop</span>
+        </a>
+        <a href="design-g-bold-geometric.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">G</span>
+          <div>
+            <div class="card-title">Bold Geometric</div>
+            <div class="card-desc">Archivo Black headlines, blue/yellow/red accents, 3px borders, offset shadows, geometric shapes.</div>
+          </div>
+          <span class="card-tag tag-desktop">Desktop</span>
+        </a>
+        <a href="design-h-motion-kinetic.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">H</span>
+          <div>
+            <div class="card-title">Motion / Kinetic</div>
+            <div class="card-desc">Word-by-word hero animation, scroll progress bar, animated counters, timeline fills, parallax layers.</div>
+          </div>
+          <span class="card-tag tag-desktop">Desktop</span>
+        </a>
+        <a href="design-i-data-dashboard.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">I</span>
+          <div>
+            <div class="card-title">Data Dashboard</div>
+            <div class="card-desc">GitHub-dark theme, live earnings counter, animated bar charts, LIVE badges, table-style product listing.</div>
+          </div>
+          <span class="card-tag tag-desktop">Desktop</span>
+        </a>
+        <a href="design-j-startup-launch.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">J</span>
+          <div>
+            <div class="card-title">Startup Launch</div>
+            <div class="card-desc">Animated gradient ribbon, avatar social proof, quick-start steps, testimonials, launch urgency.</div>
+          </div>
+          <span class="card-tag tag-desktop">Desktop</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- MOBILE DESIGNS -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-title">Mobile-Native Designs</h2>
+      </div>
+      <div class="grid">
+        <a href="mobile-a-neon-fintech.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">M-A</span>
+          <div>
+            <div class="card-title">Neon Fintech</div>
+            <div class="card-desc">Mobile-native version — scroll-snap sections, sticky bottom CTA, thumb-zone optimized.</div>
+          </div>
+          <span class="card-tag tag-mobile">Mobile</span>
+        </a>
+        <a href="mobile-b-swiss-modern.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">M-B</span>
+          <div>
+            <div class="card-title">Swiss Modernist</div>
+            <div class="card-desc">Mobile-native version — vertical rhythm, compact grid, touch-friendly tabular data.</div>
+          </div>
+          <span class="card-tag tag-mobile">Mobile</span>
+        </a>
+        <a href="mobile-c-editorial.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">M-C</span>
+          <div>
+            <div class="card-title">Editorial Magazine</div>
+            <div class="card-desc">Mobile-native version — full-bleed images, card-based sections, swipe-friendly layout.</div>
+          </div>
+          <span class="card-tag tag-mobile">Mobile</span>
+        </a>
+        <a href="mobile-d-gradient-glass.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">M-D</span>
+          <div>
+            <div class="card-title">Gradient Glass</div>
+            <div class="card-desc">Mobile-native version — frosted glass bottom sheet, gradient backgrounds, safe-area insets.</div>
+          </div>
+          <span class="card-tag tag-mobile">Mobile</span>
+        </a>
+        <a href="mobile-e-brutalist-code.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">M-E</span>
+          <div>
+            <div class="card-title">Brutalist Code</div>
+            <div class="card-desc">Mobile-native version — terminal scroll, compact monospace, dark interface.</div>
+          </div>
+          <span class="card-tag tag-mobile">Mobile</span>
+        </a>
+        <a href="mobile-f-warm-luxury.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">M-F</span>
+          <div>
+            <div class="card-title">Warm Luxury</div>
+            <div class="card-desc">Mobile-native version — elegant vertical flow, generous touch targets, gold details.</div>
+          </div>
+          <span class="card-tag tag-mobile">Mobile</span>
+        </a>
+        <a href="mobile-g-bold-geometric.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">M-G</span>
+          <div>
+            <div class="card-title">Bold Geometric</div>
+            <div class="card-desc">Mobile-native version — stacked bold shapes, primary color blocks, tap-friendly layout.</div>
+          </div>
+          <span class="card-tag tag-mobile">Mobile</span>
+        </a>
+        <a href="mobile-h-motion-kinetic.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">M-H</span>
+          <div>
+            <div class="card-title">Motion / Kinetic</div>
+            <div class="card-desc">Mobile-native version — scroll-triggered animations, counting numbers, progress indicators.</div>
+          </div>
+          <span class="card-tag tag-mobile">Mobile</span>
+        </a>
+        <a href="mobile-i-data-dashboard.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">M-I</span>
+          <div>
+            <div class="card-title">Data Dashboard</div>
+            <div class="card-desc">Mobile-native version — compact stats, swipeable charts, dark mode native feel.</div>
+          </div>
+          <span class="card-tag tag-mobile">Mobile</span>
+        </a>
+        <a href="mobile-j-startup-launch.html" class="card">
+          <span class="card-arrow">&rarr;</span>
+          <span class="card-letter">M-J</span>
+          <div>
+            <div class="card-title">Startup Launch</div>
+            <div class="card-desc">Mobile-native version — app-like urgency, social proof stack, sticky action bar.</div>
+          </div>
+          <span class="card-tag tag-mobile">Mobile</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer">
+      PrintKit Earn Page — 20 design explorations — March 2026
+    </div>
+
+  </div>
+</body>
+</html>

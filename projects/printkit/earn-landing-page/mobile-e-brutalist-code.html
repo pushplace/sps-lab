@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PrintKit /earn — Revenue Share for Developers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  /* ============================================
+     RESET & VARIABLES
+     ============================================ */
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --green: #00ff41;
+    --green-dim: #00cc33;
+    --green-dark: #009922;
+    --green-glow: rgba(0, 255, 65, 0.12);
+    --green-glow-strong: rgba(0, 255, 65, 0.25);
+    --amber: #ffb000;
+    --cyan: #00d4ff;
+    --red: #ff3333;
+    --white: #e0e0e0;
+    --white-bright: #ffffff;
+    --gray: #666666;
+    --gray-light: #888888;
+    --gray-dark: #333333;
+    --bg: #0a0a0a;
+    --bg-light: #111111;
+    --bg-lighter: #1a1a1a;
+    --border: #222222;
+    --border-bright: #444444;
+    --font: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--white);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    padding-bottom: 72px; /* space for sticky CTA */
+  }
+
+  ::selection {
+    background: var(--green);
+    color: var(--bg);
+  }
+
+  a {
+    color: var(--green);
+    text-decoration: none;
+  }
+
+  /* ============================================
+     CRT SCANLINES
+     ============================================ */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.04) 2px,
+      rgba(0, 0, 0, 0.04) 4px
+    );
+    pointer-events: none;
+    z-index: 10000;
+  }
+
+  /* Subtle CRT flicker */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.3) 100%);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ============================================
+     NAV - MOBILE TERMINAL BAR
+     ============================================ */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--bg);
+    border-bottom: 2px solid var(--green-dark);
+    padding: 0 16px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--green);
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span {
+    color: var(--gray-light);
+    font-weight: 400;
+  }
+
+  .nav-toggle {
+    background: none;
+    border: 2px solid var(--green-dark);
+    color: var(--green);
+    font-family: var(--font);
+    font-size: 16px;
+    padding: 6px 12px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-toggle:active {
+    background: var(--green-glow);
+  }
+
+  .nav-menu {
+    display: none;
+    position: fixed;
+    top: 52px;
+    left: 0; right: 0; bottom: 0;
+    background: var(--bg);
+    z-index: 999;
+    padding: 8px 0;
+    border-bottom: 2px solid var(--green-dark);
+    overflow-y: auto;
+  }
+  .nav-menu.open {
+    display: block;
+  }
+
+  .nav-menu a {
+    display: block;
+    padding: 16px 20px;
+    color: var(--gray-light);
+    font-size: 16px;
+    border-bottom: 1px solid var(--border);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-menu a:active {
+    background: var(--green-glow);
+    color: var(--green);
+  }
+
+  .nav-menu .nav-cta-link {
+    color: var(--bg);
+    background: var(--green);
+    font-weight: 700;
+    margin: 16px;
+    text-align: center;
+    border: none;
+  }
+  .nav-menu .nav-cta-link:active {
+    background: var(--green-dim);
+  }
+
+  /* ============================================
+     LAYOUT
+     ============================================ */
+  .container {
+    padding: 0 16px;
+  }
+
+  section {
+    padding: 48px 0;
+    border-bottom: 2px solid var(--border);
+  }
+
+  /* ============================================
+     SECTION HEADERS
+     ============================================ */
+  .section-header {
+    margin-bottom: 28px;
+  }
+
+  .section-comment {
+    color: var(--gray);
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white-bright);
+    letter-spacing: -0.5px;
+  }
+  .section-title .accent { color: var(--green); }
+
+  /* ============================================
+     HERO
+     ============================================ */
+  .hero {
+    padding: 40px 0 48px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .hero-path {
+    color: var(--gray);
+    font-size: 13px;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+  }
+  .hero-path .slash { color: var(--green-dark); }
+
+  .hero h1 {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--green);
+    margin-bottom: 4px;
+    letter-spacing: -1px;
+  }
+
+  .cursor-blink {
+    display: inline-block;
+    width: 3px;
+    height: 0.85em;
+    background: var(--green);
+    margin-left: 3px;
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--gray-light);
+    margin-top: 16px;
+    line-height: 1.7;
+  }
+  .hero-sub .hl { color: var(--green); font-weight: 600; }
+
+  .hero-prompt {
+    margin-top: 28px;
+    padding: 16px;
+    background: var(--bg-light);
+    border: 2px solid var(--border);
+    font-size: 12px;
+    line-height: 1.8;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+  .hero-prompt .comment { color: var(--gray); }
+  .hero-prompt .cmd { color: var(--green); }
+  .hero-prompt .flag { color: var(--amber); }
+  .hero-prompt .str { color: var(--cyan); }
+
+  .hero-stats {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 2px solid var(--border);
+  }
+
+  .hero-stat {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .hero-stat:nth-child(2n) { border-right: none; }
+  .hero-stat:nth-child(n+3) { border-bottom: none; }
+  .hero-stat .stat-label { color: var(--gray); }
+  .hero-stat .stat-value { color: var(--green); font-weight: 600; }
+
+  /* ============================================
+     EARNINGS - TERMINAL OUTPUT
+     ============================================ */
+  .earnings-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 2px solid var(--green-dark);
+  }
+
+  .earn-cell {
+    padding: 24px 16px;
+    border-bottom: 2px solid var(--border);
+    transition: background 0.2s;
+  }
+  .earn-cell:last-child { border-bottom: none; }
+  .earn-cell:active { background: var(--green-glow); }
+
+  .earn-label {
+    font-size: 11px;
+    color: var(--gray);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+  }
+
+  .earn-orders {
+    font-size: 14px;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .earn-amount {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--green);
+    letter-spacing: -1px;
+  }
+  .earn-amount .per {
+    font-size: 14px;
+    color: var(--gray);
+    font-weight: 400;
+  }
+
+  .earn-terminal {
+    font-size: 12px;
+    color: var(--gray-light);
+    padding: 14px 16px;
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    margin-top: 16px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .earn-terminal .prompt { color: var(--green-dark); }
+  .earn-terminal .val { color: var(--green); font-weight: 600; }
+
+  /* ============================================
+     HOW IT WORKS
+     ============================================ */
+  .steps {
+    counter-reset: step;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 0;
+    border: 2px solid var(--border);
+    margin-bottom: -2px;
+  }
+  .step:active { border-color: var(--green-dark); }
+
+  .step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-light);
+    border-right: 2px solid var(--border);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--green-dark);
+    counter-increment: step;
+  }
+  .step-num::before { content: counter(step, decimal-leading-zero); }
+
+  .step-body {
+    padding: 18px 14px;
+  }
+
+  .step-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white-bright);
+    margin-bottom: 6px;
+    word-break: break-word;
+  }
+
+  .step-desc {
+    font-size: 14px;
+    color: var(--gray-light);
+    line-height: 1.6;
+  }
+
+  /* API code block */
+  .api-block {
+    margin-top: 24px;
+    border: 2px solid var(--green-dark);
+    background: var(--bg-light);
+    overflow: hidden;
+  }
+
+  .api-block-header {
+    padding: 10px 14px;
+    background: var(--bg-lighter);
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .api-block-header span {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gray-light);
+  }
+  .api-block-header .lang-tag {
+    color: var(--amber);
+    font-weight: 600;
+  }
+
+  .api-block pre {
+    padding: 14px;
+    font-size: 11px;
+    line-height: 1.8;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    color: var(--white);
+  }
+
+  .api-block .kw { color: var(--amber); }
+  .api-block .fn { color: var(--cyan); }
+  .api-block .str { color: var(--green); }
+  .api-block .comment { color: var(--gray); }
+  .api-block .prop { color: var(--white-bright); }
+  .api-block .num { color: #ff6b6b; }
+
+  .copy-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--gray-light);
+    font-family: var(--font);
+    font-size: 12px;
+    padding: 4px 12px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .copy-btn:active {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  /* ============================================
+     PRODUCTS - HORIZONTAL SCROLL CARDS
+     ============================================ */
+  .products-scroll-wrap {
+    margin: 0 -16px;
+    padding: 0 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .products-scroll-wrap::-webkit-scrollbar { display: none; }
+
+  .products-scroll {
+    display: flex;
+    gap: 0;
+    min-width: min-content;
+    padding-right: 16px;
+  }
+
+  .product-card {
+    flex: 0 0 260px;
+    border: 2px solid var(--border);
+    margin-right: -2px;
+    background: var(--bg);
+    overflow: hidden;
+  }
+  .product-card:active {
+    border-color: var(--green-dark);
+    background: var(--green-glow);
+  }
+
+  .product-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(30%) brightness(0.9);
+    border-bottom: 2px solid var(--border);
+  }
+  .product-card:active .product-img {
+    filter: grayscale(0%) brightness(1);
+  }
+
+  .product-info {
+    padding: 14px;
+  }
+
+  .product-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white-bright);
+    margin-bottom: 2px;
+  }
+  .product-size {
+    font-size: 12px;
+    color: var(--gray);
+    margin-bottom: 12px;
+  }
+
+  .product-prices {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+  }
+
+  .product-price-item {
+    text-align: center;
+  }
+  .product-price-item:not(:last-child) {
+    border-right: 1px solid var(--border);
+  }
+
+  .product-price-label {
+    font-size: 10px;
+    color: var(--gray);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .product-price-value {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .product-price-value.retail { color: var(--gray-light); }
+  .product-price-value.cost { color: var(--white); }
+  .product-price-value.margin { color: var(--green); }
+
+  .product-margin-bar {
+    height: 4px;
+    background: var(--border);
+    margin-top: 12px;
+  }
+  .product-margin-bar-fill {
+    height: 100%;
+    background: var(--green-dark);
+    transition: width 0.4s;
+  }
+
+  .scroll-hint {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 14px;
+    text-align: center;
+  }
+  .scroll-hint .arrow { color: var(--green-dark); }
+
+  .products-note {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 12px;
+    padding: 0;
+  }
+
+  /* ============================================
+     THE DEAL
+     ============================================ */
+  .deal-stack {
+    border: 2px solid var(--border);
+  }
+
+  .deal-item {
+    padding: 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .deal-item:last-child { border-bottom: none; }
+  .deal-item:active { background: var(--green-glow); }
+
+  .deal-icon {
+    font-size: 12px;
+    color: var(--green-dark);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  .deal-text {
+    font-size: 14px;
+    color: var(--white);
+    line-height: 1.6;
+  }
+  .deal-text strong { color: var(--white-bright); }
+
+  /* ============================================
+     USE CASES
+     ============================================ */
+  .use-cases-list {
+    list-style: none;
+    border: 2px solid var(--border);
+  }
+
+  .use-cases-list li {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 14px;
+  }
+  .use-cases-list li:last-child { border-bottom: none; }
+  .use-cases-list li:active { background: var(--green-glow); }
+
+  .use-case-arrow {
+    color: var(--green-dark);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .use-case-title {
+    font-weight: 600;
+    color: var(--white-bright);
+  }
+
+  .use-case-desc {
+    color: var(--gray-light);
+    margin-top: 4px;
+    font-size: 13px;
+  }
+
+  /* ============================================
+     FAQ
+     ============================================ */
+  .faq-item {
+    border: 2px solid var(--border);
+    margin-bottom: -2px;
+    overflow: hidden;
+  }
+
+  .faq-q {
+    width: 100%;
+    background: var(--bg-light);
+    border: none;
+    padding: 16px;
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white-bright);
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .faq-q:active {
+    background: var(--green-glow);
+    color: var(--green);
+  }
+
+  .faq-toggle {
+    color: var(--green-dark);
+    font-size: 14px;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .faq-item.open .faq-toggle { transform: rotate(90deg); }
+
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .faq-a-inner {
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--gray-light);
+    line-height: 1.7;
+    border-top: 1px solid var(--border);
+  }
+
+  .faq-item.open .faq-a {
+    max-height: 400px;
+  }
+
+  /* ============================================
+     IDEAS
+     ============================================ */
+  .ideas-stack {
+    border: 2px solid var(--border);
+  }
+
+  .idea-card {
+    padding: 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .idea-card:last-child { border-bottom: none; }
+  .idea-card:active {
+    background: var(--green-glow);
+  }
+
+  .idea-tag {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--green-dark);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .idea-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--white-bright);
+    margin-bottom: 4px;
+  }
+
+  .idea-desc {
+    font-size: 13px;
+    color: var(--gray-light);
+    line-height: 1.6;
+  }
+
+  /* ============================================
+     CTA SECTION
+     ============================================ */
+  .cta-section {
+    text-align: center;
+    padding: 56px 0 80px;
+    border-bottom: none;
+  }
+
+  .cta-ascii {
+    font-size: 7px;
+    color: var(--green-dark);
+    margin-bottom: 24px;
+    line-height: 1.2;
+    white-space: pre;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cta-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--white-bright);
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+  }
+  .cta-title .accent { color: var(--green); }
+
+  .cta-sub {
+    font-size: 14px;
+    color: var(--gray-light);
+    margin-bottom: 32px;
+    line-height: 1.6;
+    padding: 0 8px;
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 16px;
+  }
+
+  .btn-primary {
+    display: block;
+    padding: 16px 24px;
+    background: var(--green);
+    color: var(--bg);
+    font-family: var(--font);
+    font-size: 16px;
+    font-weight: 700;
+    border: 2px solid var(--green);
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-primary:active {
+    background: transparent;
+    color: var(--green);
+  }
+
+  .btn-secondary {
+    display: block;
+    padding: 16px 24px;
+    background: transparent;
+    color: var(--white);
+    font-family: var(--font);
+    font-size: 16px;
+    font-weight: 500;
+    border: 2px solid var(--border-bright);
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-secondary:active {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .cta-stats {
+    margin-top: 32px;
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 2;
+  }
+  .cta-stats .prompt { color: var(--green-dark); }
+  .cta-stats .val { color: var(--white); }
+
+  /* ============================================
+     FOOTER
+     ============================================ */
+  footer {
+    padding: 32px 0 24px;
+    border-top: 2px solid var(--border);
+  }
+
+  .footer-brand {
+    font-size: 14px;
+    color: var(--gray-light);
+    margin-bottom: 16px;
+  }
+  .footer-brand span { color: var(--gray); }
+
+  .footer-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .footer-links a {
+    color: var(--gray);
+    font-size: 13px;
+  }
+  .footer-links a:active { color: var(--green); }
+
+  /* ============================================
+     STICKY BOTTOM CTA - TERMINAL COMMAND
+     ============================================ */
+  .sticky-cta {
+    position: fixed;
+    bottom: 0;
+    left: 0; right: 0;
+    z-index: 1000;
+    background: var(--bg);
+    border-top: 2px solid var(--green-dark);
+    padding: 0;
+    display: flex;
+    align-items: stretch;
+    height: 64px;
+  }
+
+  .sticky-cta-prompt {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    font-size: 13px;
+    color: var(--gray);
+    overflow: hidden;
+  }
+  .sticky-cta-prompt .dollar { color: var(--green); margin-right: 8px; }
+  .sticky-cta-prompt .cmd-text {
+    color: var(--white);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sticky-cta-prompt .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 16px;
+    background: var(--green);
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    flex-shrink: 0;
+  }
+
+  .sticky-cta-btn {
+    flex-shrink: 0;
+    background: var(--green);
+    color: var(--bg);
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    padding: 0 20px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+  .sticky-cta-btn:active {
+    background: var(--green-dim);
+  }
+
+  /* ============================================
+     UTILITY
+     ============================================ */
+  .terminal-divider {
+    font-size: 11px;
+    color: var(--border-bright);
+    padding: 4px 16px;
+    overflow: hidden;
+    white-space: nowrap;
+    letter-spacing: 2px;
+  }
+
+  /* Hide scrollbar globally */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--green-dark); }
+
+  /* Ensure 375-430px optimization */
+  @media (min-width: 431px) {
+    .container { max-width: 430px; margin: 0 auto; }
+    body { max-width: 430px; margin: 0 auto; }
+    nav { max-width: 430px; margin: 0 auto; }
+    .sticky-cta { max-width: 430px; left: 50%; transform: translateX(-50%); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==========================================
+     NAV
+     ========================================== -->
+<nav>
+  <div class="nav-logo">printkit<span>/earn</span></div>
+  <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle navigation">[=]</button>
+</nav>
+
+<div class="nav-menu" id="navMenu">
+  <a href="#earnings" onclick="closeNav()">/earnings</a>
+  <a href="#how" onclick="closeNav()">/how_it_works</a>
+  <a href="#products" onclick="closeNav()">/products</a>
+  <a href="#deal" onclick="closeNav()">/the_deal</a>
+  <a href="#usecases" onclick="closeNav()">/use_cases</a>
+  <a href="#faq" onclick="closeNav()">/faq</a>
+  <a href="#ideas" onclick="closeNav()">/ideas</a>
+  <a href="#cta" class="nav-cta-link" onclick="closeNav()">get_api_key() &gt;</a>
+</div>
+
+<!-- ==========================================
+     HERO
+     ========================================== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-path">
+      <span class="slash">~</span>/printkit<span class="slash">/</span>earn<span class="slash">/</span>README
+    </div>
+
+    <h1>
+      earn on every<br>print your code<br>ships<span class="cursor-blink"></span>
+    </h1>
+
+    <p class="hero-sub">
+      PrintKit is an <span class="hl">agent-first photo printing API</span>.
+      Your app sends images. We print and ship. <span class="hl">You keep the margin.</span>
+    </p>
+
+    <div class="hero-prompt">
+      <span class="comment"># your first integration</span><br>
+      <span class="cmd">$</span> <span class="flag">curl</span> <span class="str">-X POST</span> api.printkit.com/v1/orders \<br>
+      &nbsp;&nbsp;<span class="flag">-H</span> <span class="str">"Auth: Bearer $KEY"</span> \<br>
+      &nbsp;&nbsp;<span class="flag">-d</span> <span class="str">'{"product":"metal_8x10"}'</span><br>
+      <br>
+      <span class="comment"># {"status":"ok","margin":"$20.00"}</span>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="stat-label">&gt; avg_margin:</span> <span class="stat-value">$15</span></div>
+      <div class="hero-stat"><span class="stat-label">&gt; fulfillment:</span> <span class="stat-value">2-4d</span></div>
+      <div class="hero-stat"><span class="stat-label">&gt; products:</span> <span class="stat-value">50+</span></div>
+      <div class="hero-stat"><span class="stat-label">&gt; countries:</span> <span class="stat-value">30+</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     EARNINGS
+     ========================================== -->
+<section id="earnings">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-comment">// projected monthly revenue</div>
+      <h2 class="section-title"><span class="accent">$</span> calculate_earnings()</h2>
+    </div>
+
+    <div class="earnings-stack">
+      <div class="earn-cell">
+        <div class="earn-label">Starter</div>
+        <div class="earn-orders">10 orders/mo</div>
+        <div class="earn-amount">$150<span class="per">/mo</span></div>
+      </div>
+      <div class="earn-cell">
+        <div class="earn-label">Growth</div>
+        <div class="earn-orders">100 orders/mo</div>
+        <div class="earn-amount">$1,500<span class="per">/mo</span></div>
+      </div>
+      <div class="earn-cell">
+        <div class="earn-label">Scale</div>
+        <div class="earn-orders">1,000 orders/mo</div>
+        <div class="earn-amount">$15,000<span class="per">/mo</span></div>
+      </div>
+    </div>
+
+    <div class="earn-terminal">
+      <span class="prompt">&gt;</span> orders: <span class="val">1,000</span> | margin: <span class="val">$15</span> | mo: <span class="val">$15,000</span> | yr: <span class="val">$180,000</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     HOW IT WORKS
+     ========================================== -->
+<section id="how">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-comment">// integration flow</div>
+      <h2 class="section-title">how <span class="accent">it works</span></h2>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <div class="step-title">get_api_key()</div>
+          <div class="step-desc">Sign up. Get your key. 30 seconds, not 30 meetings.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <div class="step-title">set_your_prices()</div>
+          <div class="step-desc">Our wholesale cost is fixed. Charge whatever you want. The delta is yours.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <div class="step-title">POST /v1/orders</div>
+          <div class="step-desc">One API call. Image, product, address. That's the whole integration.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <div class="step-title">collect_revenue()</div>
+          <div class="step-desc">We print. We ship. You keep the margin on every order. Payouts are automatic.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-block" style="margin-top: 24px;">
+      <div class="api-block-header">
+        <span>full integration</span>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="lang-tag">js</span>
+          <button class="copy-btn" onclick="copyCode(this)">copy</button>
+        </div>
+      </div>
+      <pre><code id="api-code"><span class="comment">// That's it. Seriously.</span>
+<span class="kw">const</span> order = <span class="kw">await</span> <span class="fn">fetch</span>(
+  <span class="str">"https://api.printkit.com/v1/orders"</span>,
+  {
+    <span class="prop">method</span>: <span class="str">"POST"</span>,
+    <span class="prop">headers</span>: {
+      <span class="str">"Authorization"</span>:
+        <span class="str">`Bearer ${KEY}`</span>,
+      <span class="str">"Content-Type"</span>:
+        <span class="str">"application/json"</span>
+    },
+    <span class="prop">body</span>: <span class="fn">JSON.stringify</span>({
+      <span class="prop">product</span>: <span class="str">"metal_8x10"</span>,
+      <span class="prop">image_url</span>: <span class="str">"...photo.jpg"</span>,
+      <span class="prop">quantity</span>: <span class="num">1</span>,
+      <span class="prop">ship_to</span>: {
+        <span class="prop">name</span>: <span class="str">"Jane Doe"</span>,
+        <span class="prop">city</span>: <span class="str">"Portland"</span>,
+        <span class="prop">state</span>: <span class="str">"OR"</span>
+      }
+    })
+  }
+);
+<span class="comment">// margin -> "$20.00"</span></code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     PRODUCTS - HORIZONTAL SCROLL
+     ========================================== -->
+<section id="products">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-comment">// SELECT * FROM products ORDER BY margin DESC</div>
+      <h2 class="section-title">product <span class="accent">catalog</span></h2>
+    </div>
+  </div>
+
+  <div class="products-scroll-wrap">
+    <div class="products-scroll">
+      <!-- Metal Print -->
+      <div class="product-card">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/metal-prints-1.jpg?v=1723491477" alt="Metal Print" loading="lazy">
+        <div class="product-info">
+          <div class="product-name">Metal Print</div>
+          <div class="product-size">8x10</div>
+          <div class="product-prices">
+            <div class="product-price-item">
+              <div class="product-price-label">Retail</div>
+              <div class="product-price-value retail">$29</div>
+            </div>
+            <div class="product-price-item">
+              <div class="product-price-label">Cost</div>
+              <div class="product-price-value cost">$9</div>
+            </div>
+            <div class="product-price-item">
+              <div class="product-price-label">Margin</div>
+              <div class="product-price-value margin">+$20</div>
+            </div>
+          </div>
+          <div class="product-margin-bar"><div class="product-margin-bar-fill" style="width:69%"></div></div>
+        </div>
+      </div>
+
+      <!-- Wood Print -->
+      <div class="product-card">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/wood-prints-1.jpg?v=1723578559" alt="Wood Print" loading="lazy">
+        <div class="product-info">
+          <div class="product-name">Wood Print</div>
+          <div class="product-size">12x18</div>
+          <div class="product-prices">
+            <div class="product-price-item">
+              <div class="product-price-label">Retail</div>
+              <div class="product-price-value retail">$72</div>
+            </div>
+            <div class="product-price-item">
+              <div class="product-price-label">Cost</div>
+              <div class="product-price-value cost">$22</div>
+            </div>
+            <div class="product-price-item">
+              <div class="product-price-label">Margin</div>
+              <div class="product-price-value margin">+$50</div>
+            </div>
+          </div>
+          <div class="product-margin-bar"><div class="product-margin-bar-fill" style="width:69%"></div></div>
+        </div>
+      </div>
+
+      <!-- Gallery Frame -->
+      <div class="product-card">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/gallery-frames-3.jpg?v=1724964668" alt="Gallery Frame" loading="lazy">
+        <div class="product-info">
+          <div class="product-name">Gallery Frame</div>
+          <div class="product-size">16x20</div>
+          <div class="product-prices">
+            <div class="product-price-item">
+              <div class="product-price-label">Retail</div>
+              <div class="product-price-value retail">$134</div>
+            </div>
+            <div class="product-price-item">
+              <div class="product-price-label">Cost</div>
+              <div class="product-price-value cost">$34</div>
+            </div>
+            <div class="product-price-item">
+              <div class="product-price-label">Margin</div>
+              <div class="product-price-value margin">+$100</div>
+            </div>
+          </div>
+          <div class="product-margin-bar"><div class="product-margin-bar-fill" style="width:75%"></div></div>
+        </div>
+      </div>
+
+      <!-- Large Format -->
+      <div class="product-card">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/large-format-3_b1256f8b-0ccf-4b79-8cc6-e451dd8565a4.jpg?v=1727135498" alt="Large Format" loading="lazy">
+        <div class="product-info">
+          <div class="product-name">Large Format</div>
+          <div class="product-size">20x30</div>
+          <div class="product-prices">
+            <div class="product-price-item">
+              <div class="product-price-label">Retail</div>
+              <div class="product-price-value retail">$36</div>
+            </div>
+            <div class="product-price-item">
+              <div class="product-price-label">Cost</div>
+              <div class="product-price-value cost">$12</div>
+            </div>
+            <div class="product-price-item">
+              <div class="product-price-label">Margin</div>
+              <div class="product-price-value margin">+$24</div>
+            </div>
+          </div>
+          <div class="product-margin-bar"><div class="product-margin-bar-fill" style="width:67%"></div></div>
+        </div>
+      </div>
+
+      <!-- Acrylic Block -->
+      <div class="product-card">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/acrylic-blocks-1.jpg?v=1718737872" alt="Acrylic Block" loading="lazy">
+        <div class="product-info">
+          <div class="product-name">Acrylic Block</div>
+          <div class="product-size">5x7</div>
+          <div class="product-prices">
+            <div class="product-price-item">
+              <div class="product-price-label">Retail</div>
+              <div class="product-price-value retail">$48</div>
+            </div>
+            <div class="product-price-item">
+              <div class="product-price-label">Cost</div>
+              <div class="product-price-value cost">$15</div>
+            </div>
+            <div class="product-price-item">
+              <div class="product-price-label">Margin</div>
+              <div class="product-price-value margin">+$33</div>
+            </div>
+          </div>
+          <div class="product-margin-bar"><div class="product-margin-bar-fill" style="width:69%"></div></div>
+        </div>
+      </div>
+
+      <!-- Photo Magazine -->
+      <div class="product-card">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/softcover-photo-book-1.jpg?v=1723572392" alt="Photo Magazine" loading="lazy">
+        <div class="product-info">
+          <div class="product-name">Photo Magazine</div>
+          <div class="product-size">8x10</div>
+          <div class="product-prices">
+            <div class="product-price-item">
+              <div class="product-price-label">Retail</div>
+              <div class="product-price-value retail">$26</div>
+            </div>
+            <div class="product-price-item">
+              <div class="product-price-label">Cost</div>
+              <div class="product-price-value cost">$8</div>
+            </div>
+            <div class="product-price-item">
+              <div class="product-price-label">Margin</div>
+              <div class="product-price-value margin">+$18</div>
+            </div>
+          </div>
+          <div class="product-margin-bar"><div class="product-margin-bar-fill" style="width:69%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="scroll-hint"><span class="arrow">&lt;</span> swipe to browse <span class="arrow">&gt;</span></div>
+    <div class="products-note">&gt; showing 6 of 50+ products | you set the price</div>
+  </div>
+</section>
+
+<!-- ==========================================
+     THE DEAL
+     ========================================== -->
+<section id="deal">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-comment">// terms (the readable version)</div>
+      <h2 class="section-title">the <span class="accent">deal</span></h2>
+    </div>
+
+    <div class="deal-stack">
+      <div class="deal-item">
+        <div class="deal-icon">[MARGIN]</div>
+        <div class="deal-text"><strong>You keep 100% of the markup.</strong> Our cost is your cost. Whatever you charge above that is yours.</div>
+      </div>
+      <div class="deal-item">
+        <div class="deal-icon">[BRAND]</div>
+        <div class="deal-text"><strong>White-label everything.</strong> Your packaging, your brand, your customer relationship. We're invisible.</div>
+      </div>
+      <div class="deal-item">
+        <div class="deal-icon">[QUALITY]</div>
+        <div class="deal-text"><strong>15 years of printing expertise.</strong> Lab-grade equipment. Color-calibrated output. No shortcuts.</div>
+      </div>
+      <div class="deal-item">
+        <div class="deal-icon">[SCALE]</div>
+        <div class="deal-text"><strong>No volume minimums.</strong> 1 order or 10,000 orders. Same API, same cost, same quality.</div>
+      </div>
+      <div class="deal-item">
+        <div class="deal-icon">[SPEED]</div>
+        <div class="deal-text"><strong>Ships in 2-4 business days.</strong> US-based production. Real tracking on every order.</div>
+      </div>
+      <div class="deal-item">
+        <div class="deal-icon">[API]</div>
+        <div class="deal-text"><strong>Built for agents and automation.</strong> RESTful. Webhooks. Idempotent. What your code expects.</div>
+      </div>
+      <div class="deal-item">
+        <div class="deal-icon">[PAYOUT]</div>
+        <div class="deal-text"><strong>Automatic payouts.</strong> Collect from customers, pay us wholesale. Margin never leaves your account.</div>
+      </div>
+      <div class="deal-item">
+        <div class="deal-icon">[ZERO]</div>
+        <div class="deal-text"><strong>$0 to start.</strong> No setup fees, no monthly minimums, no commitment. Pay per order at wholesale.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     USE CASES
+     ========================================== -->
+<section id="usecases">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-comment">// who's building on printkit</div>
+      <h2 class="section-title">use <span class="accent">cases</span></h2>
+    </div>
+
+    <ul class="use-cases-list">
+      <li>
+        <span class="use-case-arrow">&gt;</span>
+        <div>
+          <div class="use-case-title">AI photo editors & creative tools</div>
+          <div class="use-case-desc">User generates an image, taps "print", you earn on the fulfillment.</div>
+        </div>
+      </li>
+      <li>
+        <span class="use-case-arrow">&gt;</span>
+        <div>
+          <div class="use-case-title">Social media apps</div>
+          <div class="use-case-desc">Turn posts and memories into wall art. Printing as a premium feature.</div>
+        </div>
+      </li>
+      <li>
+        <span class="use-case-arrow">&gt;</span>
+        <div>
+          <div class="use-case-title">E-commerce storefronts</div>
+          <div class="use-case-desc">Sell art and photography without inventory. We produce on demand.</div>
+        </div>
+      </li>
+      <li>
+        <span class="use-case-arrow">&gt;</span>
+        <div>
+          <div class="use-case-title">AI agents & chatbots</div>
+          <div class="use-case-desc">Agent receives a print request, calls the API, order ships. No human needed.</div>
+        </div>
+      </li>
+      <li>
+        <span class="use-case-arrow">&gt;</span>
+        <div>
+          <div class="use-case-title">Photography platforms</div>
+          <div class="use-case-desc">Let photographers sell prints directly. You handle the storefront, we handle the lab.</div>
+        </div>
+      </li>
+      <li>
+        <span class="use-case-arrow">&gt;</span>
+        <div>
+          <div class="use-case-title">Interior design tools</div>
+          <div class="use-case-desc">Visualize art on walls, then let users order it printed and framed in one click.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==========================================
+     FAQ
+     ========================================== -->
+<section id="faq">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-comment">// frequently asked questions</div>
+      <h2 class="section-title"><span class="accent">FAQ</span>.parse()</h2>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>&gt; How does revenue share work?</span>
+          <span class="faq-toggle">[+]</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">You pay us wholesale cost per product. You charge your end customer whatever you want. The difference is your revenue. No percentage split, no commission. Your margin = retail price - wholesale cost. You keep 100% of the markup.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>&gt; What's the minimum to start?</span>
+          <span class="faq-toggle">[+]</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Zero. No minimum order volume, no monthly fees, no setup costs. Get an API key, make a request, get charged wholesale for that one order. Scale when you're ready.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>&gt; How do payouts work?</span>
+          <span class="faq-toggle">[+]</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">You collect payment from your users directly (Stripe, whatever you use). We charge your account the wholesale cost when an order ships. Your margin stays in your account from the start -- we never touch it.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>&gt; Can AI agents use the API?</span>
+          <span class="faq-toggle">[+]</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Yes. The API is designed for agent-first usage. Standard REST, JSON in/out, idempotent operations, webhook notifications. Your agent can create orders, check status, and handle shipping without any human in the loop.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>&gt; What about quality control?</span>
+          <span class="faq-toggle">[+]</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">We run our own production labs with 15 years of experience. Every print is color-calibrated and inspected. Image validation at the API level rejects low-res uploads before they become bad prints. If something goes wrong, we reprint at our cost.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>&gt; Where do you ship?</span>
+          <span class="faq-toggle">[+]</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Currently 30+ countries. US orders ship from domestic labs in 2-4 business days. International orders ship from the nearest production facility. All orders include tracking.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>&gt; Is this white-label?</span>
+          <span class="faq-toggle">[+]</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Completely. No PrintKit branding on packaging, labels, or products. As far as your customer knows, it came from you. Custom packing slips and branded inserts available on request.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     IDEAS
+     ========================================== -->
+<section id="ideas">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-comment">// things worth building</div>
+      <h2 class="section-title">integration <span class="accent">ideas</span></h2>
+    </div>
+
+    <div class="ideas-stack">
+      <div class="idea-card">
+        <div class="idea-tag">ai / ml</div>
+        <div class="idea-title">AI art generator + storefront</div>
+        <div class="idea-desc">User prompts an image, previews it on a metal print, one-click order. You earn on every sale.</div>
+      </div>
+      <div class="idea-card">
+        <div class="idea-tag">saas</div>
+        <div class="idea-title">Pet portrait subscription</div>
+        <div class="idea-desc">Monthly pet photo upload. AI enhances, auto-prints on canvas, ships to doorstep. Recurring margin.</div>
+      </div>
+      <div class="idea-card">
+        <div class="idea-tag">agent</div>
+        <div class="idea-title">Slack bot for team prints</div>
+        <div class="idea-desc">/print command in Slack. Upload image, pick product, confirm. Agent handles the rest via API.</div>
+      </div>
+      <div class="idea-card">
+        <div class="idea-tag">marketplace</div>
+        <div class="idea-title">Photography marketplace</div>
+        <div class="idea-desc">Photographers list work. Buyers order prints. You take a cut. Nobody holds inventory.</div>
+      </div>
+      <div class="idea-card">
+        <div class="idea-tag">mobile</div>
+        <div class="idea-title">Travel photo journal</div>
+        <div class="idea-desc">Trip ends, app auto-curates best shots, generates a photo magazine, ships home before you land.</div>
+      </div>
+      <div class="idea-card">
+        <div class="idea-tag">plugin</div>
+        <div class="idea-title">Figma/Canva print plugin</div>
+        <div class="idea-desc">Design in your favorite tool, export to real print product. Bridge the digital-physical gap.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     CTA
+     ========================================== -->
+<section class="cta-section" id="cta">
+  <div class="container">
+    <pre class="cta-ascii">
+ ___  ____  ____  _  _  ____
+(  _ \(  _ \(  )( \( )((_  _)
+ ) __/ )   / )( /    \  )(
+(__)  (__\_)(__)(\_)(__)(__)
+ __ _  ____  ____
+(  / )(  )(  __)
+ )  (  )(  ) _)
+(__\_)(__)(__)
+    </pre>
+
+    <div class="cta-title">
+      ready to <span class="accent">ship</span>?
+    </div>
+
+    <p class="cta-sub">
+      One API key. One fetch call. Real products on real doorsteps. Your margin from day one.
+    </p>
+
+    <div class="cta-buttons">
+      <a href="#" class="btn-primary">get_api_key() &gt;</a>
+      <a href="#" class="btn-secondary">read_the_docs()</a>
+    </div>
+
+    <div class="cta-stats">
+      <span class="prompt">$</span> time_to_first_order: <span class="val">~15min</span><br>
+      <span class="prompt">$</span> lines_of_code: <span class="val">~20</span><br>
+      <span class="prompt">$</span> upfront_cost: <span class="val">$0</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     FOOTER
+     ========================================== -->
+<footer>
+  <div class="container">
+    <div class="footer-brand">
+      printkit <span>// agent-first photo printing API</span>
+    </div>
+    <div class="footer-links">
+      <a href="#">docs</a>
+      <a href="#">status</a>
+      <a href="#">github</a>
+      <a href="#">support</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ==========================================
+     STICKY BOTTOM CTA - TERMINAL COMMAND
+     ========================================== -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="sticky-cta-prompt">
+    <span class="dollar">$</span>
+    <span class="cmd-text">printkit init --earn</span>
+    <span class="cursor"></span>
+  </div>
+  <a href="#cta" class="sticky-cta-btn">RUN &gt;</a>
+</div>
+
+<!-- ==========================================
+     JAVASCRIPT
+     ========================================== -->
+<script>
+  // Nav toggle
+  function toggleNav() {
+    const menu = document.getElementById('navMenu');
+    const btn = document.querySelector('.nav-toggle');
+    menu.classList.toggle('open');
+    btn.textContent = menu.classList.contains('open') ? '[x]' : '[=]';
+  }
+
+  function closeNav() {
+    document.getElementById('navMenu').classList.remove('open');
+    document.querySelector('.nav-toggle').textContent = '[=]';
+  }
+
+  // FAQ toggle
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+
+    document.querySelectorAll('.faq-item').forEach(el => {
+      el.classList.remove('open');
+      el.querySelector('.faq-toggle').textContent = '[+]';
+    });
+
+    if (!wasOpen) {
+      item.classList.add('open');
+      item.querySelector('.faq-toggle').textContent = '[-]';
+    }
+  }
+
+  // Copy code
+  function copyCode(btn) {
+    const code = document.getElementById('api-code');
+    const text = code.textContent || code.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'ok!';
+      btn.style.color = 'var(--green)';
+      btn.style.borderColor = 'var(--green)';
+      setTimeout(() => {
+        btn.textContent = 'copy';
+        btn.style.color = '';
+        btn.style.borderColor = '';
+      }, 2000);
+    });
+  }
+
+  // Smooth scroll for all # links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const href = this.getAttribute('href');
+      if (href === '#') return;
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) {
+        const navHeight = document.querySelector('nav').offsetHeight;
+        const y = target.getBoundingClientRect().top + window.scrollY - navHeight;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Earnings counter animation
+  const earnObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.earn-amount').forEach(el => {
+          const text = el.innerHTML;
+          const match = text.match(/\$([\d,]+)/);
+          if (match) {
+            const target = parseInt(match[1].replace(/,/g, ''));
+            animateCounter(el, target, text);
+          }
+        });
+        earnObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  function animateCounter(el, target, template) {
+    const duration = 1200;
+    const start = performance.now();
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(target * eased);
+      const formatted = current.toLocaleString();
+      el.innerHTML = template.replace(/\$[\d,]+/, '$' + formatted);
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  const earningsSection = document.getElementById('earnings');
+  if (earningsSection) earnObserver.observe(earningsSection);
+
+  // Animate margin bars on scroll
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.product-margin-bar-fill').forEach(bar => {
+          const width = bar.style.width;
+          bar.style.width = '0%';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              bar.style.width = width;
+            });
+          });
+        });
+        barObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  const productsScroll = document.querySelector('.products-scroll');
+  if (productsScroll) barObserver.observe(productsScroll);
+
+  // Show/hide sticky CTA based on scroll position
+  const stickyCta = document.getElementById('stickyCta');
+  const ctaSection = document.getElementById('cta');
+  let stickyVisible = true;
+
+  window.addEventListener('scroll', () => {
+    if (!ctaSection) return;
+    const ctaRect = ctaSection.getBoundingClientRect();
+    const windowH = window.innerHeight;
+
+    if (ctaRect.top < windowH && ctaRect.bottom > 0) {
+      if (stickyVisible) {
+        stickyCta.style.transform = 'translateY(100%)';
+        stickyCta.style.transition = 'transform 0.3s ease';
+        stickyVisible = false;
+      }
+    } else {
+      if (!stickyVisible) {
+        stickyCta.style.transform = 'translateY(0)';
+        stickyCta.style.transition = 'transform 0.3s ease';
+        stickyVisible = true;
+      }
+    }
+  }, { passive: true });
+
+  // Typewriter effect on sticky CTA prompt
+  const cmdTexts = [
+    'printkit init --earn',
+    'curl -X POST /v1/orders',
+    'npm install @printkit/sdk',
+    'printkit status --margin'
+  ];
+  let cmdIndex = 0;
+  const cmdEl = document.querySelector('.sticky-cta-prompt .cmd-text');
+
+  function typeCommand() {
+    cmdIndex = (cmdIndex + 1) % cmdTexts.length;
+    const text = cmdTexts[cmdIndex];
+    cmdEl.textContent = '';
+    let i = 0;
+    function typeChar() {
+      if (i < text.length) {
+        cmdEl.textContent += text[i];
+        i++;
+        setTimeout(typeChar, 40 + Math.random() * 30);
+      }
+    }
+    typeChar();
+  }
+
+  setInterval(typeCommand, 5000);
+</script>
+
+</body>
+</html>

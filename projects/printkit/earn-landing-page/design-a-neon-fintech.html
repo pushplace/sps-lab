@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrintKit — Earn on Every Print</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0f1a;
+  --bg-card: #0f1524;
+  --bg-card-hover: #141c2e;
+  --green: #00ff88;
+  --green-dim: #00cc6a;
+  --green-glow: rgba(0, 255, 136, 0.15);
+  --green-glow-strong: rgba(0, 255, 136, 0.3);
+  --cyan: #00d4ff;
+  --cyan-dim: #00a8cc;
+  --cyan-glow: rgba(0, 212, 255, 0.1);
+  --text: #e8edf5;
+  --text-secondary: #8a94a6;
+  --text-dim: #5a6478;
+  --border: rgba(0, 255, 136, 0.12);
+  --border-cyan: rgba(0, 212, 255, 0.08);
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ===== DOT GRID BACKGROUND ===== */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: radial-gradient(circle, rgba(0,255,136,0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== LAYOUT UTILITIES ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.section {
+  padding: 100px 0;
+  position: relative;
+}
+
+.section-border {
+  border-top: 1px solid var(--border);
+  position: relative;
+}
+
+.section-border::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 1px;
+  background: var(--green);
+  box-shadow: 0 0 20px var(--green-glow-strong), 0 0 60px var(--green-glow);
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1, h2, h3, h4 { font-weight: 700; line-height: 1.15; }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.section-title {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 800;
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+
+.section-subtitle {
+  font-size: 18px;
+  color: var(--text-secondary);
+  max-width: 600px;
+  line-height: 1.7;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s ease;
+}
+
+.btn-primary {
+  background: var(--green);
+  color: var(--bg);
+  box-shadow: 0 0 20px var(--green-glow), 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.btn-primary:hover {
+  background: #33ffaa;
+  box-shadow: 0 0 40px var(--green-glow-strong), 0 6px 20px rgba(0,0,0,0.4);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--green);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(4px);
+}
+
+.btn-secondary:hover {
+  border-color: var(--green);
+  background: var(--green-glow);
+  box-shadow: 0 0 20px var(--green-glow);
+}
+
+/* ===== FADE-IN ANIMATION ===== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-in-delay-1 { transition-delay: 0.1s; }
+.fade-in-delay-2 { transition-delay: 0.2s; }
+.fade-in-delay-3 { transition-delay: 0.3s; }
+.fade-in-delay-4 { transition-delay: 0.4s; }
+.fade-in-delay-5 { transition-delay: 0.5s; }
+
+/* ===== NAV ===== */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(10, 15, 26, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.nav-logo span {
+  color: var(--green);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover, .nav-links a.active {
+  color: var(--green);
+}
+
+.nav-links .btn {
+  padding: 8px 20px;
+  font-size: 13px;
+}
+
+.nav-mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* ===== HERO ===== */
+.hero {
+  padding: 160px 0 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse, var(--green-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: var(--green-glow);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green);
+  letter-spacing: 0.5px;
+  margin-bottom: 32px;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--green); }
+  50% { opacity: 0.5; box-shadow: 0 0 16px var(--green); }
+}
+
+.hero h1 {
+  font-size: clamp(40px, 6.5vw, 72px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  max-width: 800px;
+  margin-bottom: 24px;
+}
+
+.hero h1 .highlight {
+  color: var(--green);
+  text-shadow: 0 0 40px var(--green-glow-strong);
+}
+
+.hero-sub {
+  font-size: 19px;
+  color: var(--text-secondary);
+  max-width: 560px;
+  line-height: 1.75;
+  margin-bottom: 40px;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ===== EARNINGS MATH ===== */
+.earnings {
+  text-align: center;
+}
+
+.earnings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 60px;
+}
+
+.earnings-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 48px 32px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.earnings-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.earnings-card:hover {
+  border-color: rgba(0,255,136,0.25);
+  background: var(--bg-card-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.3), 0 0 30px var(--green-glow);
+}
+
+.earnings-card:hover::before {
+  opacity: 1;
+}
+
+.earnings-card.featured {
+  border-color: rgba(0,255,136,0.3);
+  box-shadow: 0 0 40px var(--green-glow);
+}
+
+.earnings-card.featured::before {
+  opacity: 1;
+}
+
+.earnings-orders {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.earnings-amount {
+  font-family: var(--font-mono);
+  font-size: clamp(42px, 5vw, 56px);
+  font-weight: 800;
+  color: var(--green);
+  text-shadow: 0 0 30px var(--green-glow-strong);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.earnings-card.featured .earnings-amount {
+  animation: subtle-pulse 3s ease-in-out infinite;
+}
+
+@keyframes subtle-pulse {
+  0%, 100% { text-shadow: 0 0 30px var(--green-glow-strong); }
+  50% { text-shadow: 0 0 50px var(--green-glow-strong), 0 0 80px var(--green-glow); }
+}
+
+.earnings-detail {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.earnings-period {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ===== HOW IT WORKS ===== */
+.how-it-works { }
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-top: 60px;
+  background: var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.step {
+  background: var(--bg-card);
+  padding: 40px 28px;
+  position: relative;
+  transition: background 0.3s;
+}
+
+.step:hover {
+  background: var(--bg-card-hover);
+}
+
+.step-number {
+  font-family: var(--font-mono);
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--green);
+  opacity: 0.15;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.step h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.step p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.step-tag {
+  display: inline-block;
+  margin-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cyan);
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: var(--cyan-glow);
+  border: 1px solid rgba(0,212,255,0.15);
+}
+
+/* ===== PRODUCTS ===== */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 60px;
+}
+
+.product-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.product-card:hover {
+  border-color: rgba(0,255,136,0.25);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.3), 0 0 20px var(--green-glow);
+}
+
+.product-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+  border-bottom: 1px solid var(--border);
+}
+
+.product-info {
+  padding: 24px;
+}
+
+.product-name {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.product-prices {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.product-retail {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.product-retail span {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.product-earned {
+  text-align: right;
+}
+
+.product-earned-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--green-dim);
+  margin-bottom: 2px;
+}
+
+.product-earned-amount {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--green);
+  text-shadow: 0 0 20px var(--green-glow);
+}
+
+/* ===== THE DEAL ===== */
+.deal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 60px;
+}
+
+.deal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+}
+
+.deal-card:hover {
+  border-color: rgba(0,255,136,0.2);
+  background: var(--bg-card-hover);
+}
+
+.deal-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--green-glow);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.deal-content h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.deal-content p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ===== USE CASES ===== */
+.use-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 60px;
+}
+
+.use-case {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 24px;
+  transition: all 0.3s ease;
+}
+
+.use-case:hover {
+  border-color: rgba(0,255,136,0.2);
+  background: var(--bg-card-hover);
+}
+
+.use-case-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.use-case-earn {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.use-case-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* ===== IDEAS ===== */
+.ideas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 60px;
+}
+
+.idea-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.idea-card:hover {
+  border-color: rgba(0,255,136,0.2);
+  background: var(--bg-card-hover);
+}
+
+.idea-name {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.idea-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.idea-prompt {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(0,255,136,0.08);
+  border-radius: 8px;
+  padding: 12px;
+  position: relative;
+}
+
+.idea-prompt code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.idea-copy {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.idea-copy:hover {
+  color: var(--green);
+  border-color: var(--green);
+}
+
+.idea-copy.copied {
+  color: var(--green);
+  border-color: var(--green);
+}
+
+/* ===== FAQ ===== */
+.faq-list {
+  max-width: 760px;
+  margin: 60px auto 0;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 24px 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  transition: color 0.2s;
+}
+
+.faq-question:hover {
+  color: var(--green);
+}
+
+.faq-chevron {
+  font-size: 18px;
+  color: var(--text-dim);
+  transition: transform 0.3s ease, color 0.2s;
+  flex-shrink: 0;
+}
+
+.faq-item.open .faq-chevron {
+  transform: rotate(45deg);
+  color: var(--green);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 200px;
+}
+
+.faq-answer p {
+  padding: 0 0 24px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ===== CTA BOTTOM ===== */
+.cta-bottom {
+  text-align: center;
+  position: relative;
+}
+
+.cta-bottom::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(ellipse, var(--green-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-bottom-title {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.cta-bottom-sub {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.cta-bottom .btn {
+  position: relative;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-logo {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text-dim);
+}
+
+.footer-logo span {
+  color: var(--text-secondary);
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+
+.footer-links a {
+  font-size: 13px;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--text-secondary);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
+  .ideas-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .section { padding: 72px 0; }
+
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: rgba(10, 15, 26, 0.97);
+    backdrop-filter: blur(20px);
+    padding: 24px;
+    gap: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-mobile-toggle { display: block; }
+
+  .hero { padding: 120px 0 72px; }
+
+  .earnings-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .steps { grid-template-columns: 1fr; }
+
+  .products-grid { grid-template-columns: 1fr; }
+
+  .deal-grid { grid-template-columns: 1fr; }
+
+  .use-cases-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .ideas-grid { grid-template-columns: 1fr; }
+
+  .footer-inner {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .use-cases-grid { grid-template-columns: 1fr; }
+  .hero-ctas { flex-direction: column; }
+  .hero-ctas .btn { text-align: center; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Print<span>Kit</span></a>
+    <button class="nav-mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="#">Docs</a></li>
+      <li><a href="#">Products</a></li>
+      <li><a href="#" class="active">Earn</a></li>
+      <li><a href="#cta-bottom" class="btn btn-primary" style="padding:8px 20px;font-size:13px;">Get Started</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge fade-in">New from PrintKit</div>
+    <h1 class="fade-in fade-in-delay-1">Earn on every print<br><span class="highlight">your app sends.</span></h1>
+    <p class="hero-sub fade-in fade-in-delay-2">Your agent adds the print button. Customer pays retail. PrintKit handles printing, packing, shipping. You get commission on every sale.</p>
+    <div class="hero-ctas fade-in fade-in-delay-3">
+      <a href="#" class="btn btn-primary">Start integrating <span>&rarr;</span></a>
+      <a href="#earnings" class="btn btn-secondary">How much can I earn?</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EARNINGS ===== -->
+<section id="earnings" class="section section-border earnings">
+  <div class="container">
+    <span class="section-label fade-in">Revenue Potential</span>
+    <h2 class="section-title fade-in fade-in-delay-1" style="margin-left:auto;margin-right:auto;">The math is simple</h2>
+    <p class="section-subtitle fade-in fade-in-delay-2" style="margin-left:auto;margin-right:auto;text-align:center;">Average commission of ~$15 per order. The more your app prints, the more you earn.</p>
+
+    <div class="earnings-grid">
+      <div class="earnings-card fade-in fade-in-delay-1">
+        <div class="earnings-orders">10 orders / month</div>
+        <div class="earnings-amount">$150</div>
+        <div class="earnings-detail">~$15 avg commission</div>
+        <div class="earnings-period">per month</div>
+      </div>
+      <div class="earnings-card featured fade-in fade-in-delay-2">
+        <div class="earnings-orders">100 orders / month</div>
+        <div class="earnings-amount">$1,500</div>
+        <div class="earnings-detail">~$15 avg commission</div>
+        <div class="earnings-period">per month</div>
+      </div>
+      <div class="earnings-card fade-in fade-in-delay-3">
+        <div class="earnings-orders">1,000 orders / month</div>
+        <div class="earnings-amount">$15,000</div>
+        <div class="earnings-detail">~$15 avg commission</div>
+        <div class="earnings-period">per month</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="section section-border how-it-works">
+  <div class="container">
+    <span class="section-label fade-in">How it works</span>
+    <h2 class="section-title fade-in fade-in-delay-1">Four steps. One API call.</h2>
+    <p class="section-subtitle fade-in fade-in-delay-2">From order to doorstep, you only touch step one.</p>
+
+    <div class="steps fade-in fade-in-delay-3">
+      <div class="step">
+        <div class="step-number">01</div>
+        <h3>Your app sends an order</h3>
+        <p>One fetch call through the API. Pass a SKU, attach photos, done. That's the entire integration.</p>
+        <span class="step-tag">Your code</span>
+      </div>
+      <div class="step">
+        <div class="step-number">02</div>
+        <h3>Customer pays retail</h3>
+        <p>Customer checks out at retail price and pays PrintKit directly. You never handle payments, cards, or disputes.</p>
+        <span class="step-tag">PrintKit handles</span>
+      </div>
+      <div class="step">
+        <div class="step-number">03</div>
+        <h3>We print, pack, ship</h3>
+        <p>Produced at a professional US lab. Quality control and customer service fully handled by PrintKit.</p>
+        <span class="step-tag">PrintKit handles</span>
+      </div>
+      <div class="step">
+        <div class="step-number">04</div>
+        <h3>You earn commission</h3>
+        <p>Commission on every completed order. Tracked in your real-time dashboard, paid monthly via bank transfer.</p>
+        <span class="step-tag">You get paid</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCTS ===== -->
+<section class="section section-border">
+  <div class="container">
+    <span class="section-label fade-in">Commission by product</span>
+    <h2 class="section-title fade-in fade-in-delay-1">Real products. Real margins.</h2>
+    <p class="section-subtitle fade-in fade-in-delay-2">Premium photo products printed at a professional US lab. Here's what you earn on each.</p>
+
+    <div class="products-grid">
+      <div class="product-card fade-in fade-in-delay-1">
+        <img src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/metal-prints-1.jpg?v=1723491477" alt="Metal Print 8x10" class="product-img" loading="lazy">
+        <div class="product-info">
+          <div class="product-name">Metal Print 8&times;10</div>
+          <div class="product-prices">
+            <div class="product-retail">Retail <span>$29</span></div>
+            <div class="product-earned">
+              <div class="product-earned-label">You earn</div>
+              <div class="product-earned-amount">$9</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card fade-in fade-in-delay-2">
+        <img src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/wood-prints-1.jpg?v=1723578559" alt="Wood Print 12x18" class="product-img" loading="lazy">
+        <div class="product-info">
+          <div class="product-name">Wood Print 12&times;18</div>
+          <div class="product-prices">
+            <div class="product-retail">Retail <span>$72</span></div>
+            <div class="product-earned">
+              <div class="product-earned-label">You earn</div>
+              <div class="product-earned-amount">$22</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card fade-in fade-in-delay-3">
+        <img src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/gallery-frames-3.jpg?v=1724964668" alt="Gallery Frame 16x20 Black" class="product-img" loading="lazy">
+        <div class="product-info">
+          <div class="product-name">Gallery Frame 16&times;20 Black</div>
+          <div class="product-prices">
+            <div class="product-retail">Retail <span>$134</span></div>
+            <div class="product-earned">
+              <div class="product-earned-label">You earn</div>
+              <div class="product-earned-amount">$34</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card fade-in fade-in-delay-1">
+        <img src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/large-format-3_b1256f8b-0ccf-4b79-8cc6-e451dd8565a4.jpg?v=1727135498" alt="Large Format 20x30" class="product-img" loading="lazy">
+        <div class="product-info">
+          <div class="product-name">Large Format 20&times;30</div>
+          <div class="product-prices">
+            <div class="product-retail">Retail <span>$36</span></div>
+            <div class="product-earned">
+              <div class="product-earned-label">You earn</div>
+              <div class="product-earned-amount">$12</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card fade-in fade-in-delay-2">
+        <img src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/acrylic-blocks-1.jpg?v=1718737872" alt="Acrylic Block 5x7" class="product-img" loading="lazy">
+        <div class="product-info">
+          <div class="product-name">Acrylic Block 5&times;7</div>
+          <div class="product-prices">
+            <div class="product-retail">Retail <span>$48</span></div>
+            <div class="product-earned">
+              <div class="product-earned-label">You earn</div>
+              <div class="product-earned-amount">$15</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card fade-in fade-in-delay-3">
+        <img src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/softcover-photo-book-1.jpg?v=1723572392" alt="Photo Magazine 8x10 38pg" class="product-img" loading="lazy">
+        <div class="product-info">
+          <div class="product-name">Photo Magazine 8&times;10 38pg</div>
+          <div class="product-prices">
+            <div class="product-retail">Retail <span>$26</span></div>
+            <div class="product-earned">
+              <div class="product-earned-label">You earn</div>
+              <div class="product-earned-amount">$8</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== THE DEAL ===== -->
+<section class="section section-border">
+  <div class="container">
+    <span class="section-label fade-in">The deal</span>
+    <h2 class="section-title fade-in fade-in-delay-1">You build. We handle everything else.</h2>
+    <p class="section-subtitle fade-in fade-in-delay-2">No inventory, no payments, no shipping logistics. Just commission.</p>
+
+    <div class="deal-grid">
+      <div class="deal-card fade-in fade-in-delay-1">
+        <div class="deal-icon">$0</div>
+        <div class="deal-content">
+          <h3>No upfront costs</h3>
+          <p>No fees, no minimums, no inventory to manage. Start earning from your first order with zero investment.</p>
+        </div>
+      </div>
+      <div class="deal-card fade-in fade-in-delay-2">
+        <div class="deal-icon" style="font-size:18px;">&#9733;</div>
+        <div class="deal-content">
+          <h3>We handle payments</h3>
+          <p>No credit card processing, no refund management, no chargebacks. Customers pay PrintKit directly.</p>
+        </div>
+      </div>
+      <div class="deal-card fade-in fade-in-delay-3">
+        <div class="deal-icon" style="font-size:18px;">&#9998;</div>
+        <div class="deal-content">
+          <h3>We handle fulfillment</h3>
+          <p>Printing, packing, and shipping from a professional US-based lab. Quality control and customer service included.</p>
+        </div>
+      </div>
+      <div class="deal-card fade-in fade-in-delay-4">
+        <div class="deal-icon" style="font-size:16px;">&#10003;</div>
+        <div class="deal-content">
+          <h3>Real products, real quality</h3>
+          <p>Metal prints, wood prints, framed art, photo books. Premium products from a US-based professional lab.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== USE CASES ===== -->
+<section class="section section-border">
+  <div class="container">
+    <span class="section-label fade-in">Use cases</span>
+    <h2 class="section-title fade-in fade-in-delay-1">Any app that touches photos can earn.</h2>
+    <p class="section-subtitle fade-in fade-in-delay-2">If your users create or collect images, you have a revenue stream waiting.</p>
+
+    <div class="use-cases-grid">
+      <div class="use-case fade-in fade-in-delay-1">
+        <div class="use-case-name">Photo printing app</div>
+        <div class="use-case-earn">$9 &ndash; $34</div>
+        <div class="use-case-label">per order</div>
+      </div>
+      <div class="use-case fade-in fade-in-delay-2">
+        <div class="use-case-name">AI-generated art</div>
+        <div class="use-case-earn">$15 &ndash; $100+</div>
+        <div class="use-case-label">per print</div>
+      </div>
+      <div class="use-case fade-in fade-in-delay-3">
+        <div class="use-case-name">Travel / journal app</div>
+        <div class="use-case-earn">$8</div>
+        <div class="use-case-label">per book</div>
+      </div>
+      <div class="use-case fade-in fade-in-delay-4">
+        <div class="use-case-name">Interior design tool</div>
+        <div class="use-case-earn">$12 &ndash; $60</div>
+        <div class="use-case-label">per piece</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== IDEAS ===== -->
+<section class="section section-border">
+  <div class="container">
+    <span class="section-label fade-in">App ideas</span>
+    <h2 class="section-title fade-in fade-in-delay-1">Build any of these this weekend.</h2>
+    <p class="section-subtitle fade-in fade-in-delay-2">Ship an app, earn on prints. Here are some ideas with ready-to-use prompts.</p>
+
+    <div class="ideas-grid">
+      <div class="idea-card fade-in">
+        <div class="idea-name">Strava Route Posters</div>
+        <div class="idea-desc">Turn GPS running/cycling routes into beautiful poster-style prints with elevation data and stats.</div>
+        <div class="idea-prompt">
+          <code>Build an app that connects to Strava, renders a user's route as a stylized map poster, and sends it to PrintKit as a large format print.</code>
+          <button class="idea-copy" onclick="copyPrompt(this)">Copy</button>
+        </div>
+      </div>
+
+      <div class="idea-card fade-in">
+        <div class="idea-name">AI Pet Portraits</div>
+        <div class="idea-desc">Upload a pet photo, pick an art style (watercolor, oil painting, pop art), get a physical print delivered.</div>
+        <div class="idea-prompt">
+          <code>Build an app where users upload a pet photo, choose an art style, use AI to generate a portrait, and order a metal or wood print via PrintKit.</code>
+          <button class="idea-copy" onclick="copyPrompt(this)">Copy</button>
+        </div>
+      </div>
+
+      <div class="idea-card fade-in">
+        <div class="idea-name">Kids' Drawing Printer</div>
+        <div class="idea-desc">Snap a photo of your kid's artwork. We clean it up and print it on museum-quality material.</div>
+        <div class="idea-prompt">
+          <code>Build an app that takes a photo of a child's drawing, enhances it with AI, and orders a gallery-framed print through PrintKit.</code>
+          <button class="idea-copy" onclick="copyPrompt(this)">Copy</button>
+        </div>
+      </div>
+
+      <div class="idea-card fade-in">
+        <div class="idea-name">Recipe Card Prints</div>
+        <div class="idea-desc">Design beautiful recipe cards from any URL or text, print them as a set on heavy stock.</div>
+        <div class="idea-prompt">
+          <code>Build an app that takes a recipe URL, generates a beautifully designed recipe card layout, and prints it as a set via PrintKit.</code>
+          <button class="idea-copy" onclick="copyPrompt(this)">Copy</button>
+        </div>
+      </div>
+
+      <div class="idea-card fade-in">
+        <div class="idea-name">Travel Photo Books</div>
+        <div class="idea-desc">Auto-organize vacation photos by date and location into a printed photo magazine.</div>
+        <div class="idea-prompt">
+          <code>Build an app that imports photos from a trip, auto-layouts them by date/location into a photo magazine, and orders it through PrintKit.</code>
+          <button class="idea-copy" onclick="copyPrompt(this)">Copy</button>
+        </div>
+      </div>
+
+      <div class="idea-card fade-in">
+        <div class="idea-name">AI Art Print Shop</div>
+        <div class="idea-desc">Generate art with a text prompt, preview it on a wall, order it as a framed print or metal piece.</div>
+        <div class="idea-prompt">
+          <code>Build an AI art generator where users type a prompt, preview the result on a virtual wall, and order it as a gallery frame or metal print via PrintKit.</code>
+          <button class="idea-copy" onclick="copyPrompt(this)">Copy</button>
+        </div>
+      </div>
+
+      <div class="idea-card fade-in">
+        <div class="idea-name">Astronomy Photo Prints</div>
+        <div class="idea-desc">Pull NASA/ESA imagery or user astrophotography and print on metal for that cosmic glow.</div>
+        <div class="idea-prompt">
+          <code>Build an app that curates NASA/ESA space imagery or user astrophotography and prints them on metal via PrintKit for a luminous finish.</code>
+          <button class="idea-copy" onclick="copyPrompt(this)">Copy</button>
+        </div>
+      </div>
+
+      <div class="idea-card fade-in">
+        <div class="idea-name">Wedding Guest Photo Book</div>
+        <div class="idea-desc">Guests upload photos from the event. The couple gets a printed photo magazine automatically.</div>
+        <div class="idea-prompt">
+          <code>Build a wedding photo app where guests upload event photos to a shared album, then auto-generate and order a photo magazine through PrintKit.</code>
+          <button class="idea-copy" onclick="copyPrompt(this)">Copy</button>
+        </div>
+      </div>
+
+      <div class="idea-card fade-in">
+        <div class="idea-name">Year in Review Poster</div>
+        <div class="idea-desc">Auto-generate a visual summary of someone's year from their photos and stats.</div>
+        <div class="idea-prompt">
+          <code>Build an app that pulls a user's top photos and stats from the past year, generates a beautiful infographic poster, and prints it via PrintKit.</code>
+          <button class="idea-copy" onclick="copyPrompt(this)">Copy</button>
+        </div>
+      </div>
+
+      <div class="idea-card fade-in">
+        <div class="idea-name">Indie Album Art Printer</div>
+        <div class="idea-desc">Musicians upload album art and get physical prints to sell at shows or include with merch.</div>
+        <div class="idea-prompt">
+          <code>Build a tool for indie musicians to upload album artwork and order physical prints (metal, wood, or poster) via PrintKit for merch sales.</code>
+          <button class="idea-copy" onclick="copyPrompt(this)">Copy</button>
+        </div>
+      </div>
+
+      <div class="idea-card fade-in">
+        <div class="idea-name">Real Estate Listing Prints</div>
+        <div class="idea-desc">Generate professional property listing prints from MLS data for open houses and client gifts.</div>
+        <div class="idea-prompt">
+          <code>Build a real estate tool that generates styled property listing prints from MLS photos and data, ordered as large format prints via PrintKit.</code>
+          <button class="idea-copy" onclick="copyPrompt(this)">Copy</button>
+        </div>
+      </div>
+
+      <div class="idea-card fade-in">
+        <div class="idea-name">Daily Affirmation Cards</div>
+        <div class="idea-desc">AI-generated inspirational quote cards with beautiful typography, printed and mailed monthly.</div>
+        <div class="idea-prompt">
+          <code>Build a subscription app that generates AI-designed daily affirmation cards with custom typography and prints a monthly set via PrintKit.</code>
+          <button class="idea-copy" onclick="copyPrompt(this)">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="section section-border">
+  <div class="container">
+    <div style="text-align:center;">
+      <span class="section-label fade-in">FAQ</span>
+      <h2 class="section-title fade-in fade-in-delay-1">Common questions</h2>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item fade-in">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          How much do I earn per sale?
+          <span class="faq-chevron">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Commission ranges from $8 to $60+ depending on the product. Metal prints, gallery frames, and wood prints earn the most. Average commission across all products is approximately $15 per order.</p>
+        </div>
+      </div>
+
+      <div class="faq-item fade-in">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Can I set my own prices?
+          <span class="faq-chevron">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Not yet. All products are sold at standard retail pricing. Custom pricing tiers are coming soon for high-volume partners. Get in touch if you're already doing volume.</p>
+        </div>
+      </div>
+
+      <div class="faq-item fade-in">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          When do I get paid?
+          <span class="faq-chevron">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Payouts are monthly via bank transfer. You can track all orders, commissions, and payouts in real-time through your partner dashboard.</p>
+        </div>
+      </div>
+
+      <div class="faq-item fade-in">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Is there a minimum payout?
+          <span class="faq-chevron">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>No minimums. You earn from your very first order, and we pay out whatever you've earned each month regardless of amount.</p>
+        </div>
+      </div>
+
+      <div class="faq-item fade-in">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          What about returns and customer service?
+          <span class="faq-chevron">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>PrintKit handles all returns and customer service. If an order is refunded, the commission is reversed — but our return rate is under 2%. You never deal with support tickets.</p>
+        </div>
+      </div>
+
+      <div class="faq-item fade-in">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Do I need to handle shipping or fulfillment?
+          <span class="faq-chevron">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>No. PrintKit handles printing, quality control, packing, and shipping from our US-based professional lab. Your only job is sending the order through the API.</p>
+        </div>
+      </div>
+
+      <div class="faq-item fade-in">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          How is this different from Printify or Printful?
+          <span class="faq-chevron">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>PrintKit is API-first. One API call sends an order — no storefront needed, no inventory management, no product catalog to maintain. It's designed for developers and AI agents, not Shopify stores.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA BOTTOM ===== -->
+<section id="cta-bottom" class="section section-border cta-bottom">
+  <div class="container">
+    <span class="section-label fade-in">Ready?</span>
+    <h2 class="cta-bottom-title fade-in fade-in-delay-1">Start <span style="color:var(--green);text-shadow:0 0 40px var(--green-glow-strong);">earning.</span></h2>
+    <p class="cta-bottom-sub fade-in fade-in-delay-2">Add printing to your app. One API call, five minutes.</p>
+    <div class="fade-in fade-in-delay-3">
+      <a href="#" class="btn btn-primary" style="padding:16px 40px;font-size:16px;">Start integrating <span>&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Print<span>Kit</span></div>
+    <ul class="footer-links">
+      <li><a href="#">Docs</a></li>
+      <li><a href="#">Products</a></li>
+      <li><a href="#">API Reference</a></li>
+      <li><a href="#">Support</a></li>
+    </ul>
+  </div>
+</footer>
+
+<!-- ===== JS ===== -->
+<script>
+// Fade-in on scroll
+(function() {
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  document.querySelectorAll('.fade-in').forEach(function(el) {
+    observer.observe(el);
+  });
+})();
+
+// FAQ toggle
+function toggleFaq(btn) {
+  var item = btn.parentElement;
+  var isOpen = item.classList.contains('open');
+
+  // Close all
+  document.querySelectorAll('.faq-item').forEach(function(el) {
+    el.classList.remove('open');
+  });
+
+  // Open clicked (if it wasn't already open)
+  if (!isOpen) {
+    item.classList.add('open');
+  }
+}
+
+// Copy prompt
+function copyPrompt(btn) {
+  var code = btn.parentElement.querySelector('code');
+  var text = code.textContent.trim();
+
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(function() {
+    // Fallback
+    var textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+// Close mobile nav on link click
+document.querySelectorAll('.nav-links a').forEach(function(link) {
+  link.addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.remove('open');
+  });
+});
+</script>
+
+</body>
+</html>

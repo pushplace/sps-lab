@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PrintKit Partner Program — Earn on Every Print</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ========================================
+   RESET & VARIABLES
+   ======================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --cream: #faf8f5;
+  --cream-light: #fdfcfa;
+  --white: #ffffff;
+  --gold: #c9a84c;
+  --gold-light: #d4b85e;
+  --gold-muted: rgba(201, 168, 76, 0.2);
+  --gold-faint: rgba(201, 168, 76, 0.05);
+  --ink: #1a1714;
+  --ink-soft: #3d3831;
+  --ink-muted: #6b6259;
+  --ink-light: #9b9185;
+  --ink-faint: #c5bfb6;
+  --border: #e8e3db;
+  --serif: 'Cormorant Garamond', 'Georgia', serif;
+  --sans: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow: 0 4px 24px rgba(26, 23, 20, 0.06), 0 1px 4px rgba(26, 23, 20, 0.04);
+  --shadow-lg: 0 8px 40px rgba(26, 23, 20, 0.08), 0 2px 8px rgba(26, 23, 20, 0.04);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  background-color: var(--cream);
+  overflow-x: hidden;
+  padding-bottom: 80px; /* space for sticky CTA */
+}
+
+::selection {
+  background: var(--gold-muted);
+  color: var(--ink);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+/* ========================================
+   MOBILE LAYOUT
+   ======================================== */
+.section-pad {
+  padding: 0 24px;
+}
+
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+h1, h2, h3, h4 {
+  font-family: var(--serif);
+  color: var(--ink);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+h1 {
+  font-size: 2.6rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 2rem;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: 1.35rem;
+}
+
+.label {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ========================================
+   GOLD RULES
+   ======================================== */
+.gold-rule {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+  opacity: 0.25;
+  margin: 0 24px;
+}
+
+.gold-rule--short {
+  width: 48px;
+  background: var(--gold);
+  opacity: 0.4;
+  margin: 0;
+}
+
+/* ========================================
+   MOBILE NAV
+   ======================================== */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+.nav--scrolled {
+  border-bottom-color: var(--border);
+  box-shadow: 0 1px 12px rgba(26, 23, 20, 0.04);
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 20px;
+}
+
+.nav__logo {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.nav__logo span {
+  color: var(--gold);
+  font-weight: 400;
+}
+
+.nav__cta-small {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.3s var(--ease);
+}
+
+.nav__cta-small:active {
+  background: var(--ink-soft);
+}
+
+/* ========================================
+   HERO
+   ======================================== */
+.hero {
+  padding: 88px 24px 56px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--cream) 0%, var(--cream-light) 100%);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--gold-faint) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero .label {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.hero h1 {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.hero h1 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gold);
+}
+
+.hero__sub {
+  font-size: 1rem;
+  color: var(--ink-muted);
+  line-height: 1.75;
+  max-width: 340px;
+  margin: 0 auto 32px;
+  position: relative;
+}
+
+.hero__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 300px;
+  padding: 16px 32px;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-radius: 8px;
+  border: none;
+  text-decoration: none;
+  transition: all 0.3s var(--ease);
+  position: relative;
+}
+
+.hero__btn:active {
+  transform: scale(0.98);
+}
+
+.hero__btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.hero__secondary {
+  display: block;
+  margin-top: 14px;
+  font-size: 0.82rem;
+  color: var(--ink-light);
+  font-family: var(--serif);
+  font-style: italic;
+  position: relative;
+}
+
+/* ========================================
+   SECTION HEADERS
+   ======================================== */
+.section-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.section-header .label {
+  margin-bottom: 12px;
+}
+
+.section-header h2 {
+  margin-bottom: 12px;
+}
+
+.section-header p {
+  color: var(--ink-muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   EARNINGS
+   ======================================== */
+.earnings {
+  padding: 56px 24px;
+  background: var(--white);
+}
+
+.earnings__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.earnings__card {
+  text-align: center;
+  padding: 28px 20px;
+  position: relative;
+}
+
+.earnings__card:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.25;
+}
+
+.earnings__card--featured {
+  background: linear-gradient(180deg, var(--gold-faint), transparent);
+  border-radius: 12px;
+  padding: 36px 20px;
+  margin: 4px -4px;
+}
+
+.earnings__vol {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 10px;
+}
+
+.earnings__amt {
+  font-family: var(--serif);
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+}
+
+.earnings__amt span {
+  color: var(--gold);
+}
+
+.earnings__per {
+  font-size: 0.85rem;
+  color: var(--ink-light);
+}
+
+.earnings__note {
+  text-align: center;
+  margin-top: 28px;
+  font-size: 0.88rem;
+  color: var(--ink-light);
+  font-style: italic;
+  font-family: var(--serif);
+}
+
+/* ========================================
+   HOW IT WORKS
+   ======================================== */
+.how-it-works {
+  padding: 56px 24px;
+  background: linear-gradient(180deg, var(--cream-light) 0%, var(--cream) 100%);
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.step {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.step__num {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--gold);
+  border-radius: 50%;
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--gold);
+}
+
+.step__body h3 {
+  font-size: 1.15rem;
+  margin-bottom: 6px;
+}
+
+.step__body p {
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  line-height: 1.65;
+}
+
+/* ========================================
+   PRODUCTS — HORIZONTAL CAROUSEL
+   ======================================== */
+.products {
+  padding: 56px 0;
+  background: var(--white);
+  overflow: hidden;
+}
+
+.products .section-header {
+  padding: 0 24px;
+}
+
+.carousel-wrapper {
+  position: relative;
+}
+
+.carousel {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 24px 20px;
+  scrollbar-width: none;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel__card {
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+  background: var(--cream);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: box-shadow 0.3s var(--ease);
+}
+
+.carousel__card:active {
+  box-shadow: var(--shadow-lg);
+}
+
+.carousel__img {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  position: relative;
+  background: var(--cream-light);
+}
+
+.carousel__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel__badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(26, 23, 20, 0.85);
+  color: var(--cream);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 4px;
+  backdrop-filter: blur(8px);
+}
+
+.carousel__body {
+  padding: 18px 20px 20px;
+}
+
+.carousel__name {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+.carousel__size {
+  font-size: 0.78rem;
+  color: var(--ink-light);
+  margin-bottom: 14px;
+}
+
+.carousel__pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.carousel__price-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel__price-label {
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 1px;
+}
+
+.carousel__price {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.carousel__profit {
+  margin-left: auto;
+  text-align: right;
+}
+
+.carousel__profit .carousel__price-label {
+  color: var(--gold);
+}
+
+.carousel__profit .carousel__price {
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+/* Carousel indicators */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+  transition: all 0.3s var(--ease);
+}
+
+.carousel-dot--active {
+  background: var(--gold);
+  width: 20px;
+  border-radius: 3px;
+}
+
+/* ========================================
+   THE DEAL
+   ======================================== */
+.the-deal {
+  padding: 56px 24px;
+  background: linear-gradient(180deg, var(--cream) 0%, var(--cream-light) 100%);
+}
+
+.deal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.deal-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.deal-item__icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--gold);
+  background: var(--white);
+}
+
+.deal-item__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.deal-item h4 {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  color: var(--ink);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.deal-item p {
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  line-height: 1.65;
+}
+
+/* ========================================
+   USE CASES
+   ======================================== */
+.use-cases {
+  padding: 56px 24px;
+  background: var(--white);
+}
+
+.use-cases__list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.use-case {
+  padding: 24px 22px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--cream-light);
+}
+
+.use-case__header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.use-case__icon {
+  flex-shrink: 0;
+  color: var(--gold);
+}
+
+.use-case__icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.use-case__title {
+  font-family: var(--serif);
+  font-size: 1.08rem;
+  color: var(--ink);
+}
+
+.use-case__desc {
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  line-height: 1.65;
+  padding-left: 38px;
+}
+
+/* ========================================
+   IDEAS
+   ======================================== */
+.ideas {
+  padding: 56px 24px;
+  background: linear-gradient(180deg, var(--cream-light) 0%, var(--cream) 100%);
+}
+
+.ideas__list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.idea {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px;
+  background: var(--white);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.idea__num {
+  flex-shrink: 0;
+  font-family: var(--serif);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--gold);
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--gold-muted);
+  border-radius: 50%;
+}
+
+.idea h4 {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--ink);
+  margin-bottom: 3px;
+  font-weight: 500;
+}
+
+.idea p {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+/* ========================================
+   FAQ
+   ======================================== */
+.faq {
+  padding: 56px 24px;
+  background: var(--white);
+}
+
+.faq__list {
+  margin-top: 0;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.faq-item:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.faq-item__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 20px 0;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  color: var(--ink);
+  line-height: 1.35;
+  gap: 12px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.faq-item__q:active {
+  color: var(--gold);
+}
+
+.faq-item__toggle {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  transition: transform 0.3s var(--ease);
+}
+
+.faq-item__toggle svg {
+  width: 16px;
+  height: 16px;
+}
+
+.faq-item--open .faq-item__toggle {
+  transform: rotate(45deg);
+}
+
+.faq-item__a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s var(--ease);
+}
+
+.faq-item--open .faq-item__a {
+  max-height: 400px;
+}
+
+.faq-item__a p {
+  padding-bottom: 20px;
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  line-height: 1.75;
+}
+
+/* ========================================
+   BOTTOM CTA SECTION
+   ======================================== */
+.cta-section {
+  padding: 64px 24px 100px;
+  background: var(--ink);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(201, 168, 76, 0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.cta-section .label {
+  color: var(--gold);
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.cta-section h2 {
+  color: var(--cream);
+  font-weight: 300;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.cta-section p {
+  color: var(--ink-light);
+  font-size: 0.95rem;
+  line-height: 1.75;
+  max-width: 320px;
+  margin: 0 auto 36px;
+  position: relative;
+}
+
+.cta-section__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 300px;
+  padding: 16px 32px;
+  background: var(--gold);
+  color: var(--white);
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-radius: 8px;
+  border: none;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s var(--ease);
+}
+
+.cta-section__btn:active {
+  transform: scale(0.98);
+  background: var(--gold-light);
+}
+
+.cta-section__btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+.footer {
+  padding: 32px 24px 24px;
+  background: var(--ink);
+  border-top: 1px solid rgba(250, 248, 245, 0.06);
+  text-align: center;
+}
+
+.footer__logo {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--cream);
+  opacity: 0.6;
+  margin-bottom: 16px;
+}
+
+.footer__logo span {
+  color: var(--gold);
+  opacity: 0.8;
+}
+
+.footer__links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  list-style: none;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.footer__links a {
+  font-size: 0.78rem;
+  color: rgba(250, 248, 245, 0.4);
+  text-decoration: none;
+}
+
+.footer__copy {
+  font-size: 0.72rem;
+  color: rgba(250, 248, 245, 0.2);
+}
+
+/* ========================================
+   STICKY BOTTOM CTA
+   ======================================== */
+.sticky-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: rgba(250, 248, 245, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  padding: 12px 20px;
+  transform: translateY(100%);
+  transition: transform 0.4s var(--ease);
+}
+
+.sticky-cta--visible {
+  transform: translateY(0);
+}
+
+.sticky-cta__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sticky-cta__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.sticky-cta__headline {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--ink);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.sticky-cta__sub {
+  font-size: 0.72rem;
+  color: var(--ink-light);
+  margin-top: 1px;
+}
+
+.sticky-cta__btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 22px;
+  background: var(--gold);
+  color: var(--white);
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-radius: 8px;
+  border: none;
+  text-decoration: none;
+  transition: all 0.3s var(--ease);
+  white-space: nowrap;
+}
+
+.sticky-cta__btn:active {
+  transform: scale(0.97);
+  background: var(--gold-light);
+}
+
+.sticky-cta__btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ========================================
+   SCROLL ANIMATIONS
+   ======================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+
+.reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+.reveal-d3 { transition-delay: 0.3s; }
+
+/* ========================================
+   RESPONSIVE: Slightly wider phones
+   ======================================== */
+@media (min-width: 390px) {
+  .carousel__card {
+    flex: 0 0 300px;
+  }
+  h1 {
+    font-size: 2.8rem;
+  }
+}
+
+@media (min-width: 430px) {
+  .section-pad {
+    padding: 0 28px;
+  }
+  .carousel__card {
+    flex: 0 0 320px;
+  }
+}
+
+/* ========================================
+   CAP AT TABLET — Keep mobile experience
+   ======================================== */
+@media (min-width: 480px) {
+  body {
+    max-width: 480px;
+    margin: 0 auto;
+    box-shadow: -1px 0 0 var(--border), 1px 0 0 var(--border);
+  }
+  .nav, .sticky-cta {
+    max-width: 480px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .sticky-cta {
+    transform: translate(-50%, 100%);
+  }
+  .sticky-cta--visible {
+    transform: translate(-50%, 0);
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     NAVIGATION
+     ============================================ -->
+<nav class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="#" class="nav__logo">Print<span>Kit</span></a>
+    <a href="#start" class="nav__cta-small">
+      Get API Key
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- ============================================
+     HERO
+     ============================================ -->
+<section class="hero">
+  <p class="label reveal">PrintKit Partner Program</p>
+  <h1 class="reveal reveal-d1">Earn on<br>every print<br>your app <em>sends.</em></h1>
+  <p class="hero__sub reveal reveal-d2">Museum-grade photo printing via API. Your users get beautiful products. You earn on every order.</p>
+  <a href="#start" class="hero__btn reveal reveal-d3">
+    Start Earning
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+  </a>
+  <a href="#how-it-works" class="hero__secondary reveal reveal-d3">See how it works</a>
+</section>
+
+<hr class="gold-rule">
+
+<!-- ============================================
+     EARNINGS
+     ============================================ -->
+<section class="earnings" id="earnings">
+  <div class="section-header">
+    <p class="label reveal">Revenue Potential</p>
+    <h2 class="reveal reveal-d1">The math is simple</h2>
+    <p class="reveal reveal-d2">Set your prices. Pay wholesale. Keep the difference.</p>
+  </div>
+
+  <div class="earnings__cards">
+    <div class="earnings__card reveal">
+      <p class="earnings__vol">10 orders / month</p>
+      <p class="earnings__amt"><span>$</span>150</p>
+      <p class="earnings__per">per month</p>
+    </div>
+    <div class="earnings__card earnings__card--featured reveal reveal-d1">
+      <p class="earnings__vol">100 orders / month</p>
+      <p class="earnings__amt"><span>$</span>1,500</p>
+      <p class="earnings__per">per month</p>
+    </div>
+    <div class="earnings__card reveal reveal-d2">
+      <p class="earnings__vol">1,000 orders / month</p>
+      <p class="earnings__amt"><span>$</span>15,000</p>
+      <p class="earnings__per">per month</p>
+    </div>
+  </div>
+
+  <p class="earnings__note reveal">Based on average order margins across our catalog.</p>
+</section>
+
+<hr class="gold-rule">
+
+<!-- ============================================
+     HOW IT WORKS
+     ============================================ -->
+<section class="how-it-works" id="how-it-works">
+  <div class="section-header">
+    <p class="label reveal">How It Works</p>
+    <h2 class="reveal reveal-d1">Four steps to revenue</h2>
+    <p class="reveal reveal-d2">API key to first payout. No inventory, no shipping, no headaches.</p>
+  </div>
+
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step__num">1</div>
+      <div class="step__body">
+        <h3>Get Your API Key</h3>
+        <p>Create your partner account and receive credentials. Takes less than two minutes.</p>
+      </div>
+    </div>
+    <div class="step reveal reveal-d1">
+      <div class="step__num">2</div>
+      <div class="step__body">
+        <h3>Integrate the API</h3>
+        <p>Clean, RESTful API with SDKs for every major language. Submit orders with a single call.</p>
+      </div>
+    </div>
+    <div class="step reveal reveal-d2">
+      <div class="step__num">3</div>
+      <div class="step__body">
+        <h3>Set Your Prices</h3>
+        <p>Charge whatever you like. Your margin is the spread between retail and our wholesale cost.</p>
+      </div>
+    </div>
+    <div class="step reveal reveal-d3">
+      <div class="step__num">4</div>
+      <div class="step__body">
+        <h3>We Handle the Rest</h3>
+        <p>Professional printing, quality inspection, and white-label shipping to your customer's door.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- ============================================
+     PRODUCTS — HORIZONTAL CAROUSEL
+     ============================================ -->
+<section class="products" id="products">
+  <div class="section-header">
+    <p class="label reveal">The Collection</p>
+    <h2 class="reveal reveal-d1">Real products,<br>real lab</h2>
+    <p class="reveal reveal-d2">Fifteen years of expertise. Museum-grade materials. Handcrafted in the USA.</p>
+  </div>
+
+  <div class="carousel-wrapper">
+    <div class="carousel" id="productCarousel">
+
+      <div class="carousel__card">
+        <div class="carousel__img">
+          <img src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/metal-prints-1.jpg?v=1723491477" alt="Metal Print" loading="lazy">
+          <span class="carousel__badge">69% margin</span>
+        </div>
+        <div class="carousel__body">
+          <h3 class="carousel__name">Metal Print</h3>
+          <p class="carousel__size">8 &times; 10 inches</p>
+          <div class="carousel__pricing">
+            <div class="carousel__price-col">
+              <span class="carousel__price-label">Retail</span>
+              <span class="carousel__price">$29</span>
+            </div>
+            <div class="carousel__price-col">
+              <span class="carousel__price-label">Your Cost</span>
+              <span class="carousel__price">$9</span>
+            </div>
+            <div class="carousel__price-col carousel__profit">
+              <span class="carousel__price-label">You Earn</span>
+              <span class="carousel__price">$20</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel__card">
+        <div class="carousel__img">
+          <img src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/wood-prints-1.jpg?v=1723578559" alt="Wood Print" loading="lazy">
+          <span class="carousel__badge">69% margin</span>
+        </div>
+        <div class="carousel__body">
+          <h3 class="carousel__name">Wood Print</h3>
+          <p class="carousel__size">12 &times; 18 inches</p>
+          <div class="carousel__pricing">
+            <div class="carousel__price-col">
+              <span class="carousel__price-label">Retail</span>
+              <span class="carousel__price">$72</span>
+            </div>
+            <div class="carousel__price-col">
+              <span class="carousel__price-label">Your Cost</span>
+              <span class="carousel__price">$22</span>
+            </div>
+            <div class="carousel__price-col carousel__profit">
+              <span class="carousel__price-label">You Earn</span>
+              <span class="carousel__price">$50</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel__card">
+        <div class="carousel__img">
+          <img src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/gallery-frames-3.jpg?v=1724964668" alt="Gallery Frame" loading="lazy">
+          <span class="carousel__badge">75% margin</span>
+        </div>
+        <div class="carousel__body">
+          <h3 class="carousel__name">Gallery Frame</h3>
+          <p class="carousel__size">16 &times; 20 inches</p>
+          <div class="carousel__pricing">
+            <div class="carousel__price-col">
+              <span class="carousel__price-label">Retail</span>
+              <span class="carousel__price">$134</span>
+            </div>
+            <div class="carousel__price-col">
+              <span class="carousel__price-label">Your Cost</span>
+              <span class="carousel__price">$34</span>
+            </div>
+            <div class="carousel__price-col carousel__profit">
+              <span class="carousel__price-label">You Earn</span>
+              <span class="carousel__price">$100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel__card">
+        <div class="carousel__img">
+          <img src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/large-format-3_b1256f8b-0ccf-4b79-8cc6-e451dd8565a4.jpg?v=1727135498" alt="Large Format Print" loading="lazy">
+          <span class="carousel__badge">67% margin</span>
+        </div>
+        <div class="carousel__body">
+          <h3 class="carousel__name">Large Format Print</h3>
+          <p class="carousel__size">20 &times; 30 inches</p>
+          <div class="carousel__pricing">
+            <div class="carousel__price-col">
+              <span class="carousel__price-label">Retail</span>
+              <span class="carousel__price">$36</span>
+            </div>
+            <div class="carousel__price-col">
+              <span class="carousel__price-label">Your Cost</span>
+              <span class="carousel__price">$12</span>
+            </div>
+            <div class="carousel__price-col carousel__profit">
+              <span class="carousel__price-label">You Earn</span>
+              <span class="carousel__price">$24</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel__card">
+        <div class="carousel__img">
+          <img src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/acrylic-blocks-1.jpg?v=1718737872" alt="Acrylic Block" loading="lazy">
+          <span class="carousel__badge">69% margin</span>
+        </div>
+        <div class="carousel__body">
+          <h3 class="carousel__name">Acrylic Block</h3>
+          <p class="carousel__size">5 &times; 7 inches</p>
+          <div class="carousel__pricing">
+            <div class="carousel__price-col">
+              <span class="carousel__price-label">Retail</span>
+              <span class="carousel__price">$48</span>
+            </div>
+            <div class="carousel__price-col">
+              <span class="carousel__price-label">Your Cost</span>
+              <span class="carousel__price">$15</span>
+            </div>
+            <div class="carousel__price-col carousel__profit">
+              <span class="carousel__price-label">You Earn</span>
+              <span class="carousel__price">$33</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel__card">
+        <div class="carousel__img">
+          <img src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/softcover-photo-book-1.jpg?v=1723572392" alt="Photo Magazine" loading="lazy">
+          <span class="carousel__badge">69% margin</span>
+        </div>
+        <div class="carousel__body">
+          <h3 class="carousel__name">Photo Magazine</h3>
+          <p class="carousel__size">8 &times; 10 inches</p>
+          <div class="carousel__pricing">
+            <div class="carousel__price-col">
+              <span class="carousel__price-label">Retail</span>
+              <span class="carousel__price">$26</span>
+            </div>
+            <div class="carousel__price-col">
+              <span class="carousel__price-label">Your Cost</span>
+              <span class="carousel__price">$8</span>
+            </div>
+            <div class="carousel__price-col carousel__profit">
+              <span class="carousel__price-label">You Earn</span>
+              <span class="carousel__price">$18</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="carousel-dots" id="carouselDots">
+      <div class="carousel-dot carousel-dot--active"></div>
+      <div class="carousel-dot"></div>
+      <div class="carousel-dot"></div>
+      <div class="carousel-dot"></div>
+      <div class="carousel-dot"></div>
+      <div class="carousel-dot"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- ============================================
+     THE DEAL
+     ============================================ -->
+<section class="the-deal" id="the-deal">
+  <div class="section-header">
+    <p class="label reveal">The Partner Advantage</p>
+    <h2 class="reveal reveal-d1">Everything you need</h2>
+  </div>
+
+  <div class="deal-list">
+    <div class="deal-item reveal">
+      <div class="deal-item__icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/></svg>
+      </div>
+      <div>
+        <h4>Wholesale Pricing</h4>
+        <p>Access our full catalog at partner rates. Margins of 60-75% on every product, every order.</p>
+      </div>
+    </div>
+
+    <div class="deal-item reveal reveal-d1">
+      <div class="deal-item__icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"/></svg>
+      </div>
+      <div>
+        <h4>White-Label Fulfillment</h4>
+        <p>Your brand, front and center. Custom packing slips, branded inserts, no PrintKit branding.</p>
+      </div>
+    </div>
+
+    <div class="deal-item reveal reveal-d2">
+      <div class="deal-item__icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>
+      </div>
+      <div>
+        <h4>Developer-First API</h4>
+        <p>RESTful endpoints, webhook notifications, SDKs for Python, Node, Ruby, and Go.</p>
+      </div>
+    </div>
+
+    <div class="deal-item reveal">
+      <div class="deal-item__icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
+      </div>
+      <div>
+        <h4>Handled Shipping</h4>
+        <p>Domestic and international fulfillment. Real-time tracking. Careful, protective packaging.</p>
+      </div>
+    </div>
+
+    <div class="deal-item reveal reveal-d1">
+      <div class="deal-item__icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+      </div>
+      <div>
+        <h4>Quality Guaranteed</h4>
+        <p>Every print inspected by hand. Not perfect? We reprint it. No questions, no cost.</p>
+      </div>
+    </div>
+
+    <div class="deal-item reveal reveal-d2">
+      <div class="deal-item__icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>
+      </div>
+      <div>
+        <h4>Partner Dashboard</h4>
+        <p>Track orders, revenue, and payouts in real time. Detailed analytics on performance.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- ============================================
+     USE CASES
+     ============================================ -->
+<section class="use-cases" id="use-cases">
+  <div class="section-header">
+    <p class="label reveal">Built For</p>
+    <h2 class="reveal reveal-d1">Who partners<br>with PrintKit</h2>
+    <p class="reveal reveal-d2">If your users have photos, we have the products.</p>
+  </div>
+
+  <div class="use-cases__list">
+    <div class="use-case reveal">
+      <div class="use-case__header">
+        <div class="use-case__icon">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/></svg>
+        </div>
+        <h3 class="use-case__title">AI Photo Apps</h3>
+      </div>
+      <p class="use-case__desc">Turn generated images into premium wall art. Print AI creations on metal, wood, or acrylic.</p>
+    </div>
+
+    <div class="use-case reveal reveal-d1">
+      <div class="use-case__header">
+        <div class="use-case__icon">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"/><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"/></svg>
+        </div>
+        <h3 class="use-case__title">Photography Platforms</h3>
+      </div>
+      <p class="use-case__desc">Give photographers a seamless storefront. Professional prints that match their vision.</p>
+    </div>
+
+    <div class="use-case reveal reveal-d2">
+      <div class="use-case__header">
+        <div class="use-case__icon">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
+        </div>
+        <h3 class="use-case__title">Social &amp; Community Apps</h3>
+      </div>
+      <p class="use-case__desc">Monetize user-generated content. Custom merchandise within your existing experience.</p>
+    </div>
+
+    <div class="use-case reveal">
+      <div class="use-case__header">
+        <div class="use-case__icon">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+        </div>
+        <h3 class="use-case__title">Interior Design Tools</h3>
+      </div>
+      <p class="use-case__desc">From room visualization to delivered wall art. Close the digital-to-physical loop.</p>
+    </div>
+
+    <div class="use-case reveal reveal-d1">
+      <div class="use-case__header">
+        <div class="use-case__icon">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
+        </div>
+        <h3 class="use-case__title">Gifting &amp; E-Commerce</h3>
+      </div>
+      <p class="use-case__desc">Personalized photo gifts for any marketplace. No inventory risk or upfront investment.</p>
+    </div>
+
+    <div class="use-case reveal reveal-d2">
+      <div class="use-case__header">
+        <div class="use-case__icon">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>
+        </div>
+        <h3 class="use-case__title">Mobile-First Apps</h3>
+      </div>
+      <p class="use-case__desc">Phone to print in seconds. Optimized for the camera-roll-to-checkout flow.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- ============================================
+     IDEAS
+     ============================================ -->
+<section class="ideas" id="ideas">
+  <div class="section-header">
+    <p class="label reveal">Inspiration</p>
+    <h2 class="reveal reveal-d1">What you could build</h2>
+    <p class="reveal reveal-d2">A few ideas to get started. Our partners surprise us daily.</p>
+  </div>
+
+  <div class="ideas__list">
+    <div class="idea reveal">
+      <span class="idea__num">1</span>
+      <div>
+        <h4>AI Portrait Studio</h4>
+        <p>Generate stylized portraits and offer museum-quality metal prints as the premium upgrade.</p>
+      </div>
+    </div>
+    <div class="idea reveal reveal-d1">
+      <span class="idea__num">2</span>
+      <div>
+        <h4>Pet Photo App</h4>
+        <p>Pet parents love prints. Offer wood-mounted portraits and custom photo magazines.</p>
+      </div>
+    </div>
+    <div class="idea reveal reveal-d2">
+      <span class="idea__num">3</span>
+      <div>
+        <h4>Travel Journal</h4>
+        <p>Turn trip photos into a printed magazine. Auto-layout with maps, dates, and spreads.</p>
+      </div>
+    </div>
+    <div class="idea reveal">
+      <span class="idea__num">4</span>
+      <div>
+        <h4>Gallery Marketplace</h4>
+        <p>Connect artists with collectors. Gallery-framed prints produced and shipped on demand.</p>
+      </div>
+    </div>
+    <div class="idea reveal reveal-d1">
+      <span class="idea__num">5</span>
+      <div>
+        <h4>Real Estate Staging</h4>
+        <p>Auto-generate wall art for listings. Print and ship directly to the staging address.</p>
+      </div>
+    </div>
+    <div class="idea reveal reveal-d2">
+      <span class="idea__num">6</span>
+      <div>
+        <h4>Memory Subscription</h4>
+        <p>Monthly curated prints from a user's photo library. A photo album that builds itself.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- ============================================
+     FAQ
+     ============================================ -->
+<section class="faq" id="faq">
+  <div class="section-header">
+    <p class="label reveal">Questions</p>
+    <h2 class="reveal reveal-d1">Frequently asked</h2>
+  </div>
+
+  <div class="faq__list">
+
+    <div class="faq-item reveal">
+      <button class="faq-item__q" aria-expanded="false">
+        How does the pricing model work?
+        <span class="faq-item__toggle"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg></span>
+      </button>
+      <div class="faq-item__a">
+        <p>You pay our wholesale price for each product. You set whatever retail price you like. The difference is your margin. No monthly fees, no minimums, and no revenue sharing beyond wholesale cost.</p>
+      </div>
+    </div>
+
+    <div class="faq-item reveal">
+      <button class="faq-item__q" aria-expanded="false">
+        What's the typical margin on products?
+        <span class="faq-item__toggle"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg></span>
+      </button>
+      <div class="faq-item__a">
+        <p>Most partners achieve 60-75% margins depending on the product and pricing strategy. Our suggested retail prices are calibrated for premium positioning, but you price however suits your market.</p>
+      </div>
+    </div>
+
+    <div class="faq-item reveal">
+      <button class="faq-item__q" aria-expanded="false">
+        How long does integration take?
+        <span class="faq-item__toggle"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg></span>
+      </button>
+      <div class="faq-item__a">
+        <p>Most developers have a working integration within hours. RESTful API with clear docs and SDKs for Python, Node.js, Ruby, and Go. Sandbox testing is free and unlimited.</p>
+      </div>
+    </div>
+
+    <div class="faq-item reveal">
+      <button class="faq-item__q" aria-expanded="false">
+        Do you ship internationally?
+        <span class="faq-item__toggle"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg></span>
+      </button>
+      <div class="faq-item__a">
+        <p>Yes, to over 40 countries. Domestic orders arrive in 5-7 business days. International in 7-14 days. Real-time tracking via webhooks and our API for every shipment.</p>
+      </div>
+    </div>
+
+    <div class="faq-item reveal">
+      <button class="faq-item__q" aria-expanded="false">
+        What if a print arrives damaged?
+        <span class="faq-item__toggle"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg></span>
+      </button>
+      <div class="faq-item__a">
+        <p>We reprint and reship at our expense. No questions asked. Every product is inspected by hand before shipping, so damage is rare, but when it happens, we make it right immediately.</p>
+      </div>
+    </div>
+
+    <div class="faq-item reveal">
+      <button class="faq-item__q" aria-expanded="false">
+        Is there a minimum order volume?
+        <span class="faq-item__toggle"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg></span>
+      </button>
+      <div class="faq-item__a">
+        <p>No minimums. One order a month or a thousand -- same wholesale pricing, same quality. Designed to work at any scale, from indie developers to enterprise platforms.</p>
+      </div>
+    </div>
+
+    <div class="faq-item reveal">
+      <button class="faq-item__q" aria-expanded="false">
+        Who prints the products?
+        <span class="faq-item__toggle"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg></span>
+      </button>
+      <div class="faq-item__a">
+        <p>We do. PrintKit is backed by Social Print Studio, a photo lab with over fifteen years of experience and millions of prints produced. Real products made by real craftspeople.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- ============================================
+     CTA SECTION
+     ============================================ -->
+<section class="cta-section" id="start">
+  <p class="label reveal">Ready to Begin</p>
+  <h2 class="reveal reveal-d1">Start earning on<br>every print.</h2>
+  <p class="reveal reveal-d2">Create your partner account, get your API key, and submit your first order today. No commitments, no minimums.</p>
+  <a href="#" class="cta-section__btn reveal reveal-d3">
+    Get Your API Key
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+  </a>
+</section>
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+<footer class="footer">
+  <div class="footer__logo">Print<span>Kit</span></div>
+  <ul class="footer__links">
+    <li><a href="#">Documentation</a></li>
+    <li><a href="#">API Reference</a></li>
+    <li><a href="#">Status</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <p class="footer__copy">&copy; 2026 PrintKit. Backed by Social Print Studio.</p>
+</footer>
+
+<!-- ============================================
+     STICKY BOTTOM CTA
+     ============================================ -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="sticky-cta__inner">
+    <div class="sticky-cta__text">
+      <div class="sticky-cta__headline">Earn 60-75% margins</div>
+      <div class="sticky-cta__sub">No fees, no minimums</div>
+    </div>
+    <a href="#start" class="sticky-cta__btn">
+      Start Earning
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </a>
+  </div>
+</div>
+
+<!-- ============================================
+     JAVASCRIPT
+     ============================================ -->
+<script>
+(function() {
+  'use strict';
+
+  // ---- NAV SCROLL ----
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 20) {
+      nav.classList.add('nav--scrolled');
+    } else {
+      nav.classList.remove('nav--scrolled');
+    }
+  }, { passive: true });
+
+  // ---- STICKY CTA ----
+  var stickyCta = document.getElementById('stickyCta');
+  var heroEnd = 0;
+  var ctaSection = document.getElementById('start');
+
+  function updateSticky() {
+    var scrollY = window.scrollY;
+    var heroRect = document.querySelector('.hero');
+    heroEnd = heroRect.offsetTop + heroRect.offsetHeight;
+
+    var ctaTop = ctaSection.offsetTop;
+    var windowBottom = scrollY + window.innerHeight;
+
+    if (scrollY > heroEnd && windowBottom < ctaTop + 200) {
+      stickyCta.classList.add('sticky-cta--visible');
+    } else {
+      stickyCta.classList.remove('sticky-cta--visible');
+    }
+  }
+
+  window.addEventListener('scroll', updateSticky, { passive: true });
+  window.addEventListener('resize', updateSticky, { passive: true });
+  setTimeout(updateSticky, 100);
+
+  // ---- CAROUSEL DOTS ----
+  var carousel = document.getElementById('productCarousel');
+  var dots = document.querySelectorAll('.carousel-dot');
+  var cards = carousel.querySelectorAll('.carousel__card');
+
+  function updateDots() {
+    if (!cards.length) return;
+    var scrollLeft = carousel.scrollLeft;
+    var cardWidth = cards[0].offsetWidth + 16; // gap
+    var activeIndex = Math.round(scrollLeft / cardWidth);
+    activeIndex = Math.max(0, Math.min(activeIndex, dots.length - 1));
+
+    for (var i = 0; i < dots.length; i++) {
+      dots[i].classList.toggle('carousel-dot--active', i === activeIndex);
+    }
+  }
+
+  carousel.addEventListener('scroll', updateDots, { passive: true });
+
+  // Tap dot to scroll
+  dots.forEach(function(dot, index) {
+    dot.addEventListener('click', function() {
+      var cardWidth = cards[0].offsetWidth + 16;
+      carousel.scrollTo({ left: cardWidth * index, behavior: 'smooth' });
+    });
+  });
+
+  // ---- FAQ ACCORDION ----
+  var faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(function(item) {
+    var btn = item.querySelector('.faq-item__q');
+    btn.addEventListener('click', function() {
+      var isOpen = item.classList.contains('faq-item--open');
+
+      // Close all
+      faqItems.forEach(function(other) {
+        other.classList.remove('faq-item--open');
+        other.querySelector('.faq-item__q').setAttribute('aria-expanded', 'false');
+      });
+
+      // Open this one (if it was closed)
+      if (!isOpen) {
+        item.classList.add('faq-item--open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  // ---- SCROLL REVEAL ----
+  var revealEls = document.querySelectorAll('.reveal');
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal--visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealEls.forEach(function(el) {
+      observer.observe(el);
+    });
+  } else {
+    // Fallback: show all
+    revealEls.forEach(function(el) {
+      el.classList.add('reveal--visible');
+    });
+  }
+
+})();
+</script>
+
+</body>
+</html>

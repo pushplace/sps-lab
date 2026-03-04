@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>PrintKit — Earn on Every Print</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============================================
+     RESET & BASE
+     ============================================ */
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :root {
+    --bg: #0a0f1a;
+    --bg-card: #111827;
+    --bg-card-elevated: #1a2236;
+    --green: #00ff88;
+    --green-dim: #00cc6a;
+    --green-glow: rgba(0, 255, 136, 0.3);
+    --green-glow-strong: rgba(0, 255, 136, 0.5);
+    --cyan: #00d4ff;
+    --cyan-dim: #0099cc;
+    --cyan-glow: rgba(0, 212, 255, 0.25);
+    --white: #f0f4f8;
+    --gray-100: #e2e8f0;
+    --gray-300: #94a3b8;
+    --gray-500: #64748b;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--white);
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(80px + var(--safe-bottom));
+  }
+
+  /* Dot grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ============================================
+     UTILITY CLASSES
+     ============================================ */
+  .section {
+    position: relative;
+    z-index: 1;
+    padding: 48px 20px;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--green);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green-glow-strong);
+  }
+
+  .section-title {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+  }
+
+  .section-subtitle {
+    font-size: 16px;
+    color: var(--gray-300);
+    line-height: 1.5;
+  }
+
+  .glow-text {
+    color: var(--green);
+    text-shadow: 0 0 20px var(--green-glow), 0 0 40px rgba(0,255,136,0.15);
+  }
+
+  .cyan-text {
+    color: var(--cyan);
+    text-shadow: 0 0 20px var(--cyan-glow);
+  }
+
+  .mono {
+    font-family: var(--font-mono);
+  }
+
+  /* ============================================
+     HERO SECTION — full viewport
+     ============================================ */
+  .hero {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 24px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    left: -30%;
+    width: 160%;
+    height: 80%;
+    background: radial-gradient(ellipse, rgba(0,255,136,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,255,136,0.1);
+    border: 1px solid rgba(0,255,136,0.25);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--green);
+    width: fit-content;
+    margin-bottom: 24px;
+    animation: badgePulse 3s ease-in-out infinite;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: dotBlink 2s ease-in-out infinite;
+  }
+
+  @keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0,255,136,0.1); }
+    50% { box-shadow: 0 0 0 8px rgba(0,255,136,0); }
+  }
+
+  @keyframes dotBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero-title {
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
+  }
+
+  .hero-title .highlight {
+    display: block;
+    background: linear-gradient(135deg, var(--green), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px rgba(0,255,136,0.3));
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--gray-300);
+    line-height: 1.55;
+    margin-bottom: 32px;
+    max-width: 340px;
+  }
+
+  .hero-cta-row {
+    display: flex;
+    gap: 12px;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 52px;
+    padding: 0 28px;
+    background: var(--green);
+    color: var(--bg);
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 0 24px var(--green-glow), 0 4px 16px rgba(0,0,0,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .btn-primary:active {
+    transform: scale(0.96);
+    box-shadow: 0 0 12px var(--green-glow), 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 52px;
+    padding: 0 24px;
+    background: transparent;
+    color: var(--gray-300);
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 600;
+    border: 1.5px solid var(--gray-700);
+    border-radius: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-secondary:active {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--gray-500);
+    font-size: 12px;
+    animation: scrollBounce 2s ease-in-out infinite;
+  }
+
+  .hero-scroll-hint svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--gray-500);
+  }
+
+  @keyframes scrollBounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  /* ============================================
+     EARNINGS DASHBOARD
+     ============================================ */
+  .earnings {
+    padding: 48px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .earnings-dashboard {
+    background: var(--bg-card);
+    border: 1px solid rgba(0,255,136,0.12);
+    border-radius: 20px;
+    padding: 24px 20px;
+    margin-top: 24px;
+    box-shadow: 0 0 40px rgba(0,255,136,0.05), 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .earnings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .earnings-header-title {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-300);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .earnings-live-dot {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--green);
+  }
+
+  .earnings-live-dot::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: dotBlink 1.5s ease-in-out infinite;
+  }
+
+  .earnings-tier {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .earnings-tier:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .earnings-tier-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .earnings-tier-label {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--gray-500);
+  }
+
+  .earnings-tier-orders {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-300);
+  }
+
+  .earnings-tier-amount {
+    font-family: var(--font-mono);
+    font-weight: 800;
+    text-align: right;
+  }
+
+  .earnings-tier-amount .currency {
+    font-size: 18px;
+    color: var(--gray-500);
+    vertical-align: top;
+    margin-right: 2px;
+  }
+
+  .earnings-tier-amount .value {
+    font-size: 32px;
+    letter-spacing: -1px;
+  }
+
+  .earnings-tier-amount .period {
+    font-size: 13px;
+    color: var(--gray-500);
+    font-weight: 500;
+    margin-left: 2px;
+  }
+
+  .tier-starter .value { color: var(--gray-300); }
+  .tier-growth .value { color: var(--cyan); text-shadow: 0 0 16px var(--cyan-glow); }
+  .tier-scale .value { color: var(--green); text-shadow: 0 0 20px var(--green-glow); font-size: 36px; }
+
+  .earnings-footnote {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 13px;
+    color: var(--gray-500);
+    text-align: center;
+  }
+
+  /* ============================================
+     HOW IT WORKS — Vertical timeline (mobile native)
+     ============================================ */
+  .how-it-works {
+    padding: 48px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .timeline {
+    margin-top: 28px;
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--green), var(--cyan), var(--green));
+    opacity: 0.3;
+  }
+
+  .timeline-step {
+    position: relative;
+    padding-bottom: 32px;
+  }
+
+  .timeline-step:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -32px;
+    top: 2px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--bg);
+    background: var(--green);
+    box-shadow: 0 0 12px var(--green-glow);
+  }
+
+  .timeline-step:nth-child(2) .timeline-dot { background: var(--cyan); box-shadow: 0 0 12px var(--cyan-glow); }
+  .timeline-step:nth-child(3) .timeline-dot { background: var(--green); }
+  .timeline-step:nth-child(4) .timeline-dot { background: linear-gradient(135deg, var(--green), var(--cyan)); }
+
+  .timeline-content {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 18px;
+  }
+
+  .timeline-step-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .timeline-step-desc {
+    font-size: 14px;
+    color: var(--gray-300);
+    line-height: 1.5;
+  }
+
+  .timeline-step-tag {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(0,255,136,0.1);
+    color: var(--green);
+  }
+
+  .timeline-step:nth-child(2) .timeline-step-tag {
+    background: rgba(0,212,255,0.1);
+    color: var(--cyan);
+  }
+
+  /* ============================================
+     PRODUCTS — Horizontal scroll
+     ============================================ */
+  .products {
+    padding: 48px 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .products .section-header {
+    padding: 0 20px;
+    margin-bottom: 24px;
+  }
+
+  .products-scroll {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 20px 20px;
+    scrollbar-width: none;
+  }
+
+  .products-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product-card {
+    flex: 0 0 260px;
+    scroll-snap-align: start;
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 18px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .product-card:active {
+    border-color: rgba(0,255,136,0.25);
+  }
+
+  .product-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .product-info {
+    padding: 16px;
+  }
+
+  .product-name {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .product-pricing {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .product-price-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .product-price-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .product-price-value {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--white);
+  }
+
+  .product-price-cost .product-price-value {
+    font-size: 16px;
+    color: var(--gray-500);
+  }
+
+  .product-margin {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  .product-margin-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .product-margin-value {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--green);
+    text-shadow: 0 0 12px var(--green-glow);
+  }
+
+  .scroll-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding-top: 8px;
+  }
+
+  .scroll-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gray-700);
+    transition: background 0.3s, width 0.3s;
+  }
+
+  .scroll-dot.active {
+    width: 20px;
+    border-radius: 3px;
+    background: var(--green);
+  }
+
+  /* ============================================
+     THE DEAL — Value props
+     ============================================ */
+  .the-deal {
+    padding: 48px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .deal-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .deal-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: border-color 0.2s;
+  }
+
+  .deal-card:active {
+    border-color: rgba(0,255,136,0.2);
+  }
+
+  .deal-icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    background: rgba(0,255,136,0.1);
+    border: 1px solid rgba(0,255,136,0.15);
+  }
+
+  .deal-card:nth-child(2) .deal-icon {
+    background: rgba(0,212,255,0.1);
+    border-color: rgba(0,212,255,0.15);
+  }
+
+  .deal-card:nth-child(3) .deal-icon {
+    background: rgba(168,85,247,0.1);
+    border-color: rgba(168,85,247,0.15);
+  }
+
+  .deal-card:nth-child(4) .deal-icon {
+    background: rgba(251,191,36,0.1);
+    border-color: rgba(251,191,36,0.15);
+  }
+
+  .deal-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .deal-card-desc {
+    font-size: 14px;
+    color: var(--gray-300);
+    line-height: 1.45;
+  }
+
+  /* ============================================
+     USE CASES
+     ============================================ */
+  .use-cases {
+    padding: 48px 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .use-cases .section-header {
+    padding: 0 20px;
+    margin-bottom: 24px;
+  }
+
+  .use-cases-scroll {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 20px 16px;
+    scrollbar-width: none;
+  }
+
+  .use-cases-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .use-case-card {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 18px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .use-case-emoji {
+    font-size: 28px;
+  }
+
+  .use-case-title {
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .use-case-desc {
+    font-size: 14px;
+    color: var(--gray-300);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .use-case-earning {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .use-case-earning::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+  }
+
+  /* ============================================
+     FAQ — Accordion
+     ============================================ */
+  .faq {
+    padding: 48px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .faq-list {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .faq-item {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.04);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .faq-item:first-child {
+    border-radius: 16px 16px 4px 4px;
+  }
+
+  .faq-item:last-child {
+    border-radius: 4px 4px 16px 16px;
+  }
+
+  .faq-item:not(:first-child):not(:last-child) {
+    border-radius: 4px;
+  }
+
+  .faq-item.active {
+    border-color: rgba(0,255,136,0.15);
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 18px 20px;
+    background: none;
+    border: none;
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    min-height: 56px;
+    gap: 12px;
+  }
+
+  .faq-question:active {
+    background: rgba(255,255,255,0.02);
+  }
+
+  .faq-chevron {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+  }
+
+  .faq-item.active .faq-chevron {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+
+  .faq-answer-inner {
+    padding: 0 20px 18px;
+    font-size: 14px;
+    color: var(--gray-300);
+    line-height: 1.6;
+  }
+
+  /* ============================================
+     APP IDEAS
+     ============================================ */
+  .ideas {
+    padding: 48px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .ideas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .idea-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.2s;
+  }
+
+  .idea-card:active {
+    border-color: rgba(0,255,136,0.2);
+  }
+
+  .idea-icon {
+    font-size: 26px;
+  }
+
+  .idea-title {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .idea-desc {
+    font-size: 12px;
+    color: var(--gray-500);
+    line-height: 1.4;
+  }
+
+  /* ============================================
+     FINAL CTA
+     ============================================ */
+  .final-cta {
+    padding: 60px 20px 120px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -20%;
+    width: 140%;
+    height: 60%;
+    background: radial-gradient(ellipse at bottom, rgba(0,255,136,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .final-cta-title {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .final-cta-sub {
+    font-size: 16px;
+    color: var(--gray-300);
+    margin-bottom: 32px;
+    line-height: 1.5;
+  }
+
+  .final-cta .btn-primary {
+    width: 100%;
+    height: 56px;
+    font-size: 18px;
+    border-radius: 16px;
+  }
+
+  /* ============================================
+     STICKY BOTTOM BAR
+     ============================================ */
+  .sticky-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10,15,26,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 12px 20px calc(12px + var(--safe-bottom));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .sticky-bottom.visible {
+    transform: translateY(0);
+  }
+
+  .sticky-bottom-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .sticky-bottom-label {
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+
+  .sticky-bottom-amount {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--green);
+    text-shadow: 0 0 12px var(--green-glow);
+  }
+
+  .sticky-bottom .btn-primary {
+    height: 48px;
+    padding: 0 24px;
+    font-size: 15px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+
+  /* ============================================
+     ANIMATIONS
+     ============================================ */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .animate-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Counter animation */
+  @keyframes countPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  /* Divider */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.06), transparent);
+    margin: 0 20px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ======================================
+     HERO
+     ====================================== -->
+<section class="hero">
+  <div class="hero-badge">New from PrintKit</div>
+  <h1 class="hero-title">
+    Earn on<br>every print<br><span class="highlight">your app sends.</span>
+  </h1>
+  <p class="hero-sub">Drop our SDK into your app. Your users order prints. You earn $15-$100 per order, paid monthly.</p>
+  <div class="hero-cta-row">
+    <a href="#" class="btn-primary">Start Earning</a>
+    <a href="#earnings" class="btn-secondary">See Earnings</a>
+  </div>
+  <div class="hero-scroll-hint">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5"/><path d="M7 6l5 5 5-5"/></svg>
+  </div>
+</section>
+
+<!-- ======================================
+     EARNINGS DASHBOARD
+     ====================================== -->
+<section class="earnings" id="earnings">
+  <div class="section-label">Earnings Calculator</div>
+  <h2 class="section-title">Your revenue<br>at a glance.</h2>
+  <p class="section-subtitle">Based on ~$15 average margin per order.</p>
+
+  <div class="earnings-dashboard animate-in">
+    <div class="earnings-header">
+      <span class="earnings-header-title">Monthly Revenue</span>
+      <span class="earnings-live-dot">Live</span>
+    </div>
+
+    <div class="earnings-tier">
+      <div class="earnings-tier-left">
+        <span class="earnings-tier-label">Starter</span>
+        <span class="earnings-tier-orders">10 orders/mo</span>
+      </div>
+      <div class="earnings-tier-amount tier-starter">
+        <span class="currency">$</span><span class="value" data-target="150">0</span><span class="period">/mo</span>
+      </div>
+    </div>
+
+    <div class="earnings-tier">
+      <div class="earnings-tier-left">
+        <span class="earnings-tier-label">Growth</span>
+        <span class="earnings-tier-orders">100 orders/mo</span>
+      </div>
+      <div class="earnings-tier-amount tier-growth">
+        <span class="currency">$</span><span class="value" data-target="1500">0</span><span class="period">/mo</span>
+      </div>
+    </div>
+
+    <div class="earnings-tier">
+      <div class="earnings-tier-left">
+        <span class="earnings-tier-label">Scale</span>
+        <span class="earnings-tier-orders">1,000 orders/mo</span>
+      </div>
+      <div class="earnings-tier-amount tier-scale">
+        <span class="currency">$</span><span class="value" data-target="15000">0</span><span class="period">/mo</span>
+      </div>
+    </div>
+
+    <div class="earnings-footnote">
+      Avg. margin varies by product mix
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ======================================
+     HOW IT WORKS
+     ====================================== -->
+<section class="how-it-works">
+  <div class="section-label">How It Works</div>
+  <h2 class="section-title">Four steps to<br><span class="glow-text">passive revenue.</span></h2>
+
+  <div class="timeline">
+    <div class="timeline-step animate-in">
+      <div class="timeline-dot">1</div>
+      <div class="timeline-content">
+        <div class="timeline-step-title">Get Your API Key</div>
+        <div class="timeline-step-desc">Sign up and grab your credentials. Takes about 60 seconds to get started.</div>
+        <span class="timeline-step-tag">~1 min</span>
+      </div>
+    </div>
+
+    <div class="timeline-step animate-in">
+      <div class="timeline-dot">2</div>
+      <div class="timeline-content">
+        <div class="timeline-step-title">Drop In Our SDK</div>
+        <div class="timeline-step-desc">iOS and Android SDKs handle product browsing, image upload, checkout, and payment.</div>
+        <span class="timeline-step-tag">~2 hours</span>
+      </div>
+    </div>
+
+    <div class="timeline-step animate-in">
+      <div class="timeline-dot">3</div>
+      <div class="timeline-content">
+        <div class="timeline-step-title">Users Order Prints</div>
+        <div class="timeline-step-desc">Your users browse products, pick their photos, and pay &mdash; all inside your app.</div>
+        <span class="timeline-step-tag">In-app flow</span>
+      </div>
+    </div>
+
+    <div class="timeline-step animate-in">
+      <div class="timeline-dot">4</div>
+      <div class="timeline-content">
+        <div class="timeline-step-title">You Get Paid</div>
+        <div class="timeline-step-desc">We handle printing, shipping, and support. Your margin hits your account monthly.</div>
+        <span class="timeline-step-tag">Monthly payout</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ======================================
+     PRODUCTS
+     ====================================== -->
+<section class="products">
+  <div class="section-header">
+    <div class="section-label">Product Catalog</div>
+    <h2 class="section-title">Set your own<br>prices. Keep<br><span class="glow-text">the margin.</span></h2>
+    <p class="section-subtitle" style="padding-right: 40px;">Swipe to browse. Your price, your cost, your profit.</p>
+  </div>
+
+  <div class="products-scroll" id="productsScroll">
+    <!-- Metal Print -->
+    <div class="product-card">
+      <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/metal-prints-1.jpg?v=1723491477" alt="Metal Print 8x10" loading="lazy">
+      <div class="product-info">
+        <div class="product-name">Metal Print 8&times;10</div>
+        <div class="product-pricing">
+          <div class="product-price-col">
+            <span class="product-price-label">You charge</span>
+            <span class="product-price-value">$29</span>
+          </div>
+          <div class="product-price-col product-price-cost">
+            <span class="product-price-label">Your cost</span>
+            <span class="product-price-value">$9</span>
+          </div>
+          <div class="product-margin">
+            <span class="product-margin-label">Margin</span>
+            <span class="product-margin-value">+$20</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wood Print -->
+    <div class="product-card">
+      <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/wood-prints-1.jpg?v=1723578559" alt="Wood Print 12x18" loading="lazy">
+      <div class="product-info">
+        <div class="product-name">Wood Print 12&times;18</div>
+        <div class="product-pricing">
+          <div class="product-price-col">
+            <span class="product-price-label">You charge</span>
+            <span class="product-price-value">$72</span>
+          </div>
+          <div class="product-price-col product-price-cost">
+            <span class="product-price-label">Your cost</span>
+            <span class="product-price-value">$22</span>
+          </div>
+          <div class="product-margin">
+            <span class="product-margin-label">Margin</span>
+            <span class="product-margin-value">+$50</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gallery Frame -->
+    <div class="product-card">
+      <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/gallery-frames-3.jpg?v=1724964668" alt="Gallery Frame 16x20" loading="lazy">
+      <div class="product-info">
+        <div class="product-name">Gallery Frame 16&times;20</div>
+        <div class="product-pricing">
+          <div class="product-price-col">
+            <span class="product-price-label">You charge</span>
+            <span class="product-price-value">$134</span>
+          </div>
+          <div class="product-price-col product-price-cost">
+            <span class="product-price-label">Your cost</span>
+            <span class="product-price-value">$34</span>
+          </div>
+          <div class="product-margin">
+            <span class="product-margin-label">Margin</span>
+            <span class="product-margin-value">+$100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Large Format -->
+    <div class="product-card">
+      <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/large-format-3_b1256f8b-0ccf-4b79-8cc6-e451dd8565a4.jpg?v=1727135498" alt="Large Format 20x30" loading="lazy">
+      <div class="product-info">
+        <div class="product-name">Large Format 20&times;30</div>
+        <div class="product-pricing">
+          <div class="product-price-col">
+            <span class="product-price-label">You charge</span>
+            <span class="product-price-value">$36</span>
+          </div>
+          <div class="product-price-col product-price-cost">
+            <span class="product-price-label">Your cost</span>
+            <span class="product-price-value">$12</span>
+          </div>
+          <div class="product-margin">
+            <span class="product-margin-label">Margin</span>
+            <span class="product-margin-value">+$24</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acrylic Block -->
+    <div class="product-card">
+      <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/acrylic-blocks-1.jpg?v=1718737872" alt="Acrylic Block 5x7" loading="lazy">
+      <div class="product-info">
+        <div class="product-name">Acrylic Block 5&times;7</div>
+        <div class="product-pricing">
+          <div class="product-price-col">
+            <span class="product-price-label">You charge</span>
+            <span class="product-price-value">$48</span>
+          </div>
+          <div class="product-price-col product-price-cost">
+            <span class="product-price-label">Your cost</span>
+            <span class="product-price-value">$15</span>
+          </div>
+          <div class="product-margin">
+            <span class="product-margin-label">Margin</span>
+            <span class="product-margin-value">+$33</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photo Magazine -->
+    <div class="product-card">
+      <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/softcover-photo-book-1.jpg?v=1723572392" alt="Photo Magazine 8x10" loading="lazy">
+      <div class="product-info">
+        <div class="product-name">Photo Magazine 8&times;10</div>
+        <div class="product-pricing">
+          <div class="product-price-col">
+            <span class="product-price-label">You charge</span>
+            <span class="product-price-value">$26</span>
+          </div>
+          <div class="product-price-col product-price-cost">
+            <span class="product-price-label">Your cost</span>
+            <span class="product-price-value">$8</span>
+          </div>
+          <div class="product-margin">
+            <span class="product-margin-label">Margin</span>
+            <span class="product-margin-value">+$18</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-indicator" id="scrollIndicator">
+    <div class="scroll-dot active"></div>
+    <div class="scroll-dot"></div>
+    <div class="scroll-dot"></div>
+    <div class="scroll-dot"></div>
+    <div class="scroll-dot"></div>
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ======================================
+     THE DEAL
+     ====================================== -->
+<section class="the-deal">
+  <div class="section-label">The Deal</div>
+  <h2 class="section-title">Everything you<br>need. Nothing<br>you don't.</h2>
+
+  <div class="deal-cards">
+    <div class="deal-card animate-in">
+      <div class="deal-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <div>
+        <div class="deal-card-title">You Set the Price</div>
+        <div class="deal-card-desc">Charge whatever you want. We give you wholesale costs. The spread is yours to keep.</div>
+      </div>
+    </div>
+
+    <div class="deal-card animate-in">
+      <div class="deal-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-4"/></svg>
+      </div>
+      <div>
+        <div class="deal-card-title">We Handle Fulfillment</div>
+        <div class="deal-card-desc">Printing, packaging, shipping, and quality control. All handled by our 15-year-old production facility.</div>
+      </div>
+    </div>
+
+    <div class="deal-card animate-in">
+      <div class="deal-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div>
+        <div class="deal-card-title">We Handle Support</div>
+        <div class="deal-card-desc">Customer questions, reprints, and returns. Your users email us, not you. Zero support burden.</div>
+      </div>
+    </div>
+
+    <div class="deal-card animate-in">
+      <div class="deal-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <div>
+        <div class="deal-card-title">Ship Fast, Ship Global</div>
+        <div class="deal-card-desc">3&ndash;5 day US delivery. International shipping to 50+ countries. Real tracking on every order.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ======================================
+     USE CASES
+     ====================================== -->
+<section class="use-cases">
+  <div class="section-header">
+    <div class="section-label">Use Cases</div>
+    <h2 class="section-title">Built for apps<br>with <span class="cyan-text">photos.</span></h2>
+  </div>
+
+  <div class="use-cases-scroll">
+    <div class="use-case-card animate-in">
+      <div class="use-case-emoji">&#128247;</div>
+      <div class="use-case-title">Photo Editors</div>
+      <div class="use-case-desc">Let users print their masterpieces. Filters become physical art they can hang on a wall.</div>
+      <div class="use-case-earning">~$2,400/mo at 200 orders</div>
+    </div>
+
+    <div class="use-case-card animate-in">
+      <div class="use-case-emoji">&#128062;</div>
+      <div class="use-case-title">Pet Apps</div>
+      <div class="use-case-desc">Pet parents will print everything. Metal prints of dogs? Guaranteed repeat purchases.</div>
+      <div class="use-case-earning">~$4,500/mo at 300 orders</div>
+    </div>
+
+    <div class="use-case-card animate-in">
+      <div class="use-case-emoji">&#127751;</div>
+      <div class="use-case-title">Travel Apps</div>
+      <div class="use-case-desc">Turn travel memories into gallery-quality prints. Souvenirs that actually make it to the wall.</div>
+      <div class="use-case-earning">~$7,500/mo at 500 orders</div>
+    </div>
+
+    <div class="use-case-card animate-in">
+      <div class="use-case-emoji">&#127912;</div>
+      <div class="use-case-title">AI Art Generators</div>
+      <div class="use-case-desc">AI-generated art printed on metal and acrylic. The perfect upsell for creative tools.</div>
+      <div class="use-case-earning">~$15,000/mo at 1K orders</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ======================================
+     FAQ
+     ====================================== -->
+<section class="faq">
+  <div class="section-label">FAQ</div>
+  <h2 class="section-title">Got questions?</h2>
+
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span>How long does integration take?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">Most developers have the SDK integrated and their first test order placed within 2 hours. We provide full documentation, sample projects, and direct Slack support during integration.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span>What platforms do you support?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">Native SDKs for iOS (Swift) and Android (Kotlin), plus a React Native wrapper. Flutter SDK is in beta. REST API available for custom integrations.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span>How do I get paid?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">Monthly payouts via ACH, wire transfer, or PayPal. You'll get a detailed revenue report showing every order, your price, our cost, and your margin. Net-30 terms.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span>What's the print quality like?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">We've been printing for 15 years. Museum-grade materials, archival inks, and professional color calibration. Every product is inspected before shipping. Your reputation is our reputation.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span>Can I customize the checkout UI?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">Yes. Full white-label support. Match your brand colors, fonts, and layout. The SDK exposes theme configuration, or you can build completely custom UI using our headless API.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span>Is there a minimum order volume?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">No minimums, no commitments. Whether your app sends 1 order or 10,000 orders a month, the deal is the same. Start small and scale when you're ready.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span>Where do you ship?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">US orders ship in 3&ndash;5 business days. International shipping to 50+ countries with 7&ndash;14 day delivery. Real-time tracking provided for every shipment. Duties included for most destinations.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ======================================
+     APP IDEAS
+     ====================================== -->
+<section class="ideas">
+  <div class="section-label">Inspiration</div>
+  <h2 class="section-title">App ideas that<br><span class="glow-text">print money.</span></h2>
+  <p class="section-subtitle">Already building one of these? You're sitting on a print revenue goldmine.</p>
+
+  <div class="ideas-grid">
+    <div class="idea-card animate-in">
+      <div class="idea-icon">&#128248;</div>
+      <div class="idea-title">Photo a Day Challenge</div>
+      <div class="idea-desc">Daily photo prompts + monthly print collections</div>
+    </div>
+
+    <div class="idea-card animate-in">
+      <div class="idea-icon">&#129302;</div>
+      <div class="idea-title">AI Portrait Studio</div>
+      <div class="idea-desc">AI-enhanced portraits printed on metal</div>
+    </div>
+
+    <div class="idea-card animate-in">
+      <div class="idea-icon">&#128054;</div>
+      <div class="idea-title">Pet Photo Social</div>
+      <div class="idea-desc">Share pet pics, order prints with one tap</div>
+    </div>
+
+    <div class="idea-card animate-in">
+      <div class="idea-icon">&#127968;</div>
+      <div class="idea-title">Interior Design AR</div>
+      <div class="idea-desc">Preview wall art in AR, buy instantly</div>
+    </div>
+
+    <div class="idea-card animate-in">
+      <div class="idea-icon">&#128214;</div>
+      <div class="idea-title">Family Memory Book</div>
+      <div class="idea-desc">Collaborative albums auto-printed quarterly</div>
+    </div>
+
+    <div class="idea-card animate-in">
+      <div class="idea-icon">&#127796;</div>
+      <div class="idea-title">Travel Journal</div>
+      <div class="idea-desc">Geo-tagged photos become trip print sets</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ======================================
+     FINAL CTA
+     ====================================== -->
+<section class="final-cta">
+  <div class="section-label" style="justify-content: center;">Ready?</div>
+  <h2 class="final-cta-title">Turn photos into<br><span class="glow-text">revenue.</span></h2>
+  <p class="final-cta-sub">Free to integrate. No minimums.<br>Start earning on your first order.</p>
+  <a href="#" class="btn-primary">Start Earning Today</a>
+</section>
+
+<!-- ======================================
+     STICKY BOTTOM BAR
+     ====================================== -->
+<div class="sticky-bottom" id="stickyBottom">
+  <div class="sticky-bottom-text">
+    <span class="sticky-bottom-label">Earn up to</span>
+    <span class="sticky-bottom-amount">$15,000<span style="font-size:12px;color:var(--gray-500);font-weight:500">/mo</span></span>
+  </div>
+  <a href="#" class="btn-primary">Start Earning
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+  </a>
+</div>
+
+<!-- ======================================
+     JAVASCRIPT
+     ====================================== -->
+<script>
+(function() {
+  'use strict';
+
+  // ---- Sticky bottom bar visibility ----
+  const stickyBottom = document.getElementById('stickyBottom');
+  let lastScrollY = 0;
+  let heroBottom = 0;
+
+  function updateStickyBar() {
+    const scrollY = window.scrollY || window.pageYOffset;
+    if (scrollY > heroBottom * 0.6) {
+      stickyBottom.classList.add('visible');
+    } else {
+      stickyBottom.classList.remove('visible');
+    }
+    lastScrollY = scrollY;
+  }
+
+  function measureHero() {
+    const hero = document.querySelector('.hero');
+    if (hero) heroBottom = hero.offsetTop + hero.offsetHeight;
+  }
+
+  window.addEventListener('scroll', updateStickyBar, { passive: true });
+  window.addEventListener('resize', measureHero, { passive: true });
+  measureHero();
+  updateStickyBar();
+
+  // ---- Animate In on Scroll (Intersection Observer) ----
+  const animateElements = document.querySelectorAll('.animate-in');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    animateElements.forEach(function(el) {
+      observer.observe(el);
+    });
+  } else {
+    animateElements.forEach(function(el) {
+      el.classList.add('visible');
+    });
+  }
+
+  // ---- Counter Animation ----
+  function animateCounters() {
+    const counters = document.querySelectorAll('[data-target]');
+    counters.forEach(function(counter) {
+      if (counter.dataset.animated) return;
+
+      const rect = counter.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        counter.dataset.animated = 'true';
+        const target = parseInt(counter.dataset.target, 10);
+        const duration = 1200;
+        const start = performance.now();
+
+        function easeOutCubic(t) {
+          return 1 - Math.pow(1 - t, 3);
+        }
+
+        function updateCounter(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const easedProgress = easeOutCubic(progress);
+          const current = Math.round(easedProgress * target);
+          counter.textContent = current.toLocaleString('en-US');
+          if (progress < 1) {
+            requestAnimationFrame(updateCounter);
+          }
+        }
+
+        requestAnimationFrame(updateCounter);
+      }
+    });
+  }
+
+  window.addEventListener('scroll', animateCounters, { passive: true });
+  animateCounters();
+
+  // ---- Product Scroll Indicator ----
+  const productsScroll = document.getElementById('productsScroll');
+  const scrollDots = document.querySelectorAll('#scrollIndicator .scroll-dot');
+
+  if (productsScroll && scrollDots.length) {
+    productsScroll.addEventListener('scroll', function() {
+      const scrollLeft = productsScroll.scrollLeft;
+      const cardWidth = 260 + 14; // card width + gap
+      const activeIndex = Math.round(scrollLeft / cardWidth);
+      scrollDots.forEach(function(dot, i) {
+        dot.classList.toggle('active', i === activeIndex);
+      });
+    }, { passive: true });
+  }
+
+  // ---- FAQ Accordion ----
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(function(item) {
+    const question = item.querySelector('.faq-question');
+    const answer = item.querySelector('.faq-answer');
+    const inner = item.querySelector('.faq-answer-inner');
+
+    question.addEventListener('click', function() {
+      const isActive = item.classList.contains('active');
+
+      // Close all
+      faqItems.forEach(function(other) {
+        other.classList.remove('active');
+        other.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+        other.querySelector('.faq-answer').style.maxHeight = '0';
+      });
+
+      // Open clicked (if it was closed)
+      if (!isActive) {
+        item.classList.add('active');
+        question.setAttribute('aria-expanded', 'true');
+        answer.style.maxHeight = inner.scrollHeight + 20 + 'px';
+      }
+    });
+  });
+
+  // ---- Smooth scroll for anchor links ----
+  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // ---- Prevent pull-to-refresh on overscroll (mobile) ----
+  document.body.style.overscrollBehavior = 'none';
+
+})();
+</script>
+
+</body>
+</html>

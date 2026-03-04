@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PrintKit Earn — Earnings Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0d1117;
+  --bg-card: #161b22;
+  --bg-card-hover: #1c2129;
+  --bg-elevated: #1c2333;
+  --border: #30363d;
+  --border-light: #21262d;
+  --text-primary: #e6edf3;
+  --text-secondary: #8b949e;
+  --text-tertiary: #6e7681;
+  --green: #22c55e;
+  --green-dim: rgba(34, 197, 94, 0.15);
+  --green-glow: rgba(34, 197, 94, 0.3);
+  --blue: #58a6ff;
+  --blue-dim: rgba(88, 166, 255, 0.12);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167, 139, 250, 0.12);
+  --yellow: #f59e0b;
+  --red: #f87171;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  padding-bottom: calc(80px + var(--safe-bottom));
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+/* Subtle grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(48, 54, 61, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(48, 54, 61, 0.2) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 400px;
+  background: radial-gradient(ellipse 100% 60% at 50% -10%, rgba(34, 197, 94, 0.07), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page { position: relative; z-index: 1; }
+
+/* ========================================
+   MOBILE NAV - App-like top bar
+   ======================================== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(13, 17, 23, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 16px;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+.nav-brand {
+  display: flex; align-items: center; gap: 8px;
+  text-decoration: none;
+}
+.nav-icon {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 11px; font-weight: 800;
+  color: var(--bg);
+}
+.nav-title {
+  font-family: var(--mono); font-weight: 700; font-size: 16px;
+  color: var(--text-primary);
+}
+
+.nav-right {
+  display: flex; align-items: center; gap: 10px;
+}
+
+.nav-earning {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  padding: 5px 10px; border-radius: 8px;
+}
+.nav-earning-label {
+  font-size: 10px; color: var(--text-tertiary); font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.nav-earning-val {
+  font-family: var(--mono); font-size: 14px; font-weight: 700;
+  color: var(--green);
+}
+
+.live-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--green-dim); color: var(--green);
+  font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+  padding: 3px 7px; border-radius: 4px; text-transform: uppercase;
+  font-family: var(--mono);
+}
+.live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--green-glow); }
+  50% { opacity: 0.5; box-shadow: 0 0 0 6px transparent; }
+}
+
+/* ========================================
+   HERO
+   ======================================== */
+.hero {
+  padding: 76px 20px 32px;
+  text-align: center;
+}
+
+.hero-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  padding: 6px 14px; border-radius: 99px;
+  font-size: 12px; color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-size: 32px; font-weight: 900;
+  line-height: 1.1; letter-spacing: -0.03em;
+  margin-bottom: 14px;
+}
+.hero h1 .green { color: var(--green); }
+
+.hero-sub {
+  font-size: 16px; color: var(--text-secondary);
+  line-height: 1.6; margin-bottom: 24px;
+  max-width: 340px; margin-left: auto; margin-right: auto;
+}
+
+.hero-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--green); color: var(--bg);
+  border: none; border-radius: 12px;
+  padding: 16px 32px; width: 100%;
+  font-size: 16px; font-weight: 700;
+  font-family: var(--sans);
+  cursor: pointer; text-decoration: none;
+  min-height: 52px;
+  transition: background 0.15s;
+}
+.hero-btn:active { background: #16a34a; }
+
+/* ========================================
+   LIVE STATS TICKER - 2x2 grid
+   ======================================== */
+.ticker {
+  padding: 0 16px 32px;
+}
+.ticker-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.tick {
+  background: var(--bg-card);
+  padding: 16px 14px;
+  text-align: center;
+}
+.tick-label {
+  font-size: 10px; color: var(--text-tertiary);
+  font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.06em; margin-bottom: 6px;
+}
+.tick-value {
+  font-family: var(--mono); font-size: 24px;
+  font-weight: 800; color: var(--text-primary);
+}
+.tick-value.green { color: var(--green); }
+.tick-change {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--green); font-weight: 600;
+  margin-top: 4px;
+}
+
+/* ========================================
+   SECTION SHARED
+   ======================================== */
+.section { padding: 40px 16px; }
+
+.section-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  color: var(--green); text-transform: uppercase; letter-spacing: 0.1em;
+  background: var(--green-dim); padding: 4px 10px; border-radius: 4px;
+  margin-bottom: 12px;
+}
+.section-badge .dot {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--green);
+}
+
+.section-title {
+  font-size: 24px; font-weight: 800;
+  line-height: 1.15; letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+
+.section-sub {
+  font-size: 16px; color: var(--text-secondary);
+  line-height: 1.6; margin-bottom: 24px;
+}
+
+/* ========================================
+   EARNINGS DASHBOARD
+   ======================================== */
+.earnings-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.panel-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+.panel-label {
+  font-size: 13px; font-weight: 600; color: var(--text-secondary);
+  display: flex; align-items: center; gap: 6px;
+}
+.panel-tag {
+  font-family: var(--mono); font-size: 10px;
+  background: var(--green-dim); color: var(--green);
+  padding: 2px 7px; border-radius: 3px; font-weight: 600;
+}
+
+.panel-body { padding: 16px; }
+
+/* Earnings rows */
+.earn-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.earn-row:last-child { border-bottom: none; }
+
+.earn-left { display: flex; flex-direction: column; gap: 4px; }
+.earn-vol {
+  font-family: var(--mono); font-size: 16px;
+  font-weight: 700; color: var(--text-primary);
+}
+.earn-bar-wrap {
+  width: 100px; height: 6px; border-radius: 3px;
+  background: var(--border-light); overflow: hidden;
+}
+.earn-bar {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--green), #4ade80);
+  transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+  width: 0;
+}
+
+.earn-right { text-align: right; }
+.earn-amount {
+  font-family: var(--mono); font-size: 26px;
+  font-weight: 800; color: var(--green);
+  line-height: 1.1;
+}
+.earn-period {
+  font-size: 11px; color: var(--text-tertiary); font-weight: 500;
+}
+
+/* Chart panel */
+.chart-bars {
+  display: flex; align-items: flex-end;
+  gap: 10px; height: 160px;
+  padding-top: 12px;
+}
+.chart-col {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 6px; height: 100%;
+  justify-content: flex-end;
+}
+.chart-bar-wrap {
+  flex: 1; width: 100%; display: flex;
+  align-items: flex-end; justify-content: center;
+}
+.chart-bar {
+  width: 100%; border-radius: 5px 5px 2px 2px;
+  transition: height 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+  height: 0;
+}
+.chart-bar.g { background: linear-gradient(180deg, var(--green), #15803d); }
+.chart-bar.b { background: linear-gradient(180deg, var(--blue), #1d4ed8); }
+.chart-bar.p { background: linear-gradient(180deg, var(--purple), #7c3aed); }
+.chart-label {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--text-tertiary); font-weight: 500;
+}
+.chart-value {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--text-primary); font-weight: 700;
+}
+
+/* ========================================
+   HOW IT WORKS - vertical steps
+   ======================================== */
+.step-list {
+  display: flex; flex-direction: column;
+  gap: 2px;
+}
+.step-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 16px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.step-num {
+  font-family: var(--mono); font-size: 28px;
+  font-weight: 800; color: var(--border);
+  line-height: 1; flex-shrink: 0;
+  width: 36px;
+}
+.step-content h3 {
+  font-size: 16px; font-weight: 700; margin-bottom: 4px;
+}
+.step-content p {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.5;
+}
+
+/* ========================================
+   PRODUCTS - Horizontal scroll cards
+   ======================================== */
+.products-scroll-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  padding: 0 16px 16px;
+  margin: 0 -16px;
+  scrollbar-width: none;
+}
+.products-scroll-wrap::-webkit-scrollbar { display: none; }
+
+.products-scroll {
+  display: flex;
+  gap: 12px;
+  padding: 0 16px;
+}
+
+.product-card {
+  flex: 0 0 260px;
+  scroll-snap-align: start;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.product-card:active { border-color: var(--green); }
+
+.product-img {
+  width: 100%; height: 180px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--border-light);
+  background: var(--bg-elevated);
+}
+
+.product-info {
+  padding: 14px;
+}
+.product-name-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.product-name {
+  font-size: 16px; font-weight: 700;
+}
+.product-status {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; color: var(--green); font-weight: 600;
+  font-family: var(--mono);
+}
+.product-status .sdot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+.product-spec {
+  font-size: 12px; color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+
+.product-pricing {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px; margin-bottom: 12px;
+}
+.pp-col { text-align: center; }
+.pp-label {
+  font-size: 9px; color: var(--text-tertiary);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  font-weight: 600; margin-bottom: 2px;
+}
+.pp-val {
+  font-family: var(--mono); font-size: 16px; font-weight: 700;
+  color: var(--text-primary);
+}
+.pp-val.cost { color: var(--text-tertiary); }
+.pp-val.margin { color: var(--green); }
+
+.product-margin-bar {
+  height: 4px; border-radius: 2px;
+  background: var(--border-light); overflow: hidden;
+}
+.product-margin-fill {
+  height: 100%; border-radius: 2px;
+  background: linear-gradient(90deg, var(--green), #4ade80);
+}
+
+/* ========================================
+   THE DEAL
+   ======================================== */
+.deal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+}
+.deal-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+}
+
+.deal-metrics {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--border);
+}
+.deal-metric {
+  background: var(--bg-card);
+  padding: 20px 16px;
+  text-align: center;
+}
+.dm-val {
+  font-family: var(--mono); font-size: 28px;
+  font-weight: 800; color: var(--green);
+  line-height: 1.1;
+}
+.dm-label {
+  font-size: 12px; color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.deal-terms {
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.deal-item {
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.deal-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.deal-icon.gbg { background: var(--green-dim); }
+.deal-icon.bbg { background: var(--blue-dim); }
+.deal-icon.pbg { background: var(--purple-dim); }
+.deal-item h4 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+.deal-item p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+
+/* ========================================
+   USE CASES
+   ======================================== */
+.uc-list {
+  display: flex; flex-direction: column;
+  gap: 10px;
+}
+.uc-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 16px;
+  display: flex; gap: 14px; align-items: flex-start;
+  transition: border-color 0.2s;
+}
+.uc-card:active { border-color: var(--green); }
+
+.uc-icon {
+  font-size: 24px;
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg); border: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+.uc-text h4 { font-size: 16px; font-weight: 700; margin-bottom: 3px; }
+.uc-text p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+
+/* ========================================
+   IDEAS - numbered list cards
+   ======================================== */
+.idea-list {
+  display: flex; flex-direction: column;
+  gap: 8px;
+}
+.idea-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.idea-num {
+  font-family: var(--mono); font-size: 11px;
+  font-weight: 700; color: var(--text-tertiary);
+  background: var(--bg); border: 1px solid var(--border-light);
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.idea-content h4 { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+.idea-content p { font-size: 13px; color: var(--text-tertiary); line-height: 1.5; }
+
+/* ========================================
+   FAQ - Accordion
+   ======================================== */
+.faq-list {
+  display: flex; flex-direction: column;
+  gap: 8px;
+}
+.faq-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.faq-q {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px;
+  cursor: pointer;
+  gap: 12px;
+  min-height: 52px;
+  -webkit-tap-highlight-color: transparent;
+}
+.faq-q h4 {
+  font-size: 16px; font-weight: 600; line-height: 1.3;
+}
+.faq-toggle {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: var(--bg); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--text-tertiary);
+  flex-shrink: 0; transition: all 0.2s;
+}
+.faq-item.open .faq-toggle {
+  transform: rotate(45deg);
+  color: var(--green); border-color: var(--green);
+}
+.faq-a {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.7;
+  max-height: 0; overflow: hidden;
+  padding: 0 16px;
+  transition: all 0.3s ease;
+}
+.faq-item.open .faq-a {
+  max-height: 250px;
+  padding: 0 16px 16px;
+}
+
+/* ========================================
+   CTA SECTION (above sticky)
+   ======================================== */
+.cta-section {
+  padding: 40px 16px 48px;
+}
+.cta-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-card::before {
+  content: '';
+  position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(34,197,94,0.1), transparent 70%);
+  pointer-events: none;
+}
+
+.cta-card h2 {
+  font-size: 26px; font-weight: 800;
+  letter-spacing: -0.02em; margin-bottom: 10px;
+  position: relative;
+}
+.cta-card .cta-desc {
+  font-size: 16px; color: var(--text-secondary);
+  margin-bottom: 24px; position: relative;
+  line-height: 1.6;
+}
+
+.cta-stats {
+  display: flex; justify-content: center; gap: 24px;
+  margin-top: 24px; position: relative;
+}
+.cta-stat { text-align: center; }
+.cta-stat .val {
+  font-family: var(--mono); font-size: 18px;
+  font-weight: 800; color: var(--text-primary);
+}
+.cta-stat .lbl {
+  font-size: 10px; color: var(--text-tertiary);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+
+.cta-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--green); color: var(--bg);
+  border: none; border-radius: 12px;
+  padding: 16px; width: 100%;
+  font-size: 17px; font-weight: 700;
+  font-family: var(--sans);
+  cursor: pointer; text-decoration: none;
+  min-height: 52px;
+  position: relative;
+  transition: background 0.15s;
+}
+.cta-btn:active { background: #16a34a; }
+
+/* ========================================
+   STICKY BOTTOM CTA
+   ======================================== */
+.sticky-cta {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 99;
+  background: rgba(13, 17, 23, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border-light);
+  padding: 12px 16px calc(12px + var(--safe-bottom));
+  max-width: 430px;
+  margin: 0 auto;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+.sticky-cta.visible { transform: translateY(0); }
+
+.sticky-inner {
+  display: flex; align-items: center; gap: 12px;
+}
+.sticky-info {
+  flex: 1; display: flex; flex-direction: column;
+}
+.sticky-label {
+  font-size: 11px; color: var(--text-tertiary); font-weight: 500;
+}
+.sticky-val {
+  font-family: var(--mono); font-size: 18px;
+  font-weight: 800; color: var(--green);
+}
+
+.sticky-btn {
+  background: var(--green); color: var(--bg);
+  border: none; border-radius: 10px;
+  padding: 14px 24px;
+  font-size: 16px; font-weight: 700;
+  font-family: var(--sans);
+  cursor: pointer; text-decoration: none;
+  white-space: nowrap;
+  min-height: 48px;
+  display: flex; align-items: center; gap: 6px;
+  transition: background 0.15s;
+}
+.sticky-btn:active { background: #16a34a; }
+
+/* ========================================
+   FOOTER
+   ======================================== */
+.footer {
+  border-top: 1px solid var(--border-light);
+  padding: 24px 16px 32px;
+  text-align: center;
+}
+.footer p {
+  font-size: 13px; color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+.footer-links {
+  display: flex; justify-content: center; gap: 20px;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  font-size: 13px; color: var(--text-tertiary);
+  text-decoration: none;
+}
+.footer-links a:active { color: var(--text-secondary); }
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+.fade-up {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.fade-up.vis { opacity: 1; transform: translateY(0); }
+
+/* Counting animation support */
+@keyframes countFlash {
+  0% { color: var(--green); }
+  100% { color: var(--text-primary); }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ================ NAV ================ -->
+<nav class="nav">
+  <a href="#" class="nav-brand">
+    <span class="nav-icon">PK</span>
+    <span class="nav-title">PrintKit</span>
+  </a>
+  <div class="nav-right">
+    <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+    <div class="nav-earning">
+      <span class="nav-earning-val" id="navEarn">$0</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ================ HERO ================ -->
+<section class="hero">
+  <div class="hero-chip">
+    <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+    <span>47 partners earning this week</span>
+  </div>
+
+  <h1>Earn on every<br>print your<br><span class="green">app sends.</span></h1>
+
+  <p class="hero-sub">Integrate once with the PrintKit API. Every order your app generates, you keep the margin. No inventory. No fulfillment.</p>
+
+  <a href="#cta" class="hero-btn">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+    Start Earning
+  </a>
+</section>
+
+<!-- ================ STATS TICKER ================ -->
+<section class="ticker">
+  <div class="ticker-grid">
+    <div class="tick">
+      <div class="tick-label">Avg Revenue</div>
+      <div class="tick-value green" data-count="4820" data-prefix="$" data-separator=",">$0</div>
+      <div class="tick-change">+12.4% this mo</div>
+    </div>
+    <div class="tick">
+      <div class="tick-label">Orders (30d)</div>
+      <div class="tick-value" data-count="12847" data-separator=",">0</div>
+      <div class="tick-change">+8.2% vs last</div>
+    </div>
+    <div class="tick">
+      <div class="tick-label">Avg Margin</div>
+      <div class="tick-value green" data-count="18" data-prefix="$" data-decimal="50">$0</div>
+      <div class="tick-change">+$2.10 this qtr</div>
+    </div>
+    <div class="tick">
+      <div class="tick-label">Active Partners</div>
+      <div class="tick-value" data-count="247">0</div>
+      <div class="tick-change">+23 new this mo</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================ EARNINGS DASHBOARD ================ -->
+<section class="section" id="earnings">
+  <span class="section-badge"><span class="dot"></span> Earnings Calculator</span>
+  <h2 class="section-title">Your revenue, modeled.</h2>
+  <p class="section-sub">What your monthly earnings look like at different order volumes. You set the price. You keep the margin.</p>
+
+  <!-- Revenue Panel -->
+  <div class="earnings-panel fade-up">
+    <div class="panel-head">
+      <span class="panel-label">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+        Revenue by Volume
+      </span>
+      <span class="panel-tag">USD/mo</span>
+    </div>
+    <div class="panel-body">
+      <div class="earn-row">
+        <div class="earn-left">
+          <div class="earn-vol">10 orders</div>
+          <div class="earn-bar-wrap"><div class="earn-bar" data-w="10"></div></div>
+        </div>
+        <div class="earn-right">
+          <div class="earn-amount">$150</div>
+          <div class="earn-period">/month</div>
+        </div>
+      </div>
+      <div class="earn-row">
+        <div class="earn-left">
+          <div class="earn-vol">100 orders</div>
+          <div class="earn-bar-wrap"><div class="earn-bar" data-w="60"></div></div>
+        </div>
+        <div class="earn-right">
+          <div class="earn-amount">$1,500</div>
+          <div class="earn-period">/month</div>
+        </div>
+      </div>
+      <div class="earn-row">
+        <div class="earn-left">
+          <div class="earn-vol">1,000 orders</div>
+          <div class="earn-bar-wrap"><div class="earn-bar" data-w="100"></div></div>
+        </div>
+        <div class="earn-right">
+          <div class="earn-amount">$15,000</div>
+          <div class="earn-period">/month</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart Panel -->
+  <div class="earnings-panel fade-up">
+    <div class="panel-head">
+      <span class="panel-label">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 14V8M6 14V4M10 14V6M14 14V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Monthly Projection
+      </span>
+      <span class="panel-tag">12 MONTHS</span>
+    </div>
+    <div class="panel-body">
+      <div class="chart-bars" id="chartBars">
+        <div class="chart-col">
+          <div class="chart-value">$150</div>
+          <div class="chart-bar-wrap"><div class="chart-bar g" data-h="8"></div></div>
+          <div class="chart-label">M1</div>
+        </div>
+        <div class="chart-col">
+          <div class="chart-value">$450</div>
+          <div class="chart-bar-wrap"><div class="chart-bar g" data-h="20"></div></div>
+          <div class="chart-label">M3</div>
+        </div>
+        <div class="chart-col">
+          <div class="chart-value">$1.5K</div>
+          <div class="chart-bar-wrap"><div class="chart-bar b" data-h="45"></div></div>
+          <div class="chart-label">M6</div>
+        </div>
+        <div class="chart-col">
+          <div class="chart-value">$5K</div>
+          <div class="chart-bar-wrap"><div class="chart-bar b" data-h="70"></div></div>
+          <div class="chart-label">M9</div>
+        </div>
+        <div class="chart-col">
+          <div class="chart-value">$15K</div>
+          <div class="chart-bar-wrap"><div class="chart-bar p" data-h="100"></div></div>
+          <div class="chart-label">M12</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================ HOW IT WORKS ================ -->
+<section class="section">
+  <span class="section-badge"><span class="dot"></span> How It Works</span>
+  <h2 class="section-title">Four steps to revenue.</h2>
+  <p class="section-sub">From signup to first payout in under a week.</p>
+
+  <div class="step-list">
+    <div class="step-card fade-up">
+      <div class="step-num">01</div>
+      <div class="step-content">
+        <h3>Get Your API Key</h3>
+        <p>Sign up and receive your unique PrintKit API key and sandbox credentials in minutes.</p>
+      </div>
+    </div>
+    <div class="step-card fade-up">
+      <div class="step-num">02</div>
+      <div class="step-content">
+        <h3>Set Your Prices</h3>
+        <p>Choose products. Set your retail prices above our wholesale cost. The difference is your profit.</p>
+      </div>
+    </div>
+    <div class="step-card fade-up">
+      <div class="step-num">03</div>
+      <div class="step-content">
+        <h3>Integrate &amp; Ship</h3>
+        <p>Use our SDK or REST API to submit orders. We print, pack, and ship directly to your customers.</p>
+      </div>
+    </div>
+    <div class="step-card fade-up">
+      <div class="step-num">04</div>
+      <div class="step-content">
+        <h3>Earn on Every Sale</h3>
+        <p>You collect payment from your users. Pay us wholesale. Keep the margin, every single order.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================ PRODUCTS - Horizontal Scroll ================ -->
+<section class="section">
+  <span class="section-badge"><span class="dot"></span> Product Catalog</span>
+  <h2 class="section-title">Premium products, your margins.</h2>
+  <p class="section-sub">Swipe to browse. Every product ships white-label under your brand.</p>
+
+  <div class="products-scroll-wrap">
+    <div class="products-scroll">
+
+      <!-- Metal Print -->
+      <div class="product-card fade-up">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0978/2707/files/metal-print-product.jpg?v=1745498529" alt="Metal Print" loading="lazy">
+        <div class="product-info">
+          <div class="product-name-row">
+            <span class="product-name">Metal Print</span>
+            <span class="product-status"><span class="sdot"></span> Active</span>
+          </div>
+          <div class="product-spec">HD aluminum, 8x10" starting</div>
+          <div class="product-pricing">
+            <div class="pp-col">
+              <div class="pp-label">Retail</div>
+              <div class="pp-val">$29</div>
+            </div>
+            <div class="pp-col">
+              <div class="pp-label">Your Cost</div>
+              <div class="pp-val cost">$9</div>
+            </div>
+            <div class="pp-col">
+              <div class="pp-label">Margin</div>
+              <div class="pp-val margin">$20</div>
+            </div>
+          </div>
+          <div class="product-margin-bar"><div class="product-margin-fill" style="width:69%"></div></div>
+        </div>
+      </div>
+
+      <!-- Wood Print -->
+      <div class="product-card fade-up">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0978/2707/files/wood-print-product.jpg?v=1745498529" alt="Wood Print" loading="lazy">
+        <div class="product-info">
+          <div class="product-name-row">
+            <span class="product-name">Wood Print</span>
+            <span class="product-status"><span class="sdot"></span> Active</span>
+          </div>
+          <div class="product-spec">Natural birch, 11x14" starting</div>
+          <div class="product-pricing">
+            <div class="pp-col">
+              <div class="pp-label">Retail</div>
+              <div class="pp-val">$72</div>
+            </div>
+            <div class="pp-col">
+              <div class="pp-label">Your Cost</div>
+              <div class="pp-val cost">$22</div>
+            </div>
+            <div class="pp-col">
+              <div class="pp-label">Margin</div>
+              <div class="pp-val margin">$50</div>
+            </div>
+          </div>
+          <div class="product-margin-bar"><div class="product-margin-fill" style="width:69%"></div></div>
+        </div>
+      </div>
+
+      <!-- Framed Print -->
+      <div class="product-card fade-up">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0978/2707/files/framed-print-product.jpg?v=1745498529" alt="Framed Print" loading="lazy">
+        <div class="product-info">
+          <div class="product-name-row">
+            <span class="product-name">Framed Print</span>
+            <span class="product-status"><span class="sdot"></span> Active</span>
+          </div>
+          <div class="product-spec">Museum-quality, 16x20" starting</div>
+          <div class="product-pricing">
+            <div class="pp-col">
+              <div class="pp-label">Retail</div>
+              <div class="pp-val">$134</div>
+            </div>
+            <div class="pp-col">
+              <div class="pp-label">Your Cost</div>
+              <div class="pp-val cost">$34</div>
+            </div>
+            <div class="pp-col">
+              <div class="pp-label">Margin</div>
+              <div class="pp-val margin">$100</div>
+            </div>
+          </div>
+          <div class="product-margin-bar"><div class="product-margin-fill" style="width:75%"></div></div>
+        </div>
+      </div>
+
+      <!-- Large Format -->
+      <div class="product-card fade-up">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0978/2707/files/large-format-print-product.jpg?v=1745498529" alt="Large Format Print" loading="lazy">
+        <div class="product-info">
+          <div class="product-name-row">
+            <span class="product-name">Large Format</span>
+            <span class="product-status"><span class="sdot"></span> Active</span>
+          </div>
+          <div class="product-spec">Poster-size, 24x36" starting</div>
+          <div class="product-pricing">
+            <div class="pp-col">
+              <div class="pp-label">Retail</div>
+              <div class="pp-val">$36</div>
+            </div>
+            <div class="pp-col">
+              <div class="pp-label">Your Cost</div>
+              <div class="pp-val cost">$12</div>
+            </div>
+            <div class="pp-col">
+              <div class="pp-label">Margin</div>
+              <div class="pp-val margin">$24</div>
+            </div>
+          </div>
+          <div class="product-margin-bar"><div class="product-margin-fill" style="width:67%"></div></div>
+        </div>
+      </div>
+
+      <!-- Acrylic Print -->
+      <div class="product-card fade-up">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0978/2707/files/acrylic-print-product.jpg?v=1745498529" alt="Acrylic Print" loading="lazy">
+        <div class="product-info">
+          <div class="product-name-row">
+            <span class="product-name">Acrylic Print</span>
+            <span class="product-status"><span class="sdot"></span> Active</span>
+          </div>
+          <div class="product-spec">Crystal-clear, 8x10" starting</div>
+          <div class="product-pricing">
+            <div class="pp-col">
+              <div class="pp-label">Retail</div>
+              <div class="pp-val">$48</div>
+            </div>
+            <div class="pp-col">
+              <div class="pp-label">Your Cost</div>
+              <div class="pp-val cost">$15</div>
+            </div>
+            <div class="pp-col">
+              <div class="pp-label">Margin</div>
+              <div class="pp-val margin">$33</div>
+            </div>
+          </div>
+          <div class="product-margin-bar"><div class="product-margin-fill" style="width:69%"></div></div>
+        </div>
+      </div>
+
+      <!-- Photo Magazine -->
+      <div class="product-card fade-up">
+        <img class="product-img" src="https://cdn.shopify.com/s/files/1/0978/2707/files/photo-magazine-product.jpg?v=1745498529" alt="Photo Magazine" loading="lazy">
+        <div class="product-info">
+          <div class="product-name-row">
+            <span class="product-name">Magazine</span>
+            <span class="product-status"><span class="sdot"></span> Active</span>
+          </div>
+          <div class="product-spec">Softcover, 28 pages starting</div>
+          <div class="product-pricing">
+            <div class="pp-col">
+              <div class="pp-label">Retail</div>
+              <div class="pp-val">$26</div>
+            </div>
+            <div class="pp-col">
+              <div class="pp-label">Your Cost</div>
+              <div class="pp-val cost">$8</div>
+            </div>
+            <div class="pp-col">
+              <div class="pp-label">Margin</div>
+              <div class="pp-val margin">$18</div>
+            </div>
+          </div>
+          <div class="product-margin-bar"><div class="product-margin-fill" style="width:69%"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================ THE DEAL ================ -->
+<section class="section">
+  <span class="section-badge"><span class="dot"></span> The Deal</span>
+  <h2 class="section-title">How partners profit.</h2>
+  <p class="section-sub">Transparent economics. No hidden fees. No surprises.</p>
+
+  <div class="deal-card fade-up">
+    <div class="deal-metrics">
+      <div class="deal-metric">
+        <div class="dm-val">$0</div>
+        <div class="dm-label">Startup Cost</div>
+      </div>
+      <div class="deal-metric">
+        <div class="dm-val">68%</div>
+        <div class="dm-label">Avg Margin</div>
+      </div>
+      <div class="deal-metric">
+        <div class="dm-val">100%</div>
+        <div class="dm-label">White-Label</div>
+      </div>
+      <div class="deal-metric">
+        <div class="dm-val">Net-14</div>
+        <div class="dm-label">Payout Terms</div>
+      </div>
+    </div>
+    <div class="deal-terms">
+      <div class="deal-item">
+        <div class="deal-icon gbg">&#9733;</div>
+        <div>
+          <h4>You Set the Retail Price</h4>
+          <p>Charge whatever you want. Our wholesale price is your floor. The gap is your revenue stream.</p>
+        </div>
+      </div>
+      <div class="deal-item">
+        <div class="deal-icon bbg">&#9881;</div>
+        <div>
+          <h4>We Handle Everything</h4>
+          <p>Printing, quality control, packaging, and shipping. All under your brand. Zero logistics on your end.</p>
+        </div>
+      </div>
+      <div class="deal-item">
+        <div class="deal-icon pbg">&#128200;</div>
+        <div>
+          <h4>Scale Without Limits</h4>
+          <p>No minimums. No maximums. Same wholesale price whether you send 1 order or 10,000 per month.</p>
+        </div>
+      </div>
+      <div class="deal-item">
+        <div class="deal-icon gbg">&#128274;</div>
+        <div>
+          <h4>No Lock-In</h4>
+          <p>No contracts. No monthly fees. No commitment. Use us when it makes sense, scale when you're ready.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================ USE CASES ================ -->
+<section class="section">
+  <span class="section-badge"><span class="dot"></span> Use Cases</span>
+  <h2 class="section-title">Built for builders.</h2>
+  <p class="section-sub">Whether you run a photo app, a marketplace, or a pet platform, PrintKit adds a revenue stream.</p>
+
+  <div class="uc-list">
+    <div class="uc-card fade-up">
+      <div class="uc-icon">&#128247;</div>
+      <div class="uc-text">
+        <h4>Photo &amp; Camera Apps</h4>
+        <p>Let users print their best shots. Filters become physical art. Every edit is a revenue moment.</p>
+      </div>
+    </div>
+    <div class="uc-card fade-up">
+      <div class="uc-icon">&#127912;</div>
+      <div class="uc-text">
+        <h4>AI Art &amp; Design Tools</h4>
+        <p>Turn generated images into premium prints. AI art to gallery-quality wall decor in one tap.</p>
+      </div>
+    </div>
+    <div class="uc-card fade-up">
+      <div class="uc-icon">&#128722;</div>
+      <div class="uc-text">
+        <h4>E-commerce Platforms</h4>
+        <p>Add print-on-demand to any storefront. Custom products without warehouse headaches.</p>
+      </div>
+    </div>
+    <div class="uc-card fade-up">
+      <div class="uc-icon">&#128062;</div>
+      <div class="uc-text">
+        <h4>Pet &amp; Family Apps</h4>
+        <p>Pet portraits, family moments, milestone prints. Emotional content converts like crazy.</p>
+      </div>
+    </div>
+    <div class="uc-card fade-up">
+      <div class="uc-icon">&#127968;</div>
+      <div class="uc-text">
+        <h4>Interior &amp; Decor Apps</h4>
+        <p>AR room preview to purchase. Users visualize prints on their walls, then buy in one flow.</p>
+      </div>
+    </div>
+    <div class="uc-card fade-up">
+      <div class="uc-icon">&#127941;</div>
+      <div class="uc-text">
+        <h4>Sports &amp; Events</h4>
+        <p>Race photos, game highlights, concert shots. Time-sensitive moments drive impulse purchases.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================ IDEAS ================ -->
+<section class="section">
+  <span class="section-badge"><span class="dot"></span> Ideas to Ship</span>
+  <h2 class="section-title">Margin multipliers.</h2>
+  <p class="section-sub">Proven strategies from top-earning partners.</p>
+
+  <div class="idea-list">
+    <div class="idea-card fade-up">
+      <div class="idea-num">01</div>
+      <div class="idea-content">
+        <h4>Gift Flow at Checkout</h4>
+        <p>Add a "Send as a gift" option. Average order value jumps 40% when gifting is seamless.</p>
+      </div>
+    </div>
+    <div class="idea-card fade-up">
+      <div class="idea-num">02</div>
+      <div class="idea-content">
+        <h4>Monthly Print Club</h4>
+        <p>Recurring subscription for a curated print. Predictable revenue, zero churn management.</p>
+      </div>
+    </div>
+    <div class="idea-card fade-up">
+      <div class="idea-num">03</div>
+      <div class="idea-content">
+        <h4>Bundle Premium Formats</h4>
+        <p>Upsell metal and acrylic alongside standard. Premium formats carry the highest margins.</p>
+      </div>
+    </div>
+    <div class="idea-card fade-up">
+      <div class="idea-num">04</div>
+      <div class="idea-content">
+        <h4>Holiday &amp; Event Drops</h4>
+        <p>Seasonal campaigns around Valentine's, Mother's Day, holidays. Time-limited drives urgency.</p>
+      </div>
+    </div>
+    <div class="idea-card fade-up">
+      <div class="idea-num">05</div>
+      <div class="idea-content">
+        <h4>In-App Preview UX</h4>
+        <p>Show a realistic wall mockup before purchase. Partners with previews see 2.5x conversion.</p>
+      </div>
+    </div>
+    <div class="idea-card fade-up">
+      <div class="idea-num">06</div>
+      <div class="idea-content">
+        <h4>Creator Marketplace</h4>
+        <p>Let users sell their designs as prints. You take a cut, they handle the content. Everyone wins.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================ FAQ ================ -->
+<section class="section">
+  <span class="section-badge"><span class="dot"></span> FAQ</span>
+  <h2 class="section-title">Common questions.</h2>
+
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <h4>How much can I actually earn?</h4>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">It depends on your volume and pricing. A partner sending 100 orders per month at average margins earns roughly $1,500/mo. Our top partners sending 1,000+ orders earn $15,000 or more monthly. You control the retail price, so you control the margin.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <h4>What does integration look like?</h4>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">Our REST API and SDKs (iOS, Android, React Native, Flutter) make integration straightforward. Most partners go live within a few days. We provide sandbox testing, sample projects, and dedicated integration support.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <h4>Do customers know about PrintKit?</h4>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">Never. Everything is 100% white-label. Packaging, shipping labels, and tracking pages all use your brand. Your customers see only your name. We're invisible infrastructure behind your experience.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <h4>What about print quality?</h4>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">We use professional-grade equipment and materials. Metal prints on real aluminum with a dye-sublimation process. Framed prints with museum-quality archival paper. Every product is inspected before shipping. We stand behind the quality with a satisfaction guarantee.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <h4>How and when do I get paid?</h4>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">You collect payment directly from your users through your own payment system. You pay us the wholesale cost per order. The margin is yours immediately. No waiting for payouts, no revenue share -- you keep everything above our wholesale price.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <h4>What are the shipping times?</h4>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">Standard production is 2-4 business days. Standard shipping is 4-7 business days. We also offer expedited and priority options. Tracking numbers are provided via webhook for every order, so you can keep your customers updated in real time.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <h4>Is there a minimum order volume?</h4>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">No minimums, no maximums, and no monthly commitments. Whether you send us 1 order or 10,000 orders per month, you get the same wholesale pricing. Start small, test the waters, and scale when you're ready. The API is always on.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================ CTA ================ -->
+<section class="cta-section" id="cta">
+  <div class="cta-card fade-up">
+    <h2>Start earning on<br>every print.</h2>
+    <p class="cta-desc">Free to join. No contracts. No credit card required. Live in under a week.</p>
+
+    <a href="#" class="cta-btn">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      Start Earning Now
+    </a>
+
+    <div class="cta-stats">
+      <div class="cta-stat">
+        <div class="val">247</div>
+        <div class="lbl">Partners</div>
+      </div>
+      <div class="cta-stat">
+        <div class="val">$18.50</div>
+        <div class="lbl">Avg Margin</div>
+      </div>
+      <div class="cta-stat">
+        <div class="val">4.9/5</div>
+        <div class="lbl">Satisfaction</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================ FOOTER ================ -->
+<footer class="footer">
+  <p>&copy; 2026 PrintKit &mdash; Print infrastructure for apps.</p>
+  <div class="footer-links">
+    <a href="#">API Docs</a>
+    <a href="#">Pricing</a>
+    <a href="#">Status</a>
+    <a href="#">Terms</a>
+    <a href="#">Privacy</a>
+  </div>
+</footer>
+
+</div><!-- .page -->
+
+<!-- ================ STICKY BOTTOM CTA ================ -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="sticky-inner">
+    <div class="sticky-info">
+      <span class="sticky-label">Avg margin per order</span>
+      <span class="sticky-val">$18.50</span>
+    </div>
+    <a href="#cta" class="sticky-btn">
+      Start Earning
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ======== FAQ Toggle ========
+  window.toggleFaq = function(el) {
+    const item = el.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-item.open').forEach(function(i) {
+      i.classList.remove('open');
+    });
+    // Toggle clicked
+    if (!wasOpen) item.classList.add('open');
+  };
+
+  // ======== Intersection Observer for fade-up animations ========
+  var fadeEls = document.querySelectorAll('.fade-up');
+  if ('IntersectionObserver' in window) {
+    var fadeObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('vis');
+          fadeObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    fadeEls.forEach(function(el) { fadeObs.observe(el); });
+  } else {
+    fadeEls.forEach(function(el) { el.classList.add('vis'); });
+  }
+
+  // ======== Animate earnings bars on scroll ========
+  var earnBars = document.querySelectorAll('.earn-bar[data-w]');
+  if ('IntersectionObserver' in window) {
+    var barObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var w = entry.target.getAttribute('data-w');
+          entry.target.style.width = w + '%';
+          barObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    earnBars.forEach(function(el) { barObs.observe(el); });
+  }
+
+  // ======== Animate chart bars on scroll ========
+  var chartBars = document.querySelectorAll('.chart-bar[data-h]');
+  if ('IntersectionObserver' in window) {
+    var chartObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var h = entry.target.getAttribute('data-h');
+          entry.target.style.height = h + '%';
+          chartObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    chartBars.forEach(function(el) { chartObs.observe(el); });
+  }
+
+  // ======== Sticky CTA visibility ========
+  var stickyCta = document.getElementById('stickyCta');
+  var heroSection = document.querySelector('.hero');
+  if (stickyCta && heroSection && 'IntersectionObserver' in window) {
+    var stickyObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          stickyCta.classList.remove('visible');
+        } else {
+          stickyCta.classList.add('visible');
+        }
+      });
+    }, { threshold: 0 });
+    stickyObs.observe(heroSection);
+  }
+
+  // ======== Counting animation for ticker values ========
+  function animateCounter(el, target, prefix, separator, decimalPart) {
+    prefix = prefix || '';
+    var duration = 1800;
+    var startTime = null;
+
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      // Ease out cubic
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = Math.floor(eased * target);
+
+      var display = current.toString();
+      if (separator) {
+        display = current.toLocaleString('en-US');
+      }
+
+      if (decimalPart && progress >= 1) {
+        display = target.toLocaleString('en-US') + '.' + decimalPart;
+      } else if (decimalPart) {
+        display = current.toLocaleString('en-US') + '.' + Math.floor(eased * parseInt(decimalPart)).toString().padStart(decimalPart.length, '0');
+      }
+
+      el.textContent = prefix + display;
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  var tickerValues = document.querySelectorAll('.tick-value[data-count]');
+  if ('IntersectionObserver' in window) {
+    var counterObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var el = entry.target;
+          var target = parseInt(el.getAttribute('data-count'));
+          var prefix = el.getAttribute('data-prefix') || '';
+          var sep = el.getAttribute('data-separator') || '';
+          var dec = el.getAttribute('data-decimal') || '';
+          animateCounter(el, target, prefix, sep, dec);
+          counterObs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    tickerValues.forEach(function(el) { counterObs.observe(el); });
+  }
+
+  // ======== Nav counter - counts up on load ========
+  var navEarn = document.getElementById('navEarn');
+  if (navEarn) {
+    setTimeout(function() {
+      animateCounter(navEarn, 4820, '$', ',', '');
+    }, 600);
+  }
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PrintKit /earn — Bold Geometric Mobile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --blue: #1a2980;
+  --blue-light: #2d46b9;
+  --yellow: #ffd23f;
+  --red: #e63946;
+  --orange: #ff6b35;
+  --white: #ffffff;
+  --off-white: #f8f8f8;
+  --gray-100: #f0f0f0;
+  --gray-200: #e0e0e0;
+  --gray-400: #999;
+  --gray-600: #555;
+  --gray-800: #222;
+  --black: #111;
+  --font-display: 'Archivo Black', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--black);
+  background: var(--white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  padding-bottom: 80px; /* space for sticky CTA */
+}
+
+/* ========== MOBILE NAV ========== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: var(--white);
+  border-bottom: 3px solid var(--black);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  transition: box-shadow 0.3s;
+}
+.nav.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--black);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo-shape {
+  width: 28px; height: 28px;
+  background: var(--blue);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--yellow);
+  font-size: 0.65rem;
+  font-family: var(--font-display);
+}
+.nav-logo .slash { color: var(--red); }
+
+.nav-menu-btn {
+  width: 44px; height: 44px;
+  background: none;
+  border: 2px solid var(--black);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  position: relative;
+}
+.nav-menu-btn span {
+  display: block;
+  width: 20px; height: 2px;
+  background: var(--black);
+  transition: all 0.3s;
+}
+.nav-menu-btn.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-menu-btn.active span:nth-child(2) { opacity: 0; }
+.nav-menu-btn.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav-dropdown {
+  display: none;
+  position: fixed;
+  top: 56px; left: 0; right: 0;
+  background: var(--white);
+  border-bottom: 3px solid var(--black);
+  padding: 8px 0;
+  z-index: 999;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+.nav-dropdown.open { display: block; }
+.nav-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  text-decoration: none;
+  color: var(--black);
+  font-weight: 600;
+  font-size: 0.95rem;
+  min-height: 48px;
+  transition: background 0.2s;
+}
+.nav-dropdown a:active { background: var(--gray-100); }
+.nav-dropdown a .nav-geo {
+  width: 8px; height: 8px;
+  flex-shrink: 0;
+}
+.nav-dropdown a:nth-child(1) .nav-geo { background: var(--blue); }
+.nav-dropdown a:nth-child(2) .nav-geo { background: var(--red); border-radius: 50%; }
+.nav-dropdown a:nth-child(3) .nav-geo { background: var(--yellow); }
+.nav-dropdown a:nth-child(4) .nav-geo { background: var(--orange); transform: rotate(45deg); }
+.nav-dropdown a:nth-child(5) .nav-geo { background: var(--blue-light); border-radius: 50%; }
+.nav-dropdown a:nth-child(6) .nav-geo { background: var(--red); }
+
+/* ========== UTILITY ========== */
+.section-pad {
+  padding: 56px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.section-label {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--red);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-label::before {
+  content: '';
+  width: 20px; height: 3px;
+  background: var(--red);
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  line-height: 1.1;
+  color: var(--black);
+  margin-bottom: 12px;
+}
+.section-desc {
+  font-size: 0.95rem;
+  color: var(--gray-600);
+  line-height: 1.6;
+}
+
+/* ========== GEOMETRIC DECORATIONS ========== */
+.geo-circle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.06;
+}
+.geo-rect {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.06;
+}
+.geo-diamond {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.06;
+  transform: rotate(45deg);
+}
+
+/* ========== HERO ========== */
+.hero {
+  padding: 76px 20px 40px;
+  background: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+.hero .geo-circle {
+  width: 200px; height: 200px;
+  border: 4px solid var(--blue);
+  top: 60px; right: -60px;
+  opacity: 0.08;
+}
+.hero .geo-rect {
+  width: 120px; height: 120px;
+  background: var(--yellow);
+  bottom: 20px; left: -40px;
+  opacity: 0.08;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--yellow);
+  padding: 6px 14px;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+  color: var(--black);
+}
+.hero-badge .dot {
+  width: 7px; height: 7px;
+  background: var(--red);
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.6); opacity: 0.5; }
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: 2.1rem;
+  line-height: 1.05;
+  color: var(--black);
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.hero h1 .highlight {
+  color: var(--blue);
+  position: relative;
+  display: inline-block;
+}
+.hero h1 .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 0;
+  width: 100%; height: 5px;
+  background: var(--yellow);
+  z-index: -1;
+}
+.hero-desc {
+  font-size: 1rem;
+  color: var(--gray-600);
+  line-height: 1.65;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
+}
+.hero-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--blue);
+  color: var(--white);
+  padding: 16px 28px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  min-height: 52px;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.2s;
+}
+.hero-cta:active {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+.hero-cta svg { flex-shrink: 0; }
+.hero-outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  color: var(--black);
+  padding: 16px 28px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  border: 3px solid var(--black);
+  width: 100%;
+  min-height: 52px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.2s;
+}
+.hero-outline:active {
+  background: var(--yellow);
+  border-color: var(--yellow);
+}
+
+/* Hero stat strip */
+.hero-stats {
+  display: flex;
+  gap: 0;
+  margin-top: 28px;
+  border: 3px solid var(--black);
+  position: relative;
+  z-index: 1;
+}
+.hero-stat {
+  flex: 1;
+  padding: 14px 12px;
+  text-align: center;
+}
+.hero-stat + .hero-stat { border-left: 3px solid var(--black); }
+.hero-stat:nth-child(1) { background: var(--blue); color: var(--white); }
+.hero-stat:nth-child(2) { background: var(--yellow); color: var(--black); }
+.hero-stat:nth-child(3) { background: var(--red); color: var(--white); }
+.hero-stat-num {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.hero-stat-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+  opacity: 0.85;
+}
+
+/* ========== PROOF BAR (marquee) ========== */
+.proof-bar {
+  background: var(--black);
+  color: var(--white);
+  padding: 14px 0;
+  overflow: hidden;
+  border-top: 3px solid var(--black);
+  border-bottom: 3px solid var(--black);
+}
+.proof-track {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  animation: marquee 25s linear infinite;
+  white-space: nowrap;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.proof-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+.proof-pip {
+  width: 8px; height: 8px;
+  flex-shrink: 0;
+}
+.proof-pip.circle { border-radius: 50%; background: var(--yellow); }
+.proof-pip.square { background: var(--red); }
+.proof-pip.diamond { background: var(--blue-light); transform: rotate(45deg); }
+
+/* ========== EARNINGS ========== */
+.earnings {
+  background: var(--white);
+  position: relative;
+}
+.earnings::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--blue) 0 30px, var(--yellow) 30px 60px, var(--red) 60px 90px, transparent 90px 120px);
+}
+.earn-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+.earn-card {
+  border: 3px solid var(--black);
+  background: var(--white);
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.earn-card:active {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+.earn-card-top {
+  padding: 20px 18px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.earn-card-shape {
+  width: 56px; height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--white);
+  flex-shrink: 0;
+}
+.earn-card:nth-child(1) .earn-card-shape { background: var(--blue); }
+.earn-card:nth-child(2) .earn-card-shape { background: var(--red); border-radius: 50%; }
+.earn-card:nth-child(3) .earn-card-shape { background: var(--orange); transform: rotate(45deg); }
+.earn-card:nth-child(3) .earn-card-shape span { transform: rotate(-45deg); display: block; }
+.earn-card-info { flex: 1; }
+.earn-card-orders {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.earn-card-amount {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  color: var(--black);
+  line-height: 1;
+}
+.earn-card-period {
+  font-size: 0.8rem;
+  color: var(--gray-400);
+  font-weight: 500;
+}
+.earn-card-bottom {
+  padding: 12px 18px;
+  background: var(--gray-100);
+  border-top: 3px solid var(--black);
+  font-size: 0.82rem;
+  color: var(--gray-600);
+  font-weight: 500;
+}
+.earn-card-bottom strong { color: var(--black); }
+
+.earnings-note {
+  margin-top: 20px;
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  padding: 14px 16px;
+  background: var(--off-white);
+  border-left: 4px solid var(--yellow);
+  line-height: 1.5;
+}
+
+/* ========== HOW IT WORKS ========== */
+.how-it-works {
+  background: var(--off-white);
+  position: relative;
+}
+.how-it-works .geo-circle {
+  width: 160px; height: 160px;
+  border: 4px solid var(--blue);
+  top: -40px; right: -40px;
+}
+.hiw-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 24px;
+}
+.hiw-step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 20px 0;
+  border-bottom: 2px solid var(--gray-200);
+  position: relative;
+}
+.hiw-step:last-child { border-bottom: none; }
+.hiw-step-number {
+  width: 52px; height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--white);
+}
+.hiw-step:nth-child(1) .hiw-step-number { background: var(--blue); }
+.hiw-step:nth-child(2) .hiw-step-number { background: var(--red); border-radius: 50%; }
+.hiw-step:nth-child(3) .hiw-step-number { background: var(--orange); transform: rotate(45deg); }
+.hiw-step:nth-child(3) .hiw-step-number span { transform: rotate(-45deg); display: block; }
+.hiw-step:nth-child(4) .hiw-step-number { background: var(--yellow); color: var(--black); border-radius: 50% 50% 0 50%; }
+.hiw-step-content h3 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--black);
+  margin-bottom: 4px;
+}
+.hiw-step-content p {
+  font-size: 0.88rem;
+  color: var(--gray-600);
+  line-height: 1.5;
+}
+
+/* ========== PRODUCTS (swipeable) ========== */
+.products {
+  background: var(--white);
+  position: relative;
+}
+.products-scroll-wrap {
+  margin: 24px -20px 0;
+  padding: 0 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.products-scroll-wrap::-webkit-scrollbar { display: none; }
+
+.products-track {
+  display: flex;
+  gap: 16px;
+  padding-right: 20px;
+}
+.product-card {
+  flex: 0 0 280px;
+  border: 3px solid var(--black);
+  background: var(--white);
+  overflow: hidden;
+  scroll-snap-align: start;
+  position: relative;
+  transition: all 0.2s;
+}
+.product-card:active {
+  transform: translate(3px, 3px);
+}
+.product-accent {
+  position: absolute;
+  top: 0; right: 0;
+  width: 0; height: 0;
+  border-top: 36px solid var(--blue);
+  border-left: 36px solid transparent;
+  z-index: 2;
+}
+.product-card:nth-child(2) .product-accent { border-top-color: var(--red); }
+.product-card:nth-child(3) .product-accent { border-top-color: var(--yellow); }
+.product-card:nth-child(4) .product-accent { border-top-color: var(--orange); }
+.product-card:nth-child(5) .product-accent { border-top-color: var(--blue-light); }
+.product-card:nth-child(6) .product-accent { border-top-color: var(--red); }
+
+.product-img-wrap { overflow: hidden; }
+.product-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  border-bottom: 3px solid var(--black);
+}
+.product-body { padding: 16px; }
+.product-name {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--black);
+  margin-bottom: 10px;
+}
+.product-prices {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.product-retail {
+  font-size: 0.82rem;
+  color: var(--gray-400);
+  text-decoration: line-through;
+}
+.product-cost-wrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.product-cost-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--gray-600);
+}
+.product-cost-value {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--blue);
+}
+.product-margin {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--yellow);
+  padding: 4px 10px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--black);
+}
+.product-margin .pip {
+  width: 6px; height: 6px;
+  background: var(--red);
+}
+
+/* Scroll indicator dots */
+.scroll-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+.scroll-dot {
+  width: 8px; height: 8px;
+  background: var(--gray-200);
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+.scroll-dot.active {
+  background: var(--blue);
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* Swipe hint */
+.swipe-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* ========== THE DEAL ========== */
+.the-deal {
+  background: var(--blue);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+.the-deal::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  border: 4px solid rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+.the-deal::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: -40px;
+  width: 140px; height: 140px;
+  background: rgba(255,210,63,0.08);
+}
+.the-deal .section-label { color: var(--yellow); }
+.the-deal .section-label::before { background: var(--yellow); }
+.the-deal .section-title { color: var(--white); }
+.the-deal .section-desc { color: rgba(255,255,255,0.7); }
+
+.deal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 24px;
+  position: relative;
+  z-index: 1;
+}
+.deal-item {
+  display: flex;
+  gap: 14px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  align-items: flex-start;
+}
+.deal-item:last-child { border-bottom: none; }
+.deal-icon {
+  width: 40px; height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+.deal-item:nth-child(1) .deal-icon { background: var(--yellow); border-radius: 50%; }
+.deal-item:nth-child(2) .deal-icon { background: var(--red); }
+.deal-item:nth-child(3) .deal-icon { background: var(--orange); border-radius: 50%; }
+.deal-item:nth-child(4) .deal-icon { background: var(--yellow); transform: rotate(45deg); }
+.deal-item:nth-child(4) .deal-icon span { transform: rotate(-45deg); display: block; }
+.deal-item:nth-child(5) .deal-icon { background: var(--red); border-radius: 50%; }
+.deal-item:nth-child(6) .deal-icon { background: var(--yellow); }
+
+.deal-item h4 {
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  color: var(--white);
+  margin-bottom: 2px;
+}
+.deal-item p {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.5;
+}
+
+/* ========== USE CASES ========== */
+.use-cases {
+  background: var(--off-white);
+  position: relative;
+}
+.uc-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+.uc-card {
+  background: var(--white);
+  border: 3px solid var(--black);
+  padding: 20px 18px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.uc-card:active {
+  transform: translate(3px, 3px);
+}
+.uc-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 5px; height: 100%;
+}
+.uc-card:nth-child(1)::before { background: var(--blue); }
+.uc-card:nth-child(2)::before { background: var(--red); }
+.uc-card:nth-child(3)::before { background: var(--yellow); }
+.uc-card:nth-child(4)::before { background: var(--orange); }
+.uc-card:nth-child(5)::before { background: var(--blue-light); }
+.uc-card:nth-child(6)::before { background: var(--red); }
+
+.uc-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.uc-card-icon { font-size: 1.3rem; }
+.uc-card h3 {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--black);
+}
+.uc-card p {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  line-height: 1.5;
+  padding-left: 0;
+}
+
+/* ========== FAQ ========== */
+.faq {
+  background: var(--off-white);
+  position: relative;
+}
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 24px;
+}
+.faq-item {
+  border: 3px solid var(--black);
+  margin-bottom: -3px;
+  background: var(--white);
+  transition: all 0.3s;
+}
+.faq-item.active {
+  z-index: 2;
+  position: relative;
+  box-shadow: 4px 4px 0 var(--yellow);
+}
+.faq-question {
+  padding: 16px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  gap: 12px;
+  min-height: 52px;
+  -webkit-tap-highlight-color: transparent;
+}
+.faq-question h3 {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--black);
+  flex: 1;
+  line-height: 1.3;
+}
+.faq-toggle {
+  width: 32px; height: 32px;
+  background: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+.faq-item.active .faq-toggle {
+  background: var(--red);
+  transform: rotate(45deg);
+}
+.faq-toggle svg { stroke: var(--white); }
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.faq-answer-inner {
+  padding: 0 18px 16px;
+  font-size: 0.88rem;
+  color: var(--gray-600);
+  line-height: 1.6;
+  border-top: 2px solid var(--gray-200);
+  padding-top: 14px;
+  margin: 0 18px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ========== IDEAS ========== */
+.ideas {
+  background: var(--white);
+  position: relative;
+}
+.ideas-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 24px;
+}
+.idea-card {
+  background: var(--white);
+  border: 3px solid var(--gray-200);
+  padding: 18px 14px;
+  transition: all 0.2s;
+  position: relative;
+}
+.idea-card:active {
+  border-color: var(--black);
+  box-shadow: 4px 4px 0 var(--yellow);
+}
+.idea-num {
+  width: 32px; height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  color: var(--white);
+  margin-bottom: 10px;
+  background: var(--black);
+}
+.idea-card:nth-child(odd) .idea-num { border-radius: 50%; }
+.idea-card:nth-child(3) .idea-num { background: var(--blue); }
+.idea-card:nth-child(4) .idea-num { background: var(--red); }
+.idea-card:nth-child(5) .idea-num { background: var(--orange); }
+.idea-card:nth-child(6) .idea-num { background: var(--blue-light); }
+
+.idea-card h3 {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  color: var(--black);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+.idea-card p {
+  font-size: 0.78rem;
+  color: var(--gray-600);
+  line-height: 1.45;
+}
+
+/* ========== FINAL CTA (above sticky) ========== */
+.final-cta {
+  background: var(--black);
+  color: var(--white);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  padding: 56px 20px 80px;
+}
+.final-cta::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px; height: 280px;
+  border: 4px solid rgba(255,210,63,0.08);
+  border-radius: 50%;
+}
+.final-cta::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px; height: 180px;
+  border: 4px solid rgba(230,57,70,0.08);
+}
+.final-cta .section-label {
+  color: var(--yellow);
+  justify-content: center;
+}
+.final-cta .section-label::before { background: var(--yellow); }
+.final-cta .section-title { color: var(--white); }
+.final-cta .section-desc {
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 28px;
+}
+.btn-yellow-full {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--yellow);
+  color: var(--black);
+  padding: 16px 28px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  min-height: 52px;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.2s;
+}
+.btn-yellow-full:active {
+  background: var(--white);
+}
+.btn-ghost-full {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  color: var(--white);
+  padding: 16px 28px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  border: 3px solid rgba(255,255,255,0.2);
+  width: 100%;
+  min-height: 52px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.2s;
+}
+.btn-ghost-full:active {
+  border-color: var(--white);
+  background: rgba(255,255,255,0.05);
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  background: var(--black);
+  border-top: 3px solid rgba(255,255,255,0.08);
+  padding: 24px 20px 100px;
+  text-align: center;
+}
+.footer-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+.footer-brand .f-shape {
+  width: 22px; height: 22px;
+  background: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--yellow);
+  font-size: 0.55rem;
+  font-family: var(--font-display);
+  border-radius: 3px;
+}
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+.footer-links a {
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 500;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+.footer-links a:active { color: var(--yellow); }
+.footer-copy {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.25);
+}
+
+/* ========== STICKY BOTTOM CTA ========== */
+.sticky-cta {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: var(--white);
+  border-top: 3px solid var(--black);
+  padding: 12px 16px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+}
+.sticky-cta.visible { transform: translateY(0); }
+
+.sticky-cta-text {
+  flex: 1;
+}
+.sticky-cta-text .sticky-label {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  color: var(--black);
+  line-height: 1.1;
+}
+.sticky-cta-text .sticky-sub {
+  font-size: 0.65rem;
+  color: var(--gray-600);
+  font-weight: 500;
+}
+.sticky-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--blue);
+  color: var(--white);
+  padding: 12px 20px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  min-height: 48px;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.sticky-btn:active {
+  background: var(--black);
+}
+
+/* ========== SCROLL REVEAL ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-d1 { transition-delay: 0.08s; }
+.reveal-d2 { transition-delay: 0.16s; }
+.reveal-d3 { transition-delay: 0.24s; }
+.reveal-d4 { transition-delay: 0.32s; }
+.reveal-d5 { transition-delay: 0.4s; }
+
+/* ========== SECTION DIVIDER ========== */
+.geo-divider {
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--blue) 0 30px, var(--yellow) 30px 60px, var(--red) 60px 90px, transparent 90px 120px);
+}
+
+/* ========== BETWEEN 430-768px (larger phones / small tablets) ========== */
+@media (min-width: 431px) {
+  .hero h1 { font-size: 2.4rem; }
+  .section-title { font-size: 1.85rem; }
+  .product-card { flex: 0 0 300px; }
+  .ideas-grid { gap: 16px; }
+  .hero-stats { margin-left: 0; margin-right: 0; }
+}
+
+/* ========== PREVENT DESKTOP BREAKOUT ========== */
+@media (min-width: 769px) {
+  body { max-width: 430px; margin: 0 auto; box-shadow: 0 0 40px rgba(0,0,0,0.1); }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">
+    <div class="logo-shape">PK</div>
+    PrintKit<span class="slash">/earn</span>
+  </a>
+  <button class="nav-menu-btn" id="menuBtn" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-dropdown" id="navDropdown">
+  <a href="#earnings"><span class="nav-geo"></span>Earnings</a>
+  <a href="#how-it-works"><span class="nav-geo"></span>How It Works</a>
+  <a href="#products"><span class="nav-geo"></span>Products</a>
+  <a href="#use-cases"><span class="nav-geo"></span>Use Cases</a>
+  <a href="#faq"><span class="nav-geo"></span>FAQ</a>
+  <a href="#start"><span class="nav-geo"></span>Get API Key</a>
+</div>
+
+<!-- ========== HERO ========== -->
+<section class="hero" id="hero">
+  <div class="geo-circle"></div>
+  <div class="geo-rect"></div>
+
+  <div class="hero-badge reveal">
+    <span class="dot"></span>
+    Agent-First Print API
+  </div>
+  <h1 class="reveal reveal-d1">
+    <span class="highlight">Earn</span> on every print your app sends.
+  </h1>
+  <p class="hero-desc reveal reveal-d2">
+    Ship physical prints from any AI agent, app, or workflow. You set the price. We handle production, fulfillment, and shipping. You keep the margin.
+  </p>
+  <a href="#start" class="hero-cta reveal reveal-d3">
+    <span>Start Earning</span>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+  <a href="#earnings" class="hero-outline reveal reveal-d3">See the Math</a>
+
+  <div class="hero-stats reveal reveal-d4">
+    <div class="hero-stat">
+      <div class="hero-stat-num">69%</div>
+      <div class="hero-stat-label">Avg Margin</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">$15K</div>
+      <div class="hero-stat-label">Monthly</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">2-4d</div>
+      <div class="hero-stat-label">Ships In</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PROOF BAR ========== -->
+<div class="proof-bar">
+  <div class="proof-track" id="proofTrack">
+    <div class="proof-item"><span class="proof-pip circle"></span> No inventory required</div>
+    <div class="proof-item"><span class="proof-pip square"></span> Ships in 2-4 days</div>
+    <div class="proof-item"><span class="proof-pip diamond"></span> Premium lab quality</div>
+    <div class="proof-item"><span class="proof-pip circle"></span> One API call to print</div>
+    <div class="proof-item"><span class="proof-pip square"></span> White-label packaging</div>
+    <div class="proof-item"><span class="proof-pip diamond"></span> 69% avg margin</div>
+    <div class="proof-item"><span class="proof-pip circle"></span> JSON in, prints out</div>
+    <div class="proof-item"><span class="proof-pip square"></span> Built for AI agents</div>
+    <!-- Duplicate for seamless loop -->
+    <div class="proof-item"><span class="proof-pip circle"></span> No inventory required</div>
+    <div class="proof-item"><span class="proof-pip square"></span> Ships in 2-4 days</div>
+    <div class="proof-item"><span class="proof-pip diamond"></span> Premium lab quality</div>
+    <div class="proof-item"><span class="proof-pip circle"></span> One API call to print</div>
+    <div class="proof-item"><span class="proof-pip square"></span> White-label packaging</div>
+    <div class="proof-item"><span class="proof-pip diamond"></span> 69% avg margin</div>
+    <div class="proof-item"><span class="proof-pip circle"></span> JSON in, prints out</div>
+    <div class="proof-item"><span class="proof-pip square"></span> Built for AI agents</div>
+  </div>
+</div>
+
+<!-- ========== EARNINGS ========== -->
+<section class="earnings section-pad" id="earnings">
+  <div class="section-label reveal">Revenue Share</div>
+  <h2 class="section-title reveal reveal-d1">The Print-to-Earn Calculator</h2>
+  <p class="section-desc reveal reveal-d2">Your app sends orders. We fulfill them. You keep the difference.</p>
+
+  <div class="earn-cards">
+    <div class="earn-card reveal reveal-d1">
+      <div class="earn-card-top">
+        <div class="earn-card-shape">10/mo</div>
+        <div class="earn-card-info">
+          <div class="earn-card-orders">10 orders per month</div>
+          <div class="earn-card-amount" data-target="150">$150</div>
+          <div class="earn-card-period">per month</div>
+        </div>
+      </div>
+      <div class="earn-card-bottom">Avg. <strong>$15 profit</strong> per order</div>
+    </div>
+    <div class="earn-card reveal reveal-d2">
+      <div class="earn-card-top">
+        <div class="earn-card-shape"><span>100/mo</span></div>
+        <div class="earn-card-info">
+          <div class="earn-card-orders">100 orders per month</div>
+          <div class="earn-card-amount" data-target="1500">$1,500</div>
+          <div class="earn-card-period">per month</div>
+        </div>
+      </div>
+      <div class="earn-card-bottom">That's <strong>$18,000/year</strong> in passive revenue</div>
+    </div>
+    <div class="earn-card reveal reveal-d3">
+      <div class="earn-card-top">
+        <div class="earn-card-shape"><span>1K/mo</span></div>
+        <div class="earn-card-info">
+          <div class="earn-card-orders">1,000 orders per month</div>
+          <div class="earn-card-amount" data-target="15000">$15,000</div>
+          <div class="earn-card-period">per month</div>
+        </div>
+      </div>
+      <div class="earn-card-bottom"><strong>$180K/year</strong> — a real business line</div>
+    </div>
+  </div>
+
+  <div class="earnings-note reveal reveal-d4">
+    Based on an average order value of $45 and average cost of $15. Your actual margins depend on the products and prices you choose.
+  </div>
+</section>
+
+<!-- ========== HOW IT WORKS ========== -->
+<section class="how-it-works section-pad" id="how-it-works">
+  <div class="geo-circle"></div>
+  <div class="section-label reveal">How It Works</div>
+  <h2 class="section-title reveal reveal-d1">Four steps. Zero inventory.</h2>
+  <p class="section-desc reveal reveal-d2">From API call to doorstep in under a week.</p>
+
+  <div class="hiw-steps">
+    <div class="hiw-step reveal reveal-d1">
+      <div class="hiw-step-number">1</div>
+      <div class="hiw-step-content">
+        <h3>Get Your API Key</h3>
+        <p>Sign up, grab your key, and connect PrintKit to your app in minutes.</p>
+      </div>
+    </div>
+    <div class="hiw-step reveal reveal-d2">
+      <div class="hiw-step-number">2</div>
+      <div class="hiw-step-content">
+        <h3>Set Your Prices</h3>
+        <p>We give you wholesale cost. You decide what to charge your users. The margin is yours.</p>
+      </div>
+    </div>
+    <div class="hiw-step reveal reveal-d3">
+      <div class="hiw-step-number"><span>3</span></div>
+      <div class="hiw-step-content">
+        <h3>Send Print Orders</h3>
+        <p>Your app sends a JSON payload with the image, product, and shipping address.</p>
+      </div>
+    </div>
+    <div class="hiw-step reveal reveal-d4">
+      <div class="hiw-step-number">4</div>
+      <div class="hiw-step-content">
+        <h3>We Ship, You Earn</h3>
+        <p>Our lab prints and ships direct to your customer. White-label. You collect revenue.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="geo-divider"></div>
+
+<!-- ========== PRODUCTS ========== -->
+<section class="products section-pad" id="products">
+  <div class="section-label reveal">Product Catalog</div>
+  <h2 class="section-title reveal reveal-d1">Premium products. Wholesale costs.</h2>
+  <p class="section-desc reveal reveal-d2">Lab-quality prints your users will love. Swipe to explore.</p>
+
+  <div class="products-scroll-wrap reveal reveal-d3" id="productsScroll">
+    <div class="products-track">
+      <!-- Metal Print -->
+      <div class="product-card">
+        <div class="product-accent"></div>
+        <div class="product-img-wrap">
+          <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/metal-prints-1.jpg?v=1723491477" alt="Metal Print 8x10" loading="lazy">
+        </div>
+        <div class="product-body">
+          <div class="product-name">Metal Print 8x10</div>
+          <div class="product-prices">
+            <span class="product-retail">$29 retail</span>
+            <div class="product-cost-wrap">
+              <span class="product-cost-label">Your cost</span>
+              <span class="product-cost-value">$9</span>
+            </div>
+          </div>
+          <div class="product-margin"><span class="pip"></span> $20 profit per unit</div>
+        </div>
+      </div>
+      <!-- Wood Print -->
+      <div class="product-card">
+        <div class="product-accent"></div>
+        <div class="product-img-wrap">
+          <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/wood-prints-1.jpg?v=1723578559" alt="Wood Print 12x18" loading="lazy">
+        </div>
+        <div class="product-body">
+          <div class="product-name">Wood Print 12x18</div>
+          <div class="product-prices">
+            <span class="product-retail">$72 retail</span>
+            <div class="product-cost-wrap">
+              <span class="product-cost-label">Your cost</span>
+              <span class="product-cost-value">$22</span>
+            </div>
+          </div>
+          <div class="product-margin"><span class="pip"></span> $50 profit per unit</div>
+        </div>
+      </div>
+      <!-- Gallery Frame -->
+      <div class="product-card">
+        <div class="product-accent"></div>
+        <div class="product-img-wrap">
+          <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/gallery-frames-3.jpg?v=1724964668" alt="Gallery Frame 16x20" loading="lazy">
+        </div>
+        <div class="product-body">
+          <div class="product-name">Gallery Frame 16x20</div>
+          <div class="product-prices">
+            <span class="product-retail">$134 retail</span>
+            <div class="product-cost-wrap">
+              <span class="product-cost-label">Your cost</span>
+              <span class="product-cost-value">$34</span>
+            </div>
+          </div>
+          <div class="product-margin"><span class="pip"></span> $100 profit per unit</div>
+        </div>
+      </div>
+      <!-- Large Format -->
+      <div class="product-card">
+        <div class="product-accent"></div>
+        <div class="product-img-wrap">
+          <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/large-format-3_b1256f8b-0ccf-4b79-8cc6-e451dd8565a4.jpg?v=1727135498" alt="Large Format 20x30" loading="lazy">
+        </div>
+        <div class="product-body">
+          <div class="product-name">Large Format 20x30</div>
+          <div class="product-prices">
+            <span class="product-retail">$36 retail</span>
+            <div class="product-cost-wrap">
+              <span class="product-cost-label">Your cost</span>
+              <span class="product-cost-value">$12</span>
+            </div>
+          </div>
+          <div class="product-margin"><span class="pip"></span> $24 profit per unit</div>
+        </div>
+      </div>
+      <!-- Acrylic Block -->
+      <div class="product-card">
+        <div class="product-accent"></div>
+        <div class="product-img-wrap">
+          <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/acrylic-blocks-1.jpg?v=1718737872" alt="Acrylic Block 5x7" loading="lazy">
+        </div>
+        <div class="product-body">
+          <div class="product-name">Acrylic Block 5x7</div>
+          <div class="product-prices">
+            <span class="product-retail">$48 retail</span>
+            <div class="product-cost-wrap">
+              <span class="product-cost-label">Your cost</span>
+              <span class="product-cost-value">$15</span>
+            </div>
+          </div>
+          <div class="product-margin"><span class="pip"></span> $33 profit per unit</div>
+        </div>
+      </div>
+      <!-- Photo Magazine -->
+      <div class="product-card">
+        <div class="product-accent"></div>
+        <div class="product-img-wrap">
+          <img class="product-img" src="https://cdn.shopify.com/s/files/1/0527/1502/8643/files/softcover-photo-book-1.jpg?v=1723572392" alt="Photo Magazine 8x10" loading="lazy">
+        </div>
+        <div class="product-body">
+          <div class="product-name">Photo Magazine 8x10</div>
+          <div class="product-prices">
+            <span class="product-retail">$26 retail</span>
+            <div class="product-cost-wrap">
+              <span class="product-cost-label">Your cost</span>
+              <span class="product-cost-value">$8</span>
+            </div>
+          </div>
+          <div class="product-margin"><span class="pip"></span> $18 profit per unit</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-dots" id="scrollDots">
+    <div class="scroll-dot active"></div>
+    <div class="scroll-dot"></div>
+    <div class="scroll-dot"></div>
+    <div class="scroll-dot"></div>
+    <div class="scroll-dot"></div>
+    <div class="scroll-dot"></div>
+  </div>
+  <div class="swipe-hint">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    Swipe to see all products
+  </div>
+</section>
+
+<!-- ========== THE DEAL ========== -->
+<section class="the-deal section-pad" id="deal">
+  <div class="section-label reveal">The Deal</div>
+  <h2 class="section-title reveal reveal-d1">Everything you need. Nothing you don't.</h2>
+  <p class="section-desc reveal reveal-d2">Add physical products without becoming a logistics company.</p>
+
+  <div class="deal-list">
+    <div class="deal-item reveal reveal-d1">
+      <div class="deal-icon">&#9632;</div>
+      <div>
+        <h4>You Set the Price</h4>
+        <p>Our wholesale cost is your floor. The margin between is pure profit.</p>
+      </div>
+    </div>
+    <div class="deal-item reveal reveal-d2">
+      <div class="deal-icon">&#9650;</div>
+      <div>
+        <h4>Zero Upfront Cost</h4>
+        <p>No subscription. No minimum orders. No inventory. Pay only when an order ships.</p>
+      </div>
+    </div>
+    <div class="deal-item reveal reveal-d3">
+      <div class="deal-icon">&#9679;</div>
+      <div>
+        <h4>White-Label Fulfillment</h4>
+        <p>Your brand on the packaging. Your customer never sees us.</p>
+      </div>
+    </div>
+    <div class="deal-item reveal reveal-d4">
+      <div class="deal-icon"><span>&#9830;</span></div>
+      <div>
+        <h4>Real-Time Tracking</h4>
+        <p>Webhook events for every status change. Full visibility, always.</p>
+      </div>
+    </div>
+    <div class="deal-item reveal reveal-d5">
+      <div class="deal-icon">&#9679;</div>
+      <div>
+        <h4>Premium Lab Quality</h4>
+        <p>Professional printing on archival materials. Giclee-grade output.</p>
+      </div>
+    </div>
+    <div class="deal-item reveal">
+      <div class="deal-icon">&#9632;</div>
+      <div>
+        <h4>Agent-Native API</h4>
+        <p>Built for LLMs and AI agents. Simple JSON payloads, predictable responses.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="geo-divider"></div>
+
+<!-- ========== USE CASES ========== -->
+<section class="use-cases section-pad" id="use-cases">
+  <div class="section-label reveal">Use Cases</div>
+  <h2 class="section-title reveal reveal-d1">Who's building on PrintKit?</h2>
+  <p class="section-desc reveal reveal-d2">Any app that handles images can monetize with physical prints.</p>
+
+  <div class="uc-grid">
+    <div class="uc-card reveal reveal-d1">
+      <div class="uc-card-header">
+        <div class="uc-card-icon">&#x1F916;</div>
+        <h3>AI Art Generators</h3>
+      </div>
+      <p>Users create images with AI, then one-click order a metal print or framed poster.</p>
+    </div>
+    <div class="uc-card reveal reveal-d2">
+      <div class="uc-card-header">
+        <div class="uc-card-icon">&#x1F4F1;</div>
+        <h3>Photo Editing Apps</h3>
+      </div>
+      <p>Turn edits into purchases. Users order prints without leaving your app.</p>
+    </div>
+    <div class="uc-card reveal reveal-d3">
+      <div class="uc-card-header">
+        <div class="uc-card-icon">&#x1F3E0;</div>
+        <h3>Interior Design Tools</h3>
+      </div>
+      <p>Order wall art directly from room visualization tools. AI picks the size.</p>
+    </div>
+    <div class="uc-card reveal reveal-d4">
+      <div class="uc-card-header">
+        <div class="uc-card-icon">&#x1F381;</div>
+        <h3>Gift Platforms</h3>
+      </div>
+      <p>Personalized photo gifts on demand. Birthday photo books, anniversary prints.</p>
+    </div>
+    <div class="uc-card reveal reveal-d5">
+      <div class="uc-card-header">
+        <div class="uc-card-icon">&#x1F4BC;</div>
+        <h3>E-Commerce Stores</h3>
+      </div>
+      <p>Add print-on-demand products to any store. No inventory, no risk.</p>
+    </div>
+    <div class="uc-card reveal">
+      <div class="uc-card-header">
+        <div class="uc-card-icon">&#x1F9E0;</div>
+        <h3>AI Agent Workflows</h3>
+      </div>
+      <p>Autonomous agents that generate, curate, and sell physical prints end-to-end.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== IDEAS ========== -->
+<section class="ideas section-pad" id="ideas">
+  <div class="section-label reveal">Build Ideas</div>
+  <h2 class="section-title reveal reveal-d1">What would you build?</h2>
+  <p class="section-desc reveal reveal-d2">Real products waiting to be built. Some take a weekend.</p>
+
+  <div class="ideas-grid">
+    <div class="idea-card reveal reveal-d1">
+      <div class="idea-num">01</div>
+      <h3>Pet Portrait Agent</h3>
+      <p>Upload a pet photo. AI stylizes it. One tap to order a metal print. Avg order: $40+.</p>
+    </div>
+    <div class="idea-card reveal reveal-d2">
+      <div class="idea-num">02</div>
+      <h3>Travel Memory Bot</h3>
+      <p>AI curates trip photos and creates a photo magazine. Ships in days.</p>
+    </div>
+    <div class="idea-card reveal reveal-d3">
+      <div class="idea-num">03</div>
+      <h3>AI Art Marketplace</h3>
+      <p>Gallery of AI art. Users buy archival-quality prints. Earn on every sale.</p>
+    </div>
+    <div class="idea-card reveal reveal-d4">
+      <div class="idea-num">04</div>
+      <h3>Children's Book Creator</h3>
+      <p>AI writes and illustrates a custom book. Printed as a photo magazine.</p>
+    </div>
+    <div class="idea-card reveal reveal-d5">
+      <div class="idea-num">05</div>
+      <h3>Real Estate Staging</h3>
+      <p>AI selects wall art for listings. Agents order prints for staging.</p>
+    </div>
+    <div class="idea-card reveal">
+      <div class="idea-num">06</div>
+      <h3>Yearly Photo Recap</h3>
+      <p>AI builds a year-in-review photo book. Automatic annual re-orders.</p>
+    </div>
+  </div>
+</section>
+
+<div class="geo-divider"></div>
+
+<!-- ========== FAQ ========== -->
+<section class="faq section-pad" id="faq">
+  <div class="section-label reveal">FAQ</div>
+  <h2 class="section-title reveal reveal-d1">Straight answers.</h2>
+  <p class="section-desc reveal reveal-d2">Everything you need to know before you start building.</p>
+
+  <div class="faq-list">
+    <div class="faq-item active reveal reveal-d1">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>How does pricing work?</h3>
+        <div class="faq-toggle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+      <div class="faq-answer" style="max-height:200px;">
+        <div class="faq-answer-inner">
+          We charge you a wholesale cost per product. You set any retail price you want. The difference is your profit. No subscriptions, no platform fees, no hidden charges. You only pay when an order ships.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item reveal reveal-d2">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>What's the minimum order volume?</h3>
+        <div class="faq-toggle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          There is no minimum. Send one order or ten thousand. Our pricing stays the same. We're built for partners who start small and scale fast.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item reveal reveal-d3">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>How fast do orders ship?</h3>
+        <div class="faq-toggle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          Most orders are printed and shipped within 2-4 business days. Domestic delivery is typically 3-7 days after shipping. We provide real-time tracking via webhooks.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item reveal reveal-d4">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>Is it really white-label?</h3>
+        <div class="faq-toggle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          Yes. Your customer sees your brand, not ours. We ship in plain or custom-branded packaging. The return address, packing slip, and any inserts can be customized.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item reveal reveal-d5">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>Can AI agents use the API directly?</h3>
+        <div class="faq-toggle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          Absolutely. PrintKit is agent-first. Simple JSON payloads, predictable response schemas, clear error codes. We also provide an MCP server and tool definitions for popular agent frameworks.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item reveal">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>What happens if there's a quality issue?</h3>
+        <div class="faq-toggle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          We reprint or refund at our cost. Every order is quality-checked before shipping. If anything isn't right, we make it right. Your reputation is our priority.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item reveal">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h3>Do you ship internationally?</h3>
+        <div class="faq-toggle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          Yes. We ship to most countries worldwide. International shipping rates and timelines are available through the API. Domestic US shipping is fastest at 3-7 days after production.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FINAL CTA ========== -->
+<section class="final-cta" id="start">
+  <div class="section-label reveal">Get Started</div>
+  <h2 class="section-title reveal reveal-d1">The future of print-to-earn starts with one API call.</h2>
+  <p class="section-desc reveal reveal-d2">Get your API key. Send your first test order. Start earning on every print.</p>
+  <a href="#" class="btn-yellow-full reveal reveal-d3">
+    Get API Key
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+  <a href="#" class="btn-ghost-full reveal reveal-d3">Read the Docs</a>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="footer-brand">
+    <div class="f-shape">PK</div>
+    PrintKit
+  </div>
+  <div class="footer-links">
+    <a href="#">API Docs</a>
+    <a href="#">Pricing</a>
+    <a href="#">Status</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="footer-copy">&copy; 2026 PrintKit. All rights reserved.</div>
+</footer>
+
+<!-- ========== STICKY BOTTOM CTA ========== -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="sticky-cta-text">
+    <div class="sticky-label">Start earning today</div>
+    <div class="sticky-sub">69% avg margin &middot; Zero upfront</div>
+  </div>
+  <a href="#start" class="sticky-btn">
+    Get API Key
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+</div>
+
+<script>
+// ========== NAV SCROLL ==========
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+// ========== MOBILE MENU ==========
+const menuBtn = document.getElementById('menuBtn');
+const navDropdown = document.getElementById('navDropdown');
+menuBtn.addEventListener('click', () => {
+  menuBtn.classList.toggle('active');
+  navDropdown.classList.toggle('open');
+});
+navDropdown.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    menuBtn.classList.remove('active');
+    navDropdown.classList.remove('open');
+  });
+});
+
+// ========== FAQ ACCORDION ==========
+function toggleFaq(el) {
+  const item = el.parentElement;
+  const answer = item.querySelector('.faq-answer');
+  const isActive = item.classList.contains('active');
+
+  document.querySelectorAll('.faq-item').forEach(fi => {
+    fi.classList.remove('active');
+    fi.querySelector('.faq-answer').style.maxHeight = '0';
+  });
+
+  if (!isActive) {
+    item.classList.add('active');
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+  }
+}
+
+// ========== SCROLL REVEAL ==========
+const revealEls = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+revealEls.forEach(el => revealObs.observe(el));
+
+// ========== SMOOTH SCROLL ==========
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      const offset = 64;
+      const y = target.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  });
+});
+
+// ========== STICKY CTA ==========
+const stickyCta = document.getElementById('stickyCta');
+const heroSection = document.getElementById('hero');
+const finalCta = document.getElementById('start');
+
+function updateStickyCta() {
+  const heroBottom = heroSection.getBoundingClientRect().bottom;
+  const finalCtaTop = finalCta.getBoundingClientRect().top;
+  const windowH = window.innerHeight;
+
+  if (heroBottom < 0 && finalCtaTop > windowH) {
+    stickyCta.classList.add('visible');
+  } else {
+    stickyCta.classList.remove('visible');
+  }
+}
+window.addEventListener('scroll', updateStickyCta, { passive: true });
+updateStickyCta();
+
+// ========== PRODUCT SCROLL DOTS ==========
+const productsScroll = document.getElementById('productsScroll');
+const scrollDots = document.querySelectorAll('#scrollDots .scroll-dot');
+const cards = productsScroll.querySelectorAll('.product-card');
+
+function updateDots() {
+  if (!cards.length) return;
+  const scrollLeft = productsScroll.scrollLeft;
+  const cardWidth = cards[0].offsetWidth + 16; // card + gap
+  const activeIndex = Math.round(scrollLeft / cardWidth);
+  scrollDots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === Math.min(activeIndex, scrollDots.length - 1));
+  });
+}
+productsScroll.addEventListener('scroll', updateDots, { passive: true });
+
+// ========== COUNTER ANIMATION ==========
+function animateCounter(el, target) {
+  const duration = 1200;
+  const start = performance.now();
+  const format = (n) => n.toLocaleString();
+
+  function step(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(eased * target);
+    el.textContent = '$' + format(current);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+const earnAmounts = document.querySelectorAll('.earn-card-amount');
+const earnValues = [150, 1500, 15000];
+const earnObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = Array.from(earnAmounts).indexOf(entry.target);
+      if (idx >= 0) animateCounter(entry.target, earnValues[idx]);
+      earnObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+earnAmounts.forEach(el => earnObs.observe(el));
+</script>
+</body>
+</html>
