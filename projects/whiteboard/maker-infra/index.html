@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maker Infrastructure — SPS Whiteboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0a0a0c;
+    --green: #00ff88;
+    --green-dim: #00ff8830;
+    --green-mid: #00ff8860;
+    --amber: #ffb800;
+    --amber-dim: #ffb80030;
+    --red: #ff4444;
+    --red-dim: #ff444430;
+    --cyan: #00d4ff;
+    --cyan-dim: #00d4ff30;
+    --purple: #b388ff;
+    --purple-dim: #b388ff30;
+    --pink: #ff6bb5;
+    --pink-dim: #ff6bb530;
+    --text: #f0f0f2;
+    --text-dim: #9a9aa6;
+    --surface: #111114;
+    --surface2: #18181c;
+    --border: #222228;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Subtle dot grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Header */
+  .header {
+    padding: 32px 48px 24px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 300px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--cyan), transparent);
+    box-shadow: 0 0 10px var(--cyan-dim);
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .header h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    color: var(--cyan);
+    text-shadow: 0 0 30px var(--cyan-dim);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+  .header-meta {
+    text-align: right;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+  .header-meta .live {
+    color: var(--green);
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .main {
+    padding: 40px 48px;
+    max-width: 1600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== THE QUESTION ===== */
+  .the-question {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .tq-box {
+    display: inline-block;
+    background: var(--surface);
+    border: 2px solid var(--cyan);
+    border-radius: 12px;
+    padding: 24px 48px;
+    box-shadow: 0 0 40px var(--cyan-dim);
+  }
+  .tq-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--cyan);
+  }
+  .tq-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  /* ===== PIPELINE ===== */
+  .pipeline-section {
+    margin-bottom: 56px;
+  }
+  .pipeline-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    padding-left: 4px;
+  }
+
+  .pipeline {
+    display: flex;
+    gap: 0;
+    position: relative;
+  }
+
+  .pipe-stage {
+    flex: 1;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .pipe-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    min-height: 160px;
+    position: relative;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pipe-stage:hover .pipe-card {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .pipe-stage.standardize .pipe-card { border-top: 3px solid var(--green); }
+  .pipe-stage.customize .pipe-card { border-top: 3px solid var(--amber); }
+  .pipe-stage.unique .pipe-card { border-top: 3px solid var(--purple); }
+
+  .pipe-stage.standardize:hover .pipe-card { border-color: var(--green); box-shadow: 0 0 30px var(--green-dim); }
+  .pipe-stage.customize:hover .pipe-card { border-color: var(--amber); box-shadow: 0 0 30px var(--amber-dim); }
+  .pipe-stage.unique:hover .pipe-card { border-color: var(--purple); box-shadow: 0 0 30px var(--purple-dim); }
+
+  .pipe-num {
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 8px;
+    opacity: 0.1;
+    position: absolute;
+    top: 12px;
+    right: 16px;
+  }
+  .pipe-stage.standardize .pipe-num { color: var(--green); }
+  .pipe-stage.customize .pipe-num { color: var(--amber); }
+  .pipe-stage.unique .pipe-num { color: var(--purple); }
+
+  .pipe-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .pipe-stage.standardize .pipe-name { color: var(--green); }
+  .pipe-stage.customize .pipe-name { color: var(--amber); }
+  .pipe-stage.unique .pipe-name { color: var(--purple); }
+
+  .pipe-desc {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .pipe-verdict {
+    margin-top: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    align-self: flex-start;
+  }
+  .pipe-stage.standardize .pipe-verdict { background: var(--green-dim); color: var(--green); }
+  .pipe-stage.customize .pipe-verdict { background: var(--amber-dim); color: var(--amber); }
+  .pipe-stage.unique .pipe-verdict { background: var(--purple-dim); color: var(--purple); }
+
+  /* Arrows between stages */
+  .pipe-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    flex-shrink: 0;
+    font-size: 20px;
+    color: var(--text-dim);
+    position: relative;
+  }
+  .pipe-arrow::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 4px;
+    right: 4px;
+    height: 1px;
+    background: var(--border);
+  }
+  .pipe-arrow span {
+    position: relative;
+    background: var(--bg);
+    padding: 0 4px;
+    font-size: 16px;
+  }
+
+  /* ===== EXPANDED DETAILS ===== */
+  .stage-details {
+    display: none;
+    margin-top: -8px;
+    margin-bottom: 32px;
+    animation: slideDown 0.3s ease;
+  }
+  .stage-details.active {
+    display: block;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .sd-inner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+  }
+  .sd-inner::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 60px;
+    width: 16px;
+    height: 16px;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    border-top: 1px solid var(--border);
+    transform: rotate(45deg);
+  }
+  .sd-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+  .sd-col h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .sd-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    font-size: 11px;
+    line-height: 1.6;
+    transition: all 0.2s;
+  }
+  .sd-item:hover {
+    border-color: var(--text-dim);
+  }
+  .sd-item strong {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+  .sd-item code {
+    font-size: 10px;
+    color: var(--cyan);
+    background: var(--cyan-dim);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* ===== INFRA LAYER ===== */
+  .infra-section {
+    margin-bottom: 56px;
+  }
+  .infra-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    padding-left: 4px;
+  }
+  .infra-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .infra-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .infra-card:hover {
+    border-color: var(--green);
+    box-shadow: 0 0 20px var(--green-dim);
+    transform: translateY(-2px);
+  }
+  .infra-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--green);
+    opacity: 0.4;
+  }
+  .infra-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+    display: block;
+    filter: grayscale(0.3);
+  }
+  .infra-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 6px;
+  }
+  .infra-desc {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .infra-components {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .infra-comp {
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 7px;
+    border-radius: 3px;
+    background: var(--green-dim);
+    color: var(--green);
+  }
+
+  /* ===== MAKER EXAMPLES ===== */
+  .examples-section {
+    margin-bottom: 56px;
+  }
+  .ex-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    padding-left: 4px;
+  }
+  .ex-sublabel {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    padding-left: 4px;
+    font-weight: 300;
+  }
+  .ex-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .ex-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    transition: all 0.3s;
+  }
+  .ex-card:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 20px var(--cyan-dim);
+  }
+  .ex-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cyan);
+    margin-bottom: 4px;
+  }
+  .ex-type {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+  .ex-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+    font-size: 11px;
+  }
+  .ex-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .ex-dot.g { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .ex-dot.a { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+  .ex-dot.p { background: var(--purple); box-shadow: 0 0 6px var(--purple); }
+  .ex-stage {
+    color: var(--text-dim);
+    flex: 1;
+  }
+  .ex-what {
+    color: var(--text);
+    text-align: right;
+    font-weight: 500;
+  }
+
+  /* ===== BRANDING KIT ===== */
+  .brand-section {
+    margin-bottom: 56px;
+  }
+  .brand-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    padding-left: 4px;
+  }
+  .brand-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .brand-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    transition: all 0.3s;
+  }
+  .brand-card:hover {
+    border-color: var(--pink);
+    box-shadow: 0 0 20px var(--pink-dim);
+  }
+  .brand-card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--pink);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+
+  /* Color swatches */
+  .swatch-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .swatch {
+    flex: 1;
+    height: 40px;
+    border-radius: 6px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .swatch:hover { transform: scale(1.05); }
+  .swatch-label {
+    position: absolute;
+    bottom: -18px;
+    left: 0;
+    font-size: 9px;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  /* Font preview */
+  .font-preview {
+    margin-bottom: 12px;
+  }
+  .font-preview .fp-name {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+  .fp-serif {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--text);
+    font-style: italic;
+    letter-spacing: -0.5px;
+  }
+  .fp-sans {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+  .fp-mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--green);
+  }
+
+  /* Pattern list */
+  .pattern-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .pattern-item:last-child { border-bottom: none; }
+  .pattern-check {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--green);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pattern-check:hover {
+    border-color: var(--green);
+    background: var(--green-dim);
+  }
+  .pattern-check.checked {
+    border-color: var(--green);
+    background: var(--green-dim);
+  }
+
+  /* ===== LEGEND ===== */
+  .legend {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 32px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: fit-content;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .legend-dot.g { background: var(--green); box-shadow: 0 0 8px var(--green-dim); }
+  .legend-dot.a { background: var(--amber); box-shadow: 0 0 8px var(--amber-dim); }
+  .legend-dot.p { background: var(--purple); box-shadow: 0 0 8px var(--purple-dim); }
+
+  /* ===== OPEN QUESTIONS ===== */
+  .questions-section {
+    margin-bottom: 48px;
+  }
+  .q-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    padding-left: 4px;
+  }
+  .q-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--amber);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 20px var(--amber-dim);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .q-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px var(--amber-dim);
+  }
+  .q-card.resolved {
+    border-color: var(--border);
+    box-shadow: none;
+    opacity: 0.5;
+  }
+  .q-card.resolved .q-text { text-decoration: line-through; }
+  .q-num {
+    font-size: 10px;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .q-card.resolved .q-num { color: var(--text-dim); }
+  .q-text {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+  .q-context {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* Status bar */
+  .status-bar {
+    margin-top: 48px;
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+  }
+  .status-bar .sb-live {
+    color: var(--cyan);
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @media (max-width: 1200px) {
+    .infra-grid { grid-template-columns: repeat(2, 1fr); }
+    .ex-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 1024px) {
+    .pipeline { flex-direction: column; gap: 0; }
+    .pipe-arrow { width: auto; height: 32px; transform: rotate(90deg); }
+    .sd-grid { grid-template-columns: 1fr; }
+    .q-grid { grid-template-columns: 1fr; }
+    .header { padding: 24px; }
+    .main { padding: 24px; }
+  }
+  @media (max-width: 768px) {
+    .infra-grid { grid-template-columns: 1fr; }
+    .ex-grid { grid-template-columns: 1fr; }
+    .brand-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>Maker Infrastructure</h1>
+      <div class="header-sub">What do we standardize? What stays unique? What's the shared kit?</div>
+    </div>
+    <div class="header-meta">
+      <div><span class="live">WHITEBOARD</span> &mdash; Build Week Day 2</div>
+      <div>George + Ben + Alejo</div>
+      <div>March 3, 2026</div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- The Question -->
+  <div class="the-question">
+    <div class="tq-box">
+      <div class="tq-text">Every maker is: Hook &rarr; Upload &rarr; Customize &rarr; Preview &rarr; Buy</div>
+      <div class="tq-sub">Which parts are shared infra? Which parts are the unique magic? Click each stage to explore.</div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot g"></div> Standardize — build once, use everywhere</div>
+    <div class="legend-item"><div class="legend-dot a"></div> Shared defaults — common kit, custom skin</div>
+    <div class="legend-item"><div class="legend-dot p"></div> Unique per maker — this IS the product</div>
+  </div>
+
+  <!-- ===== THE PIPELINE ===== -->
+  <div class="pipeline-section">
+    <div class="pipeline-label">The Maker Pipeline</div>
+    <div class="pipeline" id="pipeline">
+
+      <!-- 1. HOOK -->
+      <div class="pipe-stage unique" data-stage="hook" onclick="toggleStage('hook')">
+        <div class="pipe-card">
+          <div class="pipe-num">01</div>
+          <div class="pipe-name">Hook</div>
+          <div class="pipe-desc">The landing page, the story, the reason to care. Why should someone upload their photos HERE? This is the soul of each maker.</div>
+          <div class="pipe-verdict">Unique per maker</div>
+        </div>
+      </div>
+
+      <div class="pipe-arrow"><span>&rarr;</span></div>
+
+      <!-- 2. UPLOAD -->
+      <div class="pipe-stage standardize" data-stage="upload" onclick="toggleStage('upload')">
+        <div class="pipe-card">
+          <div class="pipe-num">02</div>
+          <div class="pipe-name">Upload</div>
+          <div class="pipe-desc">Drag, drop, tap camera, pick from library. Multi-select. Resize. Crop. Every maker needs this, and it should feel identical.</div>
+          <div class="pipe-verdict">Standardize</div>
+        </div>
+      </div>
+
+      <div class="pipe-arrow"><span>&rarr;</span></div>
+
+      <!-- 3. CUSTOMIZE -->
+      <div class="pipe-stage customize" data-stage="customize" onclick="toggleStage('customize')">
+        <div class="pipe-card">
+          <div class="pipe-num">03</div>
+          <div class="pipe-name">Customize</div>
+          <div class="pipe-desc">Size picker, text input, layout choices, date range. Some parts are standard (size/price), some are the unique interaction of that product.</div>
+          <div class="pipe-verdict">Shared defaults + custom</div>
+        </div>
+      </div>
+
+      <div class="pipe-arrow"><span>&rarr;</span></div>
+
+      <!-- 4. PREVIEW -->
+      <div class="pipe-stage customize" data-stage="preview" onclick="toggleStage('preview')">
+        <div class="pipe-card">
+          <div class="pipe-num">04</div>
+          <div class="pipe-name">Preview</div>
+          <div class="pipe-desc">Show them what they're getting. Product mockup renderer with their photos composited in. A few default templates, but the preview IS what sells it.</div>
+          <div class="pipe-verdict">Shared renderer + templates</div>
+        </div>
+      </div>
+
+      <div class="pipe-arrow"><span>&rarr;</span></div>
+
+      <!-- 5. BUY -->
+      <div class="pipe-stage standardize" data-stage="buy" onclick="toggleStage('buy')">
+        <div class="pipe-card">
+          <div class="pipe-num">05</div>
+          <div class="pipe-name">Buy</div>
+          <div class="pipe-desc">Add to cart, checkout, order created. PrintKit API handles product, pricing, variants. Shopify handles the money. Same every time.</div>
+          <div class="pipe-verdict">Standardize</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Expandable details for each stage -->
+    <div class="stage-details" id="detail-hook">
+      <div class="sd-inner" style="border-top: 2px solid var(--purple);">
+        <div class="sd-grid">
+          <div class="sd-col">
+            <h4 style="color: var(--purple);">What's unique</h4>
+            <div class="sd-item"><strong>The story</strong>Copy, headlines, emotional hook. "365 days of your baby" vs "Grandma, Est. 2026" — totally different vibes.</div>
+            <div class="sd-item"><strong>Visual design</strong>Color palette, photography, layout. Each maker gets its own look.</div>
+            <div class="sd-item"><strong>Target audience</strong>New parents, gift buyers, art lovers — determines everything about the page.</div>
+          </div>
+          <div class="sd-col">
+            <h4 style="color: var(--amber);">What could be shared</h4>
+            <div class="sd-item"><strong>Page shell</strong>Meta tags, analytics, font loading, responsive breakpoints. <code>maker-shell.js</code></div>
+            <div class="sd-item"><strong>CTA patterns</strong>"Make yours" button styles, scroll-to-upload behavior, sticky mobile CTA bar.</div>
+            <div class="sd-item"><strong>Social proof</strong>Review widget, "X made this week" counter, trust badges.</div>
+          </div>
+          <div class="sd-col">
+            <h4 style="color: var(--cyan);">Open questions</h4>
+            <div class="sd-item"><strong>Do makers live on SPS or standalone?</strong>socialprintstudio.com/make/X vs. standalone URLs? Affects branding.</div>
+            <div class="sd-item"><strong>Ben's design system?</strong>Does Ben want a shared Figma component library for hook pages, or total creative freedom per maker?</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-details" id="detail-upload">
+      <div class="sd-inner" style="border-top: 2px solid var(--green);">
+        <div class="sd-grid">
+          <div class="sd-col">
+            <h4 style="color: var(--green);">Build once</h4>
+            <div class="sd-item"><strong>Drag & drop zone</strong>Desktop file drop with visual feedback. <code>&lt;sps-upload&gt;</code></div>
+            <div class="sd-item"><strong>Mobile camera</strong>Tap to open camera or photo library. Native-feeling on iOS/Android.</div>
+            <div class="sd-item"><strong>Multi-select</strong>Pick 12 photos for a calendar, 38 for a magazine, 6 for a cube. Configurable count.</div>
+            <div class="sd-item"><strong>Client-side resize</strong>Resize to max dimension before upload. Saves bandwidth, faster UX.</div>
+          </div>
+          <div class="sd-col">
+            <h4 style="color: var(--green);">Config per maker</h4>
+            <div class="sd-item"><strong>Photo count</strong><code>min: 6, max: 365, recommended: 12</code> — varies per product.</div>
+            <div class="sd-item"><strong>Aspect ratio hints</strong>Square crop for magnets, portrait for calendars, landscape for prints.</div>
+            <div class="sd-item"><strong>Upload messaging</strong>"Add your 12 best photos" vs "Upload a photo of the happy couple"</div>
+          </div>
+          <div class="sd-col">
+            <h4 style="color: var(--cyan);">Implementation</h4>
+            <div class="sd-item"><strong>Single JS component</strong>One <code>sps-uploader.js</code> that any maker imports. Web component or vanilla JS module.</div>
+            <div class="sd-item"><strong>Events-based</strong>Emits events: <code>upload:start</code>, <code>upload:complete</code>, <code>upload:error</code>. Maker listens and reacts.</div>
+            <div class="sd-item"><strong>CDN upload</strong>Straight to S3/Cloudflare. Returns URL array. No server round-trip needed for preview.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-details" id="detail-customize">
+      <div class="sd-inner" style="border-top: 2px solid var(--amber);">
+        <div class="sd-grid">
+          <div class="sd-col">
+            <h4 style="color: var(--green);">Standard components</h4>
+            <div class="sd-item"><strong>Size picker</strong>Grid of product sizes with prices. Pulls from PrintKit API. <code>&lt;sps-sizes&gt;</code></div>
+            <div class="sd-item"><strong>Material selector</strong>Wood / metal / acrylic / paper toggle. Standard UI for format products.</div>
+            <div class="sd-item"><strong>Quantity stepper</strong>+/- with bulk pricing display if applicable.</div>
+          </div>
+          <div class="sd-col">
+            <h4 style="color: var(--amber);">Product-specific</h4>
+            <div class="sd-item"><strong>Calendar: date range</strong>Start month picker, birth date input. Unique to calendar products.</div>
+            <div class="sd-item"><strong>Photo arrangement</strong>Drag to reorder, auto-layout, manual grid placement. Varies wildly per product.</div>
+            <div class="sd-item"><strong>Text personalization</strong>"NANA — Est. 2026" or baby name input. Different fields per maker.</div>
+          </div>
+          <div class="sd-col">
+            <h4 style="color: var(--purple);">The unique interaction</h4>
+            <div class="sd-item"><strong>This is the maker's soul</strong>The FaceCube grid alignment. The growth strip photo placement. The book page editor. This can't be templated.</div>
+            <div class="sd-item"><strong>Rule of thumb</strong>If it's about SELECTING options → standardize it. If it's about CREATING the layout → it's custom.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-details" id="detail-preview">
+      <div class="sd-inner" style="border-top: 2px solid var(--amber);">
+        <div class="sd-grid">
+          <div class="sd-col">
+            <h4 style="color: var(--green);">Shared renderer</h4>
+            <div class="sd-item"><strong>Canvas compositing</strong>Take user photos + product template → render preview image. <code>sps-preview.js</code></div>
+            <div class="sd-item"><strong>3D product mockups</strong>Flat print on wall, frame with mat, book on table. Reusable scene templates.</div>
+            <div class="sd-item"><strong>Zoom & rotate</strong>Pinch to zoom, click to see detail. Standard interaction layer on top of any preview.</div>
+          </div>
+          <div class="sd-col">
+            <h4 style="color: var(--amber);">Default templates</h4>
+            <div class="sd-item"><strong>Wall scene</strong>Product hanging on a styled wall. Works for prints, frames, metal, wood, canvas.</div>
+            <div class="sd-item"><strong>Desk/shelf scene</strong>Product on a styled surface. Works for books, blocks, calendars, cubes.</div>
+            <div class="sd-item"><strong>Flat lay</strong>Top-down product shot. Works for magnets, stickers, calendars, strips.</div>
+          </div>
+          <div class="sd-col">
+            <h4 style="color: var(--purple);">Custom previews</h4>
+            <div class="sd-item"><strong>Product-specific magic</strong>Calendar flipping animation. Cube rotation. Book page turn. Growth strip on a fridge door. These sell the product.</div>
+            <div class="sd-item"><strong>The preview IS the conversion</strong>This is where someone decides to buy. Invest in making it feel real and delightful.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-details" id="detail-buy">
+      <div class="sd-inner" style="border-top: 2px solid var(--green);">
+        <div class="sd-grid">
+          <div class="sd-col">
+            <h4 style="color: var(--green);">Fully standard</h4>
+            <div class="sd-item"><strong>PrintKit order API</strong><code>POST /orders</code> — product, variants, photos, shipping. One endpoint for everything.</div>
+            <div class="sd-item"><strong>Shopify cart bridge</strong>Add to existing Shopify cart with line item properties (photo URLs, customization data).</div>
+            <div class="sd-item"><strong>Price display</strong>Pull pricing from PrintKit catalog. Show base + options. <code>sps-price.js</code></div>
+          </div>
+          <div class="sd-col">
+            <h4 style="color: var(--green);">Checkout flow</h4>
+            <div class="sd-item"><strong>Option A: Shopify redirect</strong>Add to cart → redirect to Shopify checkout. Simplest. Customer sees normal SPS checkout.</div>
+            <div class="sd-item"><strong>Option B: Embedded checkout</strong>Stripe/Shopify checkout embedded in maker page. Seamless but more work.</div>
+            <div class="sd-item"><strong>Option C: PrintKit direct</strong>PrintKit handles payment. Standalone from SPS Shopify. For third-party makers.</div>
+          </div>
+          <div class="sd-col">
+            <h4 style="color: var(--cyan);">Decision needed</h4>
+            <div class="sd-item"><strong>Which checkout path?</strong>Option A is fastest to build. Option C is needed for PrintKit-as-platform. Can start with A and add C later?</div>
+            <div class="sd-item"><strong>Cart vs. direct buy</strong>Do makers add to a cart (cross-sell opportunity) or go straight to checkout (higher conversion)?</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SHARED INFRA ===== -->
+  <div class="infra-section">
+    <div class="infra-label">Shared Infrastructure — The Maker Toolkit</div>
+    <div class="infra-grid">
+
+      <div class="infra-card">
+        <div class="infra-icon">📸</div>
+        <div class="infra-name">sps-uploader</div>
+        <div class="infra-desc">Universal photo upload component. Drag/drop, mobile camera, multi-select, client-side resize, CDN upload. One component for every maker.</div>
+        <div class="infra-components">
+          <span class="infra-comp">Drag & Drop</span>
+          <span class="infra-comp">Camera</span>
+          <span class="infra-comp">Resize</span>
+          <span class="infra-comp">CDN</span>
+          <span class="infra-comp">Events</span>
+        </div>
+      </div>
+
+      <div class="infra-card">
+        <div class="infra-icon">🖼️</div>
+        <div class="infra-name">sps-preview</div>
+        <div class="infra-desc">Canvas-based preview renderer. Composites user photos onto product templates. Default mockup scenes (wall, desk, flat lay) with custom override support.</div>
+        <div class="infra-components">
+          <span class="infra-comp">Canvas</span>
+          <span class="infra-comp">Templates</span>
+          <span class="infra-comp">Mockups</span>
+          <span class="infra-comp">Zoom</span>
+        </div>
+      </div>
+
+      <div class="infra-card">
+        <div class="infra-icon">🛒</div>
+        <div class="infra-name">sps-checkout</div>
+        <div class="infra-desc">PrintKit API connector + Shopify cart bridge. Fetches products/pricing, creates orders, handles the money. Same for every maker.</div>
+        <div class="infra-components">
+          <span class="infra-comp">PrintKit API</span>
+          <span class="infra-comp">Cart</span>
+          <span class="infra-comp">Pricing</span>
+          <span class="infra-comp">Variants</span>
+        </div>
+      </div>
+
+      <div class="infra-card">
+        <div class="infra-icon">🎨</div>
+        <div class="infra-name">sps-brand</div>
+        <div class="infra-desc">SPS design tokens, font loading, responsive breakpoints, analytics, and the little touches that make it feel like SPS. Optional — external makers can skip it.</div>
+        <div class="infra-components">
+          <span class="infra-comp">Fonts</span>
+          <span class="infra-comp">Tokens</span>
+          <span class="infra-comp">Analytics</span>
+          <span class="infra-comp">Responsive</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== BRANDING KIT ===== -->
+  <div class="brand-section">
+    <div class="brand-label">SPS Brand Kit — Shared Design DNA</div>
+    <div class="brand-grid">
+
+      <div class="brand-card">
+        <div class="brand-card-title">Colors</div>
+        <div class="swatch-row">
+          <div class="swatch" style="background: #1a1a1a;">
+            <div class="swatch-label">#1a1a1a text</div>
+          </div>
+          <div class="swatch" style="background: #c45d3e;">
+            <div class="swatch-label">#c45d3e accent</div>
+          </div>
+          <div class="swatch" style="background: #f5f4f1; border: 1px solid #ddd;">
+            <div class="swatch-label">#f5f4f1 bg</div>
+          </div>
+          <div class="swatch" style="background: #6b6b6b;">
+            <div class="swatch-label">#6b6b6b muted</div>
+          </div>
+        </div>
+        <div style="margin-top: 28px; font-size: 11px; color: var(--text-dim);">
+          Neutral palette. Product photos are the color. The UI stays out of the way.
+        </div>
+      </div>
+
+      <div class="brand-card">
+        <div class="brand-card-title">Typography</div>
+        <div class="font-preview">
+          <div class="fp-name">Headings — Instrument Serif</div>
+          <div class="fp-serif">Your photos, printed.</div>
+        </div>
+        <div class="font-preview">
+          <div class="fp-name">Body — Hanken Grotesk</div>
+          <div class="fp-sans">Clean, modern, readable</div>
+        </div>
+        <div class="font-preview">
+          <div class="fp-name">Code / UI — JetBrains Mono</div>
+          <div class="fp-mono">printkit.dev/api</div>
+        </div>
+      </div>
+
+      <div class="brand-card">
+        <div class="brand-card-title">Design Patterns</div>
+        <div class="pattern-item">
+          <div class="pattern-check checked" onclick="this.classList.toggle('checked')">✓</div>
+          <span>Generous whitespace — let photos breathe</span>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-check checked" onclick="this.classList.toggle('checked')">✓</div>
+          <span>Product photography as focal point</span>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-check" onclick="this.classList.toggle('checked')"></div>
+          <span>Human hands holding products</span>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-check checked" onclick="this.classList.toggle('checked')">✓</div>
+          <span>Neutral backgrounds, colorful products</span>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-check" onclick="this.classList.toggle('checked')"></div>
+          <span>Sticky mobile CTA bar</span>
+        </div>
+        <div class="pattern-item">
+          <div class="pattern-check" onclick="this.classList.toggle('checked')"></div>
+          <span>Subtle grid-paper background texture</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== MAKER EXAMPLES ===== -->
+  <div class="examples-section">
+    <div class="ex-label">Apply The Pipeline — Real Makers</div>
+    <div class="ex-sublabel">How would each stage work for actual products we want to build?</div>
+    <div class="ex-grid">
+
+      <div class="ex-card">
+        <div class="ex-name">Baby's First Year</div>
+        <div class="ex-type">Daily Calendar &middot; 365 photos</div>
+        <div class="ex-row"><div class="ex-dot p"></div><div class="ex-stage">Hook</div><div class="ex-what">New parent story</div></div>
+        <div class="ex-row"><div class="ex-dot g"></div><div class="ex-stage">Upload</div><div class="ex-what">Multi (365), any ratio</div></div>
+        <div class="ex-row"><div class="ex-dot a"></div><div class="ex-stage">Customize</div><div class="ex-what">Birth date + name</div></div>
+        <div class="ex-row"><div class="ex-dot a"></div><div class="ex-stage">Preview</div><div class="ex-what">Calendar flip anim</div></div>
+        <div class="ex-row"><div class="ex-dot g"></div><div class="ex-stage">Buy</div><div class="ex-what">Standard checkout</div></div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-name">Est. Frame</div>
+        <div class="ex-type">Gallery Frame &middot; 1 photo</div>
+        <div class="ex-row"><div class="ex-dot p"></div><div class="ex-stage">Hook</div><div class="ex-what">Grandparent gift story</div></div>
+        <div class="ex-row"><div class="ex-dot g"></div><div class="ex-stage">Upload</div><div class="ex-what">Single photo, portrait</div></div>
+        <div class="ex-row"><div class="ex-dot a"></div><div class="ex-stage">Customize</div><div class="ex-what">Name + year + size</div></div>
+        <div class="ex-row"><div class="ex-dot a"></div><div class="ex-stage">Preview</div><div class="ex-what">Wall scene mockup</div></div>
+        <div class="ex-row"><div class="ex-dot g"></div><div class="ex-stage">Buy</div><div class="ex-what">Standard checkout</div></div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-name">FaceCube</div>
+        <div class="ex-type">Photo Rubik's Cube &middot; 6 photos</div>
+        <div class="ex-row"><div class="ex-dot p"></div><div class="ex-stage">Hook</div><div class="ex-what">Family fun story</div></div>
+        <div class="ex-row"><div class="ex-dot g"></div><div class="ex-stage">Upload</div><div class="ex-what">6 photos, square crop</div></div>
+        <div class="ex-row"><div class="ex-dot p"></div><div class="ex-stage">Customize</div><div class="ex-what">Grid alignment editor</div></div>
+        <div class="ex-row"><div class="ex-dot p"></div><div class="ex-stage">Preview</div><div class="ex-what">3D cube rotation</div></div>
+        <div class="ex-row"><div class="ex-dot g"></div><div class="ex-stage">Buy</div><div class="ex-what">Standard checkout</div></div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-name">Inch by Inch</div>
+        <div class="ex-type">Magnetic Growth Strip &middot; 12 photos</div>
+        <div class="ex-row"><div class="ex-dot p"></div><div class="ex-stage">Hook</div><div class="ex-what">Growth tracking story</div></div>
+        <div class="ex-row"><div class="ex-dot g"></div><div class="ex-stage">Upload</div><div class="ex-what">12 photos, portrait</div></div>
+        <div class="ex-row"><div class="ex-dot a"></div><div class="ex-stage">Customize</div><div class="ex-what">Month labels + order</div></div>
+        <div class="ex-row"><div class="ex-dot a"></div><div class="ex-stage">Preview</div><div class="ex-what">Fridge scene mockup</div></div>
+        <div class="ex-row"><div class="ex-dot g"></div><div class="ex-stage">Buy</div><div class="ex-what">Standard checkout</div></div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-name">/print</div>
+        <div class="ex-type">AI Art Print &middot; 1 image</div>
+        <div class="ex-row"><div class="ex-dot p"></div><div class="ex-stage">Hook</div><div class="ex-what">Paste MJ URL flow</div></div>
+        <div class="ex-row"><div class="ex-dot a"></div><div class="ex-stage">Upload</div><div class="ex-what">URL paste (not file)</div></div>
+        <div class="ex-row"><div class="ex-dot g"></div><div class="ex-stage">Customize</div><div class="ex-what">Size + material picker</div></div>
+        <div class="ex-row"><div class="ex-dot a"></div><div class="ex-stage">Preview</div><div class="ex-what">Wall scene mockup</div></div>
+        <div class="ex-row"><div class="ex-dot g"></div><div class="ex-stage">Buy</div><div class="ex-what">Standard checkout</div></div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-name">Cosmos Prints</div>
+        <div class="ex-type">NASA Wall Art &middot; curated</div>
+        <div class="ex-row"><div class="ex-dot p"></div><div class="ex-stage">Hook</div><div class="ex-what">Space gallery browse</div></div>
+        <div class="ex-row"><div class="ex-dot p"></div><div class="ex-stage">Upload</div><div class="ex-what">No upload — pick image</div></div>
+        <div class="ex-row"><div class="ex-dot g"></div><div class="ex-stage">Customize</div><div class="ex-what">Size + material picker</div></div>
+        <div class="ex-row"><div class="ex-dot a"></div><div class="ex-stage">Preview</div><div class="ex-what">Wall scene mockup</div></div>
+        <div class="ex-row"><div class="ex-dot g"></div><div class="ex-stage">Buy</div><div class="ex-what">Standard checkout</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== OPEN QUESTIONS ===== -->
+  <div class="questions-section">
+    <div class="q-label">Open Questions — Discuss on the TV</div>
+    <div class="q-grid">
+
+      <div class="q-card" onclick="this.classList.toggle('resolved')">
+        <div class="q-num">Question 01</div>
+        <div class="q-text">Web components or plain JS modules?</div>
+        <div class="q-context"><code>&lt;sps-upload&gt;</code> custom elements vs. <code>new SPSUploader(el, config)</code>. Web components are more portable but heavier. Plain JS is simpler. What's Alejo's preference?</div>
+      </div>
+
+      <div class="q-card" onclick="this.classList.toggle('resolved')">
+        <div class="q-num">Question 02</div>
+        <div class="q-text">Do makers live on socialprintstudio.com or standalone?</div>
+        <div class="q-context">SPS domain gets SEO + trust. Standalone URLs are cleaner for ads + sharing. Could do both: SPS-hosted for internal makers, standalone for PrintKit third-party makers.</div>
+      </div>
+
+      <div class="q-card" onclick="this.classList.toggle('resolved')">
+        <div class="q-num">Question 03</div>
+        <div class="q-text">How opinionated is the brand kit?</div>
+        <div class="q-context">Does every SPS maker use Instrument Serif + Hanken Grotesk + the terracotta palette? Or is each maker free to have its own visual identity? Ben — what's the brand flexibility here?</div>
+      </div>
+
+      <div class="q-card" onclick="this.classList.toggle('resolved')">
+        <div class="q-num">Question 04</div>
+        <div class="q-text">Cart add vs. direct checkout — what converts better?</div>
+        <div class="q-context">Cart = cross-sell opportunity ("add magnets too?"). Direct = fewer steps to purchase. We could A/B this later, but need a default for v1. What's SPS's current checkout flow tell us?</div>
+      </div>
+
+      <div class="q-card" onclick="this.classList.toggle('resolved')">
+        <div class="q-num">Question 05</div>
+        <div class="q-text">Build sps-preview now or later?</div>
+        <div class="q-context">The preview renderer is the hardest shared component. Canvas compositing, 3D mockups, animations. Is this a build-week thing, or do we hard-code previews in each maker for now and extract later?</div>
+      </div>
+
+      <div class="q-card" onclick="this.classList.toggle('resolved')">
+        <div class="q-num">Question 06</div>
+        <div class="q-text">What's the discovery UX when we have 10+ makers?</div>
+        <div class="q-context">Intent-based entry ("I need a gift") vs. product gallery vs. quiz flow. Not a build-week problem, but shapes how we think about the maker ecosystem. Park it or sketch it?</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <div>SPS Lab &middot; Whiteboard &middot; Maker Infrastructure</div>
+    <div><span class="sb-live">WHITEBOARD ACTIVE</span> &middot; Click stages to expand &middot; Click questions to resolve</div>
+  </div>
+
+</div>
+
+<script>
+  // Toggle stage details
+  function toggleStage(stage) {
+    const allDetails = document.querySelectorAll('.stage-details');
+    const target = document.getElementById('detail-' + stage);
+    const isActive = target.classList.contains('active');
+
+    allDetails.forEach(d => d.classList.remove('active'));
+
+    if (!isActive) {
+      target.classList.add('active');
+      // Smooth scroll to show the detail
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+  }
+
+  // Keyboard navigation for TV remote / presentation
+  document.addEventListener('keydown', (e) => {
+    const stages = ['hook', 'upload', 'customize', 'preview', 'buy'];
+    const num = parseInt(e.key);
+    if (num >= 1 && num <= 5) {
+      toggleStage(stages[num - 1]);
+    }
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.stage-details').forEach(d => d.classList.remove('active'));
+    }
+  });
+
+  console.log('%c SPS WHITEBOARD ', 'background: #00d4ff; color: #000; font-weight: bold; padding: 4px 8px;');
+  console.log('%c Press 1-5 to toggle pipeline stages. Esc to close all. ', 'color: #00d4ff;');
+</script>
+
+</body>
+</html>
