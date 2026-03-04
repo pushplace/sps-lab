@@ -20,6 +20,8 @@ sps-lab/
 │   │       ├── gift-co.html
 │   │       └── control.html
 │   ├── mothers-day/        ← Mother's Day 2026 campaign pages
+│   ├── printkit/           ← PrintKit design explorations
+│   ├── copywriting/        ← Interactive copy testing tools
 │   ├── makers/             ← Maker tool prototypes
 │   └── mockups/            ← App mockups and interactive walkthroughs
 ├── shared/                 ← Shared assets (fonts, base CSS, images)
@@ -42,6 +44,14 @@ sps-lab/
 - **Responsive:** All pages should work on mobile. Grid → single column at 640px.
 
 Individual project pages can have their own design — they're previews of different concepts. The gallery menu stays consistent.
+
+## Copywriting
+
+The lab includes a **Copywriting** section (`projects/copywriting/`) for interactive copy testing tools. These are standalone HTML pages that let the team browse, swap, and compare headline/subhead/pre-header options in the context of a real page layout.
+
+The first example is the **PrintKit Earn Headlines** copy picker (`projects/copywriting/printkit-earn-headlines/`). It renders the earn page hero with mix-and-match controls — arrow buttons cycle through options, a bottom panel shows the full list.
+
+For details on the copy picker template and how to create new ones, see `Copywriting.md` in the Ben/Claude workspace (`Projects/design/Copywriting.md`).
 
 ## Card Tags
 

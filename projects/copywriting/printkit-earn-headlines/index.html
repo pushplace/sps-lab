@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrintKit Earn — Copy Picker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --black: #0a0a0a;
+  --white: #ffffff;
+  --zinc-50: #fafafa;
+  --zinc-100: #f4f4f5;
+  --zinc-200: #e4e4e7;
+  --zinc-300: #d4d4d8;
+  --zinc-400: #a1a1aa;
+  --zinc-500: #71717a;
+  --zinc-600: #52525b;
+  --zinc-800: #27272a;
+}
+
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--font); background: var(--white); color: var(--black); }
+
+/* ===== HERO PREVIEW ===== */
+.hero-preview {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px 60px;
+  position: relative;
+}
+
+.pre-header {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--zinc-400);
+  border: 1.5px solid var(--zinc-300);
+  border-radius: 100px;
+  padding: 4px 14px;
+  margin-bottom: 28px;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.pre-header:hover {
+  border-color: var(--zinc-400);
+  color: var(--zinc-600);
+}
+
+.pre-header.active {
+  border-color: var(--black);
+  color: var(--black);
+  background: var(--zinc-50);
+}
+
+.hero-headline {
+  font-size: 52px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  color: var(--black);
+  max-width: 720px;
+  cursor: pointer;
+  transition: opacity 0.25s;
+  user-select: none;
+}
+
+.hero-headline:hover { opacity: 0.7; }
+.hero-headline.active { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+
+.hero-sub {
+  font-size: 20px;
+  line-height: 1.55;
+  color: var(--zinc-500);
+  max-width: 560px;
+  margin-top: 24px;
+  cursor: pointer;
+  transition: opacity 0.25s;
+  user-select: none;
+}
+
+.hero-sub:hover { opacity: 0.7; }
+.hero-sub.active { text-decoration: underline; text-decoration-color: var(--zinc-300); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+.cta-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--white);
+  background: var(--black);
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  text-decoration: none;
+}
+
+.cta-primary:hover { opacity: 0.85; }
+
+.cta-primary svg { width: 16px; height: 16px; }
+
+.cta-secondary {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--zinc-500);
+  text-decoration: none;
+  padding: 12px 16px;
+  transition: color 0.2s;
+}
+
+.cta-secondary:hover { color: var(--black); }
+
+/* ===== BOTTOM PANEL ===== */
+.panel-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 90;
+}
+
+.panel-backdrop.open { display: block; }
+
+.panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border-top: 1px solid var(--zinc-200);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.12);
+  z-index: 100;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  max-height: 65vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel.open { transform: translateY(0); }
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--zinc-100);
+  flex-shrink: 0;
+}
+
+.panel-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--black);
+}
+
+.panel-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.panel-tab {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--zinc-400);
+  background: transparent;
+  border: 1px solid var(--zinc-200);
+  border-radius: 6px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.panel-tab:hover { border-color: var(--zinc-400); color: var(--zinc-600); }
+.panel-tab.active { background: var(--black); color: var(--white); border-color: var(--black); }
+
+.panel-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--zinc-100);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--zinc-500);
+  transition: all 0.15s;
+}
+
+.panel-close:hover { background: var(--zinc-200); color: var(--black); }
+
+.panel-scroll {
+  overflow-y: auto;
+  flex: 1;
+  padding: 8px 0;
+}
+
+.option-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.option-row:hover { background: var(--zinc-50); }
+.option-row.selected { background: #f0fdf4; border-left-color: #16a34a; }
+
+.option-num {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--zinc-400);
+  font-variant-numeric: tabular-nums;
+  min-width: 20px;
+  padding-top: 2px;
+}
+
+.option-row.selected .option-num { color: #16a34a; }
+
+.option-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--zinc-600);
+  flex: 1;
+}
+
+.option-row.selected .option-text { color: var(--black); font-weight: 500; }
+
+/* ===== TRIGGER BAR ===== */
+.trigger-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border-top: 1px solid var(--zinc-200);
+  padding: 12px 24px;
+  z-index: 80;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.trigger-group {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.trigger-arrow {
+  width: 32px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--zinc-400);
+  background: var(--white);
+  border: 1px solid var(--zinc-200);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+
+.trigger-arrow:hover { background: var(--zinc-50); color: var(--black); border-color: var(--zinc-400); }
+.trigger-arrow:active { background: var(--zinc-100); }
+.trigger-arrow:first-child { border-radius: 8px 0 0 8px; border-right: none; }
+.trigger-arrow:last-child { border-radius: 0 8px 8px 0; border-left: none; }
+
+.trigger-btn {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--zinc-600);
+  background: var(--zinc-50);
+  border: 1px solid var(--zinc-200);
+  border-radius: 0;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.trigger-btn:hover { border-color: var(--zinc-400); color: var(--black); }
+.trigger-btn.active-trigger { background: var(--black); color: var(--white); border-color: var(--black); }
+
+/* ===== CURRENT SELECTION DISPLAY ===== */
+.selection-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--zinc-50);
+  border-bottom: 1px solid var(--zinc-200);
+  padding: 10px 24px;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  font-size: 12px;
+  color: var(--zinc-400);
+}
+
+.selection-bar span { font-weight: 500; color: var(--zinc-600); }
+
+/* ===== BELOW HERO CONTENT ===== */
+.below-hero {
+  border-top: 1px solid var(--zinc-200);
+  padding: 80px 24px 140px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.below-hero p {
+  font-size: 15px;
+  color: var(--zinc-400);
+  line-height: 1.7;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .hero-headline { font-size: 34px; letter-spacing: -0.8px; }
+  .hero-sub { font-size: 17px; }
+  .hero-preview { min-height: 60vh; padding: 60px 20px 40px; }
+  .trigger-bar { gap: 6px; }
+  .trigger-btn { font-size: 12px; padding: 7px 12px; }
+  .cta-row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="selection-bar">
+  Pre-header: <span id="sel-pre">1</span> &middot;
+  Headline: <span id="sel-head">1</span> &middot;
+  Subhead: <span id="sel-sub">1</span>
+</div>
+
+<!-- ===== HERO PREVIEW ===== -->
+<div class="hero-preview">
+  <div class="pre-header" id="preHeader" onclick="openPanel('pre')">Revenue share</div>
+  <h1 class="hero-headline" id="headline" onclick="openPanel('head')">Earn on every print<br>your app sends.</h1>
+  <p class="hero-sub" id="subhead" onclick="openPanel('sub')">Your agent adds the print button. The customer pays retail. We handle printing, packing, and shipping. You get a commission on every sale.</p>
+  <div class="cta-row">
+    <button class="cta-primary" onclick="navigator.clipboard.writeText('https://printkit.dev/llms-full.txt'); this.innerHTML='Copied!'; setTimeout(()=>{this.innerHTML='<svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><rect x=\'9\' y=\'9\' width=\'13\' height=\'13\' rx=\'2\'/><path d=\'M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1\'/></svg> Copy this &amp; share with your agent'},1500)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      Copy this &amp; share with your agent
+    </button>
+    <a href="#how" class="cta-secondary">How it works &darr;</a>
+  </div>
+</div>
+
+<div class="below-hero" id="how">
+  <p>Click any element in the hero above — the pre-header pill, the headline, or the subhead — to open the copy picker and browse all 10 options for that element. Or use the buttons at the bottom of the screen. Mix and match freely.</p>
+</div>
+
+<!-- ===== BOTTOM TRIGGER BAR ===== -->
+<div class="trigger-bar" id="triggerBar">
+  <div class="trigger-group">
+    <button class="trigger-arrow" onclick="cycle('pre',-1)">&lsaquo;</button>
+    <button class="trigger-btn" onclick="openPanel('pre')">Pre-header</button>
+    <button class="trigger-arrow" onclick="cycle('pre',1)">&rsaquo;</button>
+  </div>
+  <div class="trigger-group">
+    <button class="trigger-arrow" onclick="cycle('head',-1)">&lsaquo;</button>
+    <button class="trigger-btn" onclick="openPanel('head')">Headline</button>
+    <button class="trigger-arrow" onclick="cycle('head',1)">&rsaquo;</button>
+  </div>
+  <div class="trigger-group">
+    <button class="trigger-arrow" onclick="cycle('sub',-1)">&lsaquo;</button>
+    <button class="trigger-btn" onclick="openPanel('sub')">Subhead</button>
+    <button class="trigger-arrow" onclick="cycle('sub',1)">&rsaquo;</button>
+  </div>
+</div>
+
+<!-- ===== PANEL ===== -->
+<div class="panel-backdrop" id="backdrop" onclick="closePanel()"></div>
+<div class="panel" id="panel">
+  <div class="panel-header">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="panel-title" id="panelTitle">Headline Options</span>
+      <div class="panel-tabs">
+        <button class="panel-tab" data-tab="pre" onclick="switchTab('pre')">Pre-header</button>
+        <button class="panel-tab" data-tab="head" onclick="switchTab('head')">Headline</button>
+        <button class="panel-tab" data-tab="sub" onclick="switchTab('sub')">Subhead</button>
+      </div>
+    </div>
+    <button class="panel-close" onclick="closePanel()">&times;</button>
+  </div>
+  <div class="panel-scroll" id="panelScroll"></div>
+</div>
+
+<script>
+const copy = {
+  pre: [
+    "Now earning",
+    "New from PrintKit",
+    "Partner program",
+    "Revenue share",
+    "API → Income",
+    "Passive revenue, one endpoint",
+    "Launch & earn",
+    "Zero inventory. Real money.",
+    "The print API that pays you",
+    "Ship prints. Keep the margin.",
+    "Agent-ready print API",
+    "One URL. Infinite products.",
+    "Your agent's new revenue stream",
+    "Paste. Print. Profit.",
+    "Built for agents. Revenue for you.",
+    "The integration that isn't one",
+    "No SDK. No setup. Just go.",
+    "Print money. Almost literally.",
+    "Your agent already gets it",
+    "Works before your coffee's cold",
+    "One URL. Your agent does the rest.",
+    "11 minutes to first revenue",
+    "The print API agents prefer",
+    "No keys. No SDK. No kidding.",
+    "Agent-native commerce",
+    "Your agent's first physical product",
+    "From prompt to profit",
+    "Integration time: one paste",
+    "Real prints. Real margins. Zero friction.",
+    "The setup is the punchline"
+  ],
+  head: [
+    "Earn on every print\nyour app sends.",
+    "One API call.\nCommission on every sale.",
+    "Your app prints.\nYou get paid.",
+    "Turn any app into\na print business.",
+    "Add a print button.\nEarn $8–$60 per order.",
+    "The fastest way to monetize\nphoto prints.",
+    "Build once. Earn on\nevery order, forever.",
+    "Your users want prints.\nYou should get paid for that.",
+    "A revenue stream\nthat ships itself.",
+    "Print. Ship. Earn.\nRepeat.",
+    "You can just print.\nMoney.",
+    "Print. Money.\nThat's the whole pitch.",
+    "The only API where printing\nis the less interesting half.",
+    "Your agent closes the sale.\nWe print it. You keep the margin.",
+    "Give your agent a print button\nand get out of the way.",
+    "Other print APIs need a week.\nThis one needs a prompt.",
+    "No dashboard. No onboarding.\nJust revenue.",
+    "Your agent already knows\nhow to sell this.",
+    "The print API built for agents.\nThe revenue built for you.",
+    "One line of context.\nSix product lines. Infinite orders.",
+    "While other APIs ask you to integrate,\nthis one's already running.",
+    "Tell your agent to print.\nIt already knows how.",
+    "We made a print API.\nYour agent made it a business.",
+    "The product is real.\nThe setup isn't.",
+    "Every photo your users take\nis revenue you're leaving on the table.",
+    "You don't need a print business.\nYou need one URL and an agent.",
+    "The man who ships a print\nnever forgets the margin.",
+    "Nobody ever built a print integration\nin eleven minutes. Until agents.",
+    "Six products. One endpoint.\nYour agent handles the rest.",
+    "The best print API is the one\nyour agent can use without you.",
+    "We handle the atoms.\nYour agent handles the sale.\nYou handle the deposit.",
+    "A printing press in your pocket.\nExcept it prints money.",
+    "Add printing.\nKeep the margin.",
+    "Your agent makes the app.\nWe print the photos. You get paid.",
+    "Copy. Paste. Print. Money.",
+    "Your agent writes the code.\nWe ship the box.\nYou cash the check.",
+    "One URL in. Revenue out.",
+    "We print. You profit.\nEverybody gets a wall.",
+    "Move fast\nand print things.",
+    "Our margin\nis your opportunity.",
+    "While you were reading this,\nan agent sold a print."
+  ],
+  sub: [
+    "Your agent adds the print button. The customer pays retail. We handle printing, packing, and shipping. You get a commission on every sale.",
+    "Connect the PrintKit API. Your users order metal prints, framed art, photo books — anything. We print and ship from our US lab. You earn a commission every time.",
+    "One endpoint turns any image into a physical product. We handle payments, printing, packing, and delivery. You collect a commission on every order your app generates.",
+    "No inventory. No fulfillment. No payment processing. Just plug in the API, and every time a user orders a print through your app, you earn.",
+    "PrintKit handles the entire physical product chain — from checkout to doorstep. You add the button, we do the rest, and you earn $8 to $60+ on every single order.",
+    "Integrate once and earn indefinitely. We produce gallery-quality prints in our own lab, ship direct to your users, and split the revenue with you.",
+    "Your users already have the photos. Give them a way to print — metal, wood, framed, magazine — and earn a commission on every order without touching a box.",
+    "We built the print infrastructure so you don't have to. Free API. No minimums. Real products from a real lab. You earn from order one.",
+    "Every app with a camera roll is a print business waiting to happen. Add PrintKit, and every tap on 'Print this' puts money in your account.",
+    "Photo prints are high-margin, zero-inventory revenue. Connect one API, offer six product lines, and earn a commission on every sale your app drives.",
+    "Point your agent at printkit.dev/llms-full.txt. That's it. That's the integration. It reads the docs, places orders, and you earn on every one.",
+    "Most print APIs want you to read docs, get keys, build flows, test endpoints. PrintKit wants you to paste one URL into your agent's context and start earning.",
+    "Your agent can read our API, place an order, and earn you a commission — all before you finish reading this sentence. No keys. No setup. No kidding.",
+    "This isn't another fulfillment vendor with a 40-page integration guide. It's one context file your agent already understands. Orders start. Revenue follows.",
+    "We built PrintKit for the way software gets built now — by agents, in minutes, not by teams over quarters. Your agent handles the integration. You handle the deposit.",
+    "Other print APIs are built for developers who have sprints to plan. This one is built for agents that ship tonight. Revenue starts when your agent does.",
+    "The entire integration is a URL. Your agent reads it, understands the products, places orders, handles checkout. You earn $8–$60 on every sale. There is no step two.",
+    "PrintKit is agent-native. No SDK to install, no webhook to configure, no sandbox to test. Just context your agent can read and an API it can call. Revenue from day one.",
+    "Your agent is already building things that touch photos. Give it a print API and suddenly every image is a product, every user is a customer, and every order is your commission.",
+    "We didn't build another print API. We built the one that agents can use without asking you for help. Zero config. Instant revenue. Real products from a real lab.",
+    "Hand your agent one URL. It reads the catalog, builds the checkout, places the order. You wake up to commission receipts. That's not a pitch — that's Tuesday.",
+    "The old way: weeks of integration, test orders, webhook debugging. The new way: your agent reads one file and starts selling metal prints tonight. We print them tomorrow.",
+    "Six premium products. One API your agent already understands. Every order printed in our US lab, shipped to the customer's door. Your cut lands monthly. No questions asked.",
+    "You built an app people love. We built the print infrastructure agents can use. Put them together and every photo becomes a product, every product becomes your margin.",
+    "PrintKit exists because agents shouldn't need a developer to sell a print. Paste the context. The agent handles product selection, checkout, and fulfillment. You handle growth.",
+    "Imagine telling your agent: 'Add printing to the app.' Eleven minutes later it's done. Real products. Real revenue. That's not the future — that's PrintKit, right now.",
+    "There are print APIs that require API keys, OAuth flows, sandbox environments, and a Slack channel with their dev team. Then there's PrintKit: one URL, and your agent is selling.",
+    "We print on metal, wood, acrylic, paper, and in magazines — all from one endpoint your agent can call. You never touch inventory, shipping labels, or customer complaints. Just revenue.",
+    "The agent economy needs physical products. We supply them. Gallery-quality prints from a 15-year-old photo lab, available through an API so simple your agent figured it out before you did.",
+    "Every print API promises easy integration. We're the only one where 'integration' means giving your agent a URL and watching the orders come in. No code. No config. No catch."
+  ]
+};
+
+const state = { pre: 0, head: 0, sub: 0 };
+let currentTab = 'head';
+
+function render() {
+  document.getElementById('preHeader').textContent = copy.pre[state.pre];
+  document.getElementById('headline').innerHTML = copy.head[state.head].replace(/\n/g, '<br>');
+  document.getElementById('subhead').textContent = copy.sub[state.sub];
+  document.getElementById('sel-pre').textContent = state.pre + 1;
+  document.getElementById('sel-head').textContent = state.head + 1;
+  document.getElementById('sel-sub').textContent = state.sub + 1;
+}
+
+function renderOptions() {
+  const scroll = document.getElementById('panelScroll');
+  const options = copy[currentTab];
+  scroll.innerHTML = options.map((text, i) => {
+    const selected = state[currentTab] === i;
+    const display = text.replace(/\n/g, ' ');
+    return `<div class="option-row ${selected ? 'selected' : ''}" onclick="selectOption('${currentTab}', ${i})">
+      <span class="option-num">${String(i + 1).padStart(2, '0')}</span>
+      <span class="option-text">${display}</span>
+    </div>`;
+  }).join('');
+
+  document.querySelectorAll('.panel-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === currentTab);
+  });
+
+  const titles = { pre: 'Pre-header Options', head: 'Headline Options', sub: 'Subhead Options' };
+  document.getElementById('panelTitle').textContent = titles[currentTab];
+
+  // Highlight active trigger
+  document.querySelectorAll('.trigger-btn').forEach((btn, i) => {
+    const tabs = ['pre', 'head', 'sub'];
+    btn.classList.toggle('active-trigger', tabs[i] === currentTab);
+  });
+
+  // Highlight active hero element
+  document.getElementById('preHeader').classList.toggle('active', currentTab === 'pre');
+  document.getElementById('headline').classList.toggle('active', currentTab === 'head');
+  document.getElementById('subhead').classList.toggle('active', currentTab === 'sub');
+}
+
+function selectOption(tab, idx) {
+  state[tab] = idx;
+  render();
+  renderOptions();
+}
+
+function openPanel(tab) {
+  currentTab = tab;
+  renderOptions();
+  document.getElementById('panel').classList.add('open');
+  document.getElementById('backdrop').classList.add('open');
+
+  // Scroll to selected option
+  setTimeout(() => {
+    const selected = document.querySelector('.option-row.selected');
+    if (selected) selected.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }, 100);
+}
+
+function closePanel() {
+  document.getElementById('panel').classList.remove('open');
+  document.getElementById('backdrop').classList.remove('open');
+  document.getElementById('preHeader').classList.remove('active');
+  document.getElementById('headline').classList.remove('active');
+  document.getElementById('subhead').classList.remove('active');
+  document.querySelectorAll('.trigger-btn').forEach(b => b.classList.remove('active-trigger'));
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  renderOptions();
+  // Scroll to selected
+  setTimeout(() => {
+    const selected = document.querySelector('.option-row.selected');
+    if (selected) selected.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }, 50);
+}
+
+function cycle(tab, dir) {
+  const len = copy[tab].length;
+  state[tab] = (state[tab] + dir + len) % len;
+  render();
+  // If panel is open on this tab, refresh it
+  if (document.getElementById('panel').classList.contains('open') && currentTab === tab) {
+    renderOptions();
+  }
+}
+
+// Init
+render();
+</script>
+</body>
+</html>
