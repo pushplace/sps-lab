@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrintKit Go-Live — Launch Checklist</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0a0a0c;
+    --green: #00ff88;
+    --green-dim: #00ff8830;
+    --amber: #ffb800;
+    --amber-dim: #ffb80030;
+    --red: #ff4444;
+    --red-dim: #ff444430;
+    --cyan: #00d4ff;
+    --cyan-dim: #00d4ff30;
+    --purple: #b388ff;
+    --purple-dim: #b388ff30;
+    --pink: #ff6bb5;
+    --pink-dim: #ff6bb530;
+    --text: #f0f0f2;
+    --text-dim: #9a9aa6;
+    --surface: #111114;
+    --surface2: #18181c;
+    --border: #222228;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .header {
+    padding: 32px 48px 24px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 300px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--green), transparent);
+    box-shadow: 0 0 10px var(--green-dim);
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .header h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    color: var(--green);
+    text-shadow: 0 0 30px var(--green-dim);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+  .header-meta {
+    text-align: right;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+  .header-meta .live {
+    color: var(--green);
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .main {
+    padding: 40px 48px;
+    max-width: 1600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    margin-bottom: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+  }
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .progress-count {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .progress-track {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 3px;
+    box-shadow: 0 0 10px var(--green-dim);
+    transition: width 0.5s ease;
+  }
+
+  /* The MVP line */
+  .mvp-line {
+    text-align: center;
+    margin: 48px 0 32px;
+    position: relative;
+  }
+  .mvp-line::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--red), var(--red) 8px, transparent 8px, transparent 16px);
+    box-shadow: 0 0 8px var(--red-dim);
+  }
+  .mvp-tag {
+    display: inline-block;
+    position: relative;
+    background: var(--bg);
+    padding: 6px 20px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: 2px solid var(--red);
+    border-radius: 6px;
+    box-shadow: 0 0 20px var(--red-dim);
+  }
+
+  /* Section labels */
+  .section-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    padding-left: 4px;
+  }
+
+  /* Swim lanes */
+  .lanes {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  .lane {
+    position: relative;
+  }
+  .lane-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+  }
+  .lane-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .lane-alejo .lane-avatar { background: var(--cyan-dim); color: var(--cyan); border: 1px solid var(--cyan); }
+  .lane-ben .lane-avatar { background: var(--purple-dim); color: var(--purple); border: 1px solid var(--purple); }
+  .lane-george .lane-avatar { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber); }
+  .lane-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .lane-alejo .lane-name { color: var(--cyan); }
+  .lane-ben .lane-name { color: var(--purple); }
+  .lane-george .lane-name { color: var(--amber); }
+  .lane-role {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Checklist items */
+  .check-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .check-item:hover {
+    border-color: var(--text-dim);
+    transform: translateX(2px);
+  }
+  .check-item.done {
+    opacity: 0.4;
+    border-color: var(--green);
+  }
+  .check-item.done .check-title {
+    text-decoration: line-through;
+    color: var(--text-dim);
+  }
+  .check-item.done .check-box {
+    background: var(--green-dim);
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .check-box {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.2s;
+    margin-top: 1px;
+  }
+  .check-item:hover .check-box {
+    border-color: var(--text-dim);
+  }
+  .check-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .check-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 3px;
+    line-height: 1.4;
+  }
+  .check-desc {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  .check-tag {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-top: 6px;
+  }
+  .tag-done { background: var(--green-dim); color: var(--green); }
+  .tag-wip { background: var(--amber-dim); color: var(--amber); }
+  .tag-blocked { background: var(--red-dim); color: var(--red); }
+  .tag-todo { background: var(--surface2); color: var(--text-dim); }
+
+  /* Dependency connector */
+  .dep-note {
+    font-size: 10px;
+    color: var(--text-dim);
+    padding: 6px 12px;
+    margin-bottom: 10px;
+    border-left: 2px solid var(--border);
+    font-style: italic;
+  }
+
+  /* The question section */
+  .decisions {
+    margin-bottom: 48px;
+  }
+  .decision-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .decision-card {
+    background: var(--surface);
+    border: 1px solid var(--amber);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 20px var(--amber-dim);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .decision-card:hover {
+    transform: translateY(-2px);
+  }
+  .decision-card.resolved {
+    border-color: var(--green);
+    box-shadow: 0 0 20px var(--green-dim);
+    opacity: 0.5;
+  }
+  .decision-card.resolved .dc-label { color: var(--green); }
+  .decision-card.resolved .dc-label::after { content: ' — RESOLVED'; }
+  .dc-label {
+    font-size: 10px;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .dc-question {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+  .dc-context {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .dc-options {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .dc-opt {
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .dc-opt:hover {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-dim);
+  }
+  .dc-opt.selected {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-dim);
+  }
+
+  /* Launch sequence */
+  .launch-sequence {
+    margin-bottom: 48px;
+  }
+  .ls-timeline {
+    display: flex;
+    gap: 0;
+    position: relative;
+  }
+  .ls-timeline::before {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--border);
+  }
+  .ls-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    padding-top: 48px;
+  }
+  .ls-dot {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    z-index: 1;
+    transition: all 0.3s;
+  }
+  .ls-step.active .ls-dot {
+    border-color: var(--green);
+    background: var(--green);
+    box-shadow: 0 0 12px var(--green-dim);
+  }
+  .ls-step.next .ls-dot {
+    border-color: var(--amber);
+    background: var(--amber);
+    box-shadow: 0 0 12px var(--amber-dim);
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  .ls-day {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .ls-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .ls-step.active .ls-title { color: var(--green); }
+  .ls-step.next .ls-title { color: var(--amber); }
+  .ls-desc {
+    font-size: 10px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    padding: 0 8px;
+  }
+
+  /* Status bar */
+  .status-bar {
+    margin-top: 48px;
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+  }
+  .status-bar .sb-live {
+    color: var(--green);
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @media (max-width: 1200px) {
+    .lanes { grid-template-columns: 1fr; }
+    .decision-grid { grid-template-columns: 1fr; }
+    .ls-timeline { flex-direction: column; gap: 16px; }
+    .ls-timeline::before { display: none; }
+    .ls-step { padding-top: 0; padding-left: 40px; text-align: left; }
+    .ls-dot { left: 0; top: 50%; transform: translateY(-50%); }
+  }
+  @media (max-width: 768px) {
+    .header { padding: 24px; }
+    .main { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>PrintKit Go-Live</h1>
+      <div class="header-sub">The leanest possible launch. What do we actually need to ship?</div>
+    </div>
+    <div class="header-meta">
+      <div><span class="live">CHECKLIST</span> &mdash; Build Week Day 2</div>
+      <div>printkit.dev</div>
+      <div>March 3, 2026</div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- Progress -->
+  <div class="progress-bar">
+    <div class="progress-top">
+      <div class="progress-label">MVP Completion</div>
+      <div class="progress-count" id="progressCount">0 / 0</div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- Launch sequence timeline -->
+  <div class="launch-sequence">
+    <div class="section-label">Launch Sequence</div>
+    <div class="ls-timeline">
+      <div class="ls-step active">
+        <div class="ls-dot"></div>
+        <div class="ls-day">Mon-Tue (Done)</div>
+        <div class="ls-title">Core API + Auth</div>
+        <div class="ls-desc">API keys, earnings dashboard, product catalog, auth flow</div>
+      </div>
+      <div class="ls-step next">
+        <div class="ls-dot"></div>
+        <div class="ls-day">Tue-Wed</div>
+        <div class="ls-title">Order Flow + Docs</div>
+        <div class="ls-desc">Create order endpoint, minimal docs, homepage live</div>
+      </div>
+      <div class="ls-step">
+        <div class="ls-dot"></div>
+        <div class="ls-day">Wed-Thu</div>
+        <div class="ls-title">First External Order</div>
+        <div class="ls-desc">Someone outside the room places a real order through the API</div>
+      </div>
+      <div class="ls-step">
+        <div class="ls-dot"></div>
+        <div class="ls-day">Thu-Fri</div>
+        <div class="ls-title">Soft Launch</div>
+        <div class="ls-desc">Share with 10-20 devs. Post in communities. Get feedback.</div>
+      </div>
+      <div class="ls-step">
+        <div class="ls-dot"></div>
+        <div class="ls-day">Post Build Week</div>
+        <div class="ls-title">Public Launch</div>
+        <div class="ls-desc">HN, Twitter, dev communities. Announce properly when ready.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MVP LINE ===== -->
+  <div class="mvp-line">
+    <div class="mvp-tag">Must Ship &mdash; MVP</div>
+  </div>
+
+  <!-- MVP Checklist by owner -->
+  <div class="section-label">MVP Checklist — Ship or It Doesn't Launch</div>
+  <div class="lanes">
+
+    <!-- ALEJO -->
+    <div class="lane lane-alejo">
+      <div class="lane-header">
+        <div class="lane-avatar">A</div>
+        <div>
+          <div class="lane-name">Alejo</div>
+          <div class="lane-role">API + Infrastructure</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">API key signup + management</div>
+          <div class="check-desc">Developer signs up, gets API key, can see it in dashboard. Revoke/regenerate.</div>
+          <span class="check-tag tag-wip">almost done</span>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Earnings / billing dashboard</div>
+          <div class="check-desc">"See how much money you made." Developer sees orders, revenue, payouts owed.</div>
+          <span class="check-tag tag-wip">almost done</span>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">GET /products — catalog endpoint</div>
+          <div class="check-desc">Returns product list with sizes, prices, specs, image URLs. Already exists at products.json — needs auth wrapper.</div>
+          <span class="check-tag tag-done">exists</span>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">POST /orders — create order</div>
+          <div class="check-desc">The big one. Accept product, variant, photo URLs, shipping address. Return order ID + status. This IS PrintKit.</div>
+          <span class="check-tag tag-todo">must build</span>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">GET /orders/:id — order status</div>
+          <div class="check-desc">Check order status: received → printing → shipped → delivered. Tracking number when available.</div>
+          <span class="check-tag tag-todo">must build</span>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Photo file handling</div>
+          <div class="check-desc">Accept photo URLs in order payload. Download, validate dimensions, store for fulfillment. Or presigned upload URLs?</div>
+          <span class="check-tag tag-todo">must build</span>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Order → SPS fulfillment bridge</div>
+          <div class="check-desc">API order becomes a real SPS production job. Connect to existing print pipeline. The last mile.</div>
+          <span class="check-tag tag-todo">must build</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BEN -->
+    <div class="lane lane-ben">
+      <div class="lane-header">
+        <div class="lane-avatar">B</div>
+        <div>
+          <div class="lane-name">Ben</div>
+          <div class="lane-role">Design + Brand</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Homepage — printkit.dev</div>
+          <div class="check-desc">What is PrintKit, who is it for, how it works, pricing, CTA to sign up. The front door.</div>
+          <span class="check-tag tag-wip">in progress</span>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Pricing page / section</div>
+          <div class="check-desc">Cost-plus model. Show base cost per product + developer markup. Dead simple — devs need to see "what will this cost me?"</div>
+          <span class="check-tag tag-todo">todo</span>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Dashboard UI</div>
+          <div class="check-desc">Where devs manage API keys, view orders, see earnings. Needs to look polished — this is the product experience.</div>
+          <span class="check-tag tag-wip">in progress</span>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Earn / partners page</div>
+          <div class="check-desc">"Build apps, earn money on every print." The affiliate/partner pitch. 20 designs already explored — pick one, ship it.</div>
+          <span class="check-tag tag-wip">designs done</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GEORGE -->
+    <div class="lane lane-george">
+      <div class="lane-header">
+        <div class="lane-avatar">G</div>
+        <div>
+          <div class="lane-name">George</div>
+          <div class="lane-role">Docs + Marketing + Copy</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Quick start guide</div>
+          <div class="check-desc">One page. "Get your API key → make your first order in 5 minutes." Curl example + Node/Python snippet. This is the docs MVP.</div>
+          <span class="check-tag tag-todo">todo</span>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">API reference</div>
+          <div class="check-desc">Endpoint docs: auth, products, orders. Request/response examples. Can be a single clean page — no need for full docs platform.</div>
+          <span class="check-tag tag-todo">todo</span>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Homepage copy</div>
+          <div class="check-desc">Headline, subhead, value props, how-it-works, CTA. Ben has the design — George writes the words. Agent-first angle.</div>
+          <span class="check-tag tag-todo">todo</span>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">One working demo</div>
+          <div class="check-desc">A live app built on PrintKit that people can try. Cosmos Prints exists — clean it up or build something new that shows the API in action.</div>
+          <span class="check-tag tag-wip">cosmos exists</span>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">MCP server / agent integration</div>
+          <div class="check-desc">The differentiator. Ship a PrintKit MCP server so Claude/GPT agents can order prints. "Print this image" just works. The whole agent-first pitch lives or dies here.</div>
+          <span class="check-tag tag-todo">big bet</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== BELOW MVP LINE ===== -->
+  <div class="mvp-line">
+    <div class="mvp-tag" style="border-color: var(--text-dim); color: var(--text-dim); box-shadow: none;">Nice to Have &mdash; Post Launch</div>
+  </div>
+
+  <div class="section-label" style="margin-top: 32px">Can Wait — Don't Get Distracted</div>
+  <div class="lanes">
+
+    <div class="lane lane-alejo">
+      <div class="lane-header">
+        <div class="lane-avatar">A</div>
+        <div>
+          <div class="lane-name">Alejo</div>
+          <div class="lane-role">Post-launch</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)" style="opacity: 0.5;">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Webhooks — order status updates</div>
+          <div class="check-desc">POST to developer's URL when order status changes. Important but not day-one — devs can poll /orders/:id initially.</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)" style="opacity: 0.5;">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Rate limiting + abuse protection</div>
+          <div class="check-desc">API rate limits, request validation, cost caps. Matters at scale, not with 5 beta users.</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)" style="opacity: 0.5;">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">SDKs — Node, Python, Ruby</div>
+          <div class="check-desc">npm install printkit, pip install printkit. Nice but curl + fetch works fine for launch.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lane lane-ben">
+      <div class="lane-header">
+        <div class="lane-avatar">B</div>
+        <div>
+          <div class="lane-name">Ben</div>
+          <div class="lane-role">Post-launch</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)" style="opacity: 0.5;">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Product catalog browser</div>
+          <div class="check-desc">Visual catalog on printkit.dev — browse products, see sizes, preview mockups. Helps devs pick what to sell.</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)" style="opacity: 0.5;">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Showcase / gallery page</div>
+          <div class="check-desc">"Built with PrintKit" — apps and sites using the API. Social proof. Need actual users first.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lane lane-george">
+      <div class="lane-header">
+        <div class="lane-avatar">G</div>
+        <div>
+          <div class="lane-name">George</div>
+          <div class="lane-role">Post-launch</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)" style="opacity: 0.5;">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Blog / launch post</div>
+          <div class="check-desc">"Why we built PrintKit" — the story, the vision, the agent economy angle. Good for HN, Twitter, etc.</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)" style="opacity: 0.5;">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Dev community seeding</div>
+          <div class="check-desc">Post in AI/agent communities, indie hacker forums, dev Discords. "We made it trivial to add printing to your app."</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)" style="opacity: 0.5;">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">Tutorial content</div>
+          <div class="check-desc">"Build a photo print store in 20 minutes" — video or blog. Shows the DX in action.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Decisions -->
+  <div class="decisions">
+    <div class="section-label">Decisions to Make Before Launch</div>
+    <div class="decision-grid">
+
+      <div class="decision-card" onclick="this.classList.toggle('resolved')">
+        <div class="dc-label">Decision 01</div>
+        <div class="dc-question">How do developers pay for prints?</div>
+        <div class="dc-context">Do devs pre-fund an account (Stripe balance), pay per order (card on file), or get invoiced monthly? Affects Alejo's billing work.</div>
+        <div class="dc-options">
+          <div class="dc-opt" onclick="event.stopPropagation(); selectOpt(this)">Pre-fund</div>
+          <div class="dc-opt" onclick="event.stopPropagation(); selectOpt(this)">Card on file</div>
+          <div class="dc-opt" onclick="event.stopPropagation(); selectOpt(this)">Monthly invoice</div>
+        </div>
+      </div>
+
+      <div class="decision-card" onclick="this.classList.toggle('resolved')">
+        <div class="dc-label">Decision 02</div>
+        <div class="dc-question">What's in the product catalog at launch?</div>
+        <div class="dc-context">Currently 6 products. Do we launch with all 6, or just the simplest ones (large format prints, metal prints)? More products = more edge cases.</div>
+        <div class="dc-options">
+          <div class="dc-opt" onclick="event.stopPropagation(); selectOpt(this)">All 6</div>
+          <div class="dc-opt" onclick="event.stopPropagation(); selectOpt(this)">Prints only</div>
+          <div class="dc-opt" onclick="event.stopPropagation(); selectOpt(this)">Prints + frames</div>
+        </div>
+      </div>
+
+      <div class="decision-card" onclick="this.classList.toggle('resolved')">
+        <div class="dc-label">Decision 03</div>
+        <div class="dc-question">Photo handling: URL reference or upload?</div>
+        <div class="dc-context">Option A: dev passes a photo URL, we download it. Simple but we depend on the URL staying live. Option B: presigned upload to our S3. More reliable but more API complexity.</div>
+        <div class="dc-options">
+          <div class="dc-opt" onclick="event.stopPropagation(); selectOpt(this)">URL reference</div>
+          <div class="dc-opt" onclick="event.stopPropagation(); selectOpt(this)">Upload to S3</div>
+          <div class="dc-opt" onclick="event.stopPropagation(); selectOpt(this)">Support both</div>
+        </div>
+      </div>
+
+      <div class="decision-card" onclick="this.classList.toggle('resolved')">
+        <div class="dc-label">Decision 04</div>
+        <div class="dc-question">Pricing model — markup or commission?</div>
+        <div class="dc-context">Cost-plus: dev pays base cost, sets their own retail price, keeps the markup. Commission: we set retail, dev gets X% per sale. Cost-plus is simpler and more dev-friendly.</div>
+        <div class="dc-options">
+          <div class="dc-opt" onclick="event.stopPropagation(); selectOpt(this)">Cost-plus</div>
+          <div class="dc-opt" onclick="event.stopPropagation(); selectOpt(this)">Commission</div>
+          <div class="dc-opt" onclick="event.stopPropagation(); selectOpt(this)">Both options</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <div>SPS Lab &middot; Whiteboard &middot; PrintKit Go-Live Checklist</div>
+    <div><span class="sb-live">CHECKLIST ACTIVE</span> &middot; Click items to check off &middot; Click decisions to resolve</div>
+  </div>
+
+</div>
+
+<script>
+  function toggleCheck(el) {
+    el.classList.toggle('done');
+    const box = el.querySelector('.check-box');
+    box.textContent = el.classList.contains('done') ? '✓' : '';
+    updateProgress();
+  }
+
+  function selectOpt(el) {
+    // Deselect siblings
+    el.parentElement.querySelectorAll('.dc-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function updateProgress() {
+    const mvpItems = document.querySelectorAll('.mvp-line ~ .lanes:first-of-type .check-item, .lanes:first-of-type .check-item');
+    // Get only MVP items (first set of lanes)
+    const allLanes = document.querySelectorAll('.lanes');
+    if (allLanes.length < 1) return;
+    const mvpLane = allLanes[0];
+    const items = mvpLane.querySelectorAll('.check-item');
+    const done = mvpLane.querySelectorAll('.check-item.done');
+    const total = items.length;
+    const completed = done.length;
+    const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+    document.getElementById('progressCount').textContent = completed + ' / ' + total;
+    document.getElementById('progressFill').style.width = pct + '%';
+
+    // Color change at milestones
+    const fill = document.getElementById('progressFill');
+    const count = document.getElementById('progressCount');
+    if (pct === 100) {
+      fill.style.background = 'var(--green)';
+      fill.style.boxShadow = '0 0 20px var(--green)';
+      count.style.color = 'var(--green)';
+    } else if (pct >= 50) {
+      fill.style.background = 'var(--amber)';
+      fill.style.boxShadow = '0 0 10px var(--amber-dim)';
+      count.style.color = 'var(--amber)';
+    } else {
+      fill.style.background = 'var(--cyan)';
+      fill.style.boxShadow = '0 0 10px var(--cyan-dim)';
+      count.style.color = 'var(--cyan)';
+    }
+  }
+
+  // Save state to localStorage
+  function saveState() {
+    const state = {};
+    document.querySelectorAll('.check-item').forEach((el, i) => {
+      state['check-' + i] = el.classList.contains('done');
+    });
+    document.querySelectorAll('.decision-card').forEach((el, i) => {
+      state['decision-' + i] = el.classList.contains('resolved');
+      const selected = el.querySelector('.dc-opt.selected');
+      if (selected) state['decision-' + i + '-opt'] = selected.textContent;
+    });
+    localStorage.setItem('printkit-launch', JSON.stringify(state));
+  }
+
+  function loadState() {
+    const raw = localStorage.getItem('printkit-launch');
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    document.querySelectorAll('.check-item').forEach((el, i) => {
+      if (state['check-' + i]) {
+        el.classList.add('done');
+        el.querySelector('.check-box').textContent = '✓';
+      }
+    });
+    document.querySelectorAll('.decision-card').forEach((el, i) => {
+      if (state['decision-' + i]) el.classList.add('resolved');
+      const optText = state['decision-' + i + '-opt'];
+      if (optText) {
+        el.querySelectorAll('.dc-opt').forEach(o => {
+          if (o.textContent === optText) o.classList.add('selected');
+        });
+      }
+    });
+    updateProgress();
+  }
+
+  // Auto-save on any click
+  document.addEventListener('click', () => setTimeout(saveState, 100));
+
+  // Init
+  loadState();
+  updateProgress();
+
+  console.log('%c PRINTKIT GO-LIVE CHECKLIST ', 'background: #00ff88; color: #000; font-weight: bold; padding: 4px 8px;');
+  console.log('%c Check items off as you build. State persists in localStorage. ', 'color: #00ff88;');
+</script>
+
+</body>
+</html>
