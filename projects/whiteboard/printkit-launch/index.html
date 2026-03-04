@@ -737,14 +737,6 @@
         </div>
       </div>
 
-      <div class="check-item" onclick="toggleCheck(this)">
-        <div class="check-box"></div>
-        <div class="check-content">
-          <div class="check-title">MCP server / agent integration</div>
-          <div class="check-desc">The differentiator. Ship a PrintKit MCP server so Claude/GPT agents can order prints. "Print this image" just works. The whole agent-first pitch lives or dies here.</div>
-          <span class="check-tag tag-todo">big bet</span>
-        </div>
-      </div>
     </div>
 
   </div>
@@ -847,6 +839,24 @@
         <div class="check-content">
           <div class="check-title">Tutorial content</div>
           <div class="check-desc">"Build a photo print store in 20 minutes" — video or blog. Shows the DX in action.</div>
+        </div>
+      </div>
+
+      <div class="dep-note">Different audience than the API — these are for agent builders + end users, not app developers</div>
+
+      <div class="check-item" onclick="toggleCheck(this)" style="opacity: 0.5;">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">MCP server for developers</div>
+          <div class="check-desc">PrintKit MCP server that agent-builders install so their agents can create print orders programmatically. Tools: browse catalog, create order, check status. B2D — devs integrate this into their agent apps.</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)" style="opacity: 0.5;">
+        <div class="check-box"></div>
+        <div class="check-content">
+          <div class="check-title">SPS personal print agent (MCP)</div>
+          <div class="check-desc">Different thing entirely. An MCP server for SPS customers — "print this photo as a 16x20 metal print" → get a checkout link, done. Not PrintKit infra, it's a consumer product that uses PrintKit. The "just print it" experience.</div>
         </div>
       </div>
     </div>
