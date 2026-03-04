@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Trip — Your travel, printed.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #f8f6f3;
+    --text: #1a1a1a;
+    --text-muted: #6b6b6b;
+    --text-faint: #a8a5a0;
+    --cream: #fefaf1;
+    --warm-white: #f5f0e8;
+    --accent: #c45d3e;
+    --serif: 'Instrument Serif', serif;
+    --sans: 'Hanken Grotesk', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 40px;
+    position: relative;
+    background: var(--cream);
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    max-width: 1200px;
+    width: 100%;
+    align-items: center;
+  }
+
+  .hero-text {
+    max-width: 480px;
+  }
+
+  .hero-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 24px;
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: 4.5rem;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    max-width: 400px;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    background: var(--text);
+    color: var(--cream);
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 14px 36px;
+    border-radius: 6px;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+  }
+  .hero-cta:hover {
+    background: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .hero-price {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    margin-top: 14px;
+    letter-spacing: 0.02em;
+  }
+
+  /* Magazine stack on hero */
+  .hero-magazine {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    perspective: 1200px;
+  }
+
+  /* The main magazine cover */
+  .mag-cover {
+    width: 360px;
+    height: 450px;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 20px 60px rgba(0,0,0,0.15),
+      0 8px 20px rgba(0,0,0,0.1);
+    transform: rotate(-2deg);
+    z-index: 3;
+    background: #2a2a2a;
+  }
+
+  .mag-photo {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://cdn.shopify.com/s/files/1/0527/1502/8643/files/softcover-photo-book-1.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: saturate(0.82) contrast(1.03) brightness(1.02);
+  }
+
+  .mag-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0,0,0,0.08) 0%,
+      transparent 30%,
+      transparent 50%,
+      rgba(0,0,0,0.25) 100%
+    );
+    z-index: 1;
+  }
+
+  .mag-masthead {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 2;
+    font-family: var(--serif);
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.3);
+  }
+
+  .mag-destination {
+    position: absolute;
+    bottom: 56px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 2;
+  }
+  .mag-destination .dest-name {
+    font-family: var(--serif);
+    font-size: 42px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.95);
+    text-shadow: 0 2px 16px rgba(0,0,0,0.35);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+  .mag-destination .dest-date {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.7);
+    text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  /* Stacked magazines behind */
+  .mag-stack-1 {
+    position: absolute;
+    width: 360px;
+    height: 450px;
+    border-radius: 4px;
+    background: #d4cfc5;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+    transform: rotate(3deg) translateX(20px) translateY(8px);
+    z-index: 2;
+    overflow: hidden;
+  }
+  .mag-stack-1::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('https://cdn.shopify.com/s/files/1/0527/1502/8643/files/softcover-photo-book-3.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: saturate(0.7) brightness(0.95);
+    opacity: 0.7;
+  }
+
+  .mag-stack-2 {
+    position: absolute;
+    width: 360px;
+    height: 450px;
+    border-radius: 4px;
+    background: #e0dbd3;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    transform: rotate(-5deg) translateX(-24px) translateY(16px);
+    z-index: 1;
+  }
+
+  /* ===== HOW IT WORKS ===== */
+  .how-section {
+    padding: 120px 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: 2.8rem;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    margin-bottom: 60px;
+    max-width: 500px;
+  }
+
+  .how-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+  }
+
+  .how-step {
+    position: relative;
+  }
+
+  .step-num {
+    font-family: var(--serif);
+    font-size: 3rem;
+    font-weight: 400;
+    color: var(--warm-white);
+    line-height: 1;
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+  }
+
+  .step-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+  }
+
+  .step-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* ===== THE COVER ===== */
+  .cover-section {
+    background: var(--text);
+    color: var(--cream);
+    padding: 120px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .cover-text .section-eyebrow {
+    color: rgba(255,255,255,0.4);
+  }
+
+  .cover-text .section-title {
+    color: var(--cream);
+  }
+
+  .cover-text p {
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.6);
+    max-width: 400px;
+  }
+
+  .cover-anatomy {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .anatomy-mag {
+    width: 320px;
+    height: 400px;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #3a5a6e 0%, #2a3a3e 50%, #1a2a2e 100%);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+
+  .anatomy-mag .mag-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(0,0,0,0.12) 0%,
+      transparent 25%,
+      transparent 55%,
+      rgba(0,0,0,0.35) 100%
+    );
+  }
+
+  .anatomy-mag .mag-masthead {
+    top: 24px;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+  }
+
+  .anatomy-mag .dest-name {
+    font-size: 36px;
+  }
+
+  /* Annotation lines */
+  .anno {
+    position: absolute;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .anno::before {
+    content: '';
+    position: absolute;
+    background: rgba(255,255,255,0.15);
+  }
+
+  .anno-masthead {
+    top: 28px;
+    right: -140px;
+  }
+  .anno-masthead::before {
+    width: 40px;
+    height: 1px;
+    right: 100%;
+    top: 50%;
+    margin-right: 8px;
+  }
+
+  .anno-photo {
+    top: 50%;
+    right: -180px;
+    transform: translateY(-50%);
+  }
+  .anno-photo::before {
+    width: 60px;
+    height: 1px;
+    right: 100%;
+    top: 50%;
+    margin-right: 8px;
+  }
+
+  .anno-dest {
+    bottom: 60px;
+    right: -190px;
+  }
+  .anno-dest::before {
+    width: 50px;
+    height: 1px;
+    right: 100%;
+    top: 50%;
+    margin-right: 8px;
+  }
+
+  .anno-date {
+    bottom: 32px;
+    right: -130px;
+  }
+  .anno-date::before {
+    width: 40px;
+    height: 1px;
+    right: 100%;
+    top: 50%;
+    margin-right: 8px;
+  }
+
+  /* ===== SPREAD PREVIEW ===== */
+  .spread-section {
+    padding: 120px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .spread-preview {
+    margin-top: 60px;
+    position: relative;
+  }
+
+  .spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.1);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .spread-page {
+    aspect-ratio: 8 / 10;
+    background-size: cover;
+    background-position: center;
+    filter: saturate(0.82) contrast(1.02);
+    position: relative;
+  }
+
+  .spread-page.with-text {
+    display: flex;
+    align-items: flex-end;
+    padding: 32px;
+  }
+
+  .spread-page.with-text::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%, transparent 60%);
+  }
+
+  .spread-caption {
+    position: relative;
+    z-index: 1;
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    color: rgba(255,255,255,0.9);
+    font-style: italic;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.3);
+  }
+
+  .spread-note {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 0.8rem;
+    color: var(--text-faint);
+    font-weight: 300;
+  }
+
+  /* ===== THE SHELF ===== */
+  .shelf-section {
+    background: var(--warm-white);
+    padding: 120px 40px;
+    text-align: center;
+  }
+
+  .shelf-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .shelf-section .section-title {
+    margin: 0 auto 16px;
+    text-align: center;
+  }
+
+  .shelf-sub {
+    font-size: 1rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    max-width: 500px;
+    margin: 0 auto 60px;
+    line-height: 1.7;
+  }
+
+  .shelf {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    align-items: flex-end;
+    padding: 40px 0;
+    position: relative;
+  }
+  .shelf::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--text-faint), transparent);
+    opacity: 0.3;
+  }
+
+  .spine {
+    width: 18px;
+    height: 200px;
+    border-radius: 2px;
+    position: relative;
+    cursor: default;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .spine:hover {
+    transform: translateY(-8px);
+  }
+  .spine-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: var(--serif);
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.8);
+    white-space: nowrap;
+  }
+  .spine:nth-child(1) { background: #3a5a6e; height: 195px; }
+  .spine:nth-child(2) { background: #6e5a3a; height: 200px; }
+  .spine:nth-child(3) { background: #5a6e3a; height: 192px; }
+  .spine:nth-child(4) { background: #6e3a5a; height: 198px; }
+  .spine:nth-child(5) { background: #3a3a6e; height: 194px; }
+  .spine:nth-child(6) { background: #5a3a3a; height: 200px; }
+  .spine:nth-child(7) { background: #4a5a5a; height: 196px; }
+  .spine:nth-child(8) { background: #6e5a4a; height: 193px; }
+
+  /* ===== SPECS ===== */
+  .specs-section {
+    padding: 120px 40px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .specs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: 48px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    grid-column: 1 / -1;
+  }
+
+  .spec-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .spec-value {
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: right;
+  }
+
+  /* ===== FINAL CTA ===== */
+  .final-cta {
+    background: var(--text);
+    color: var(--cream);
+    padding: 120px 40px;
+    text-align: center;
+  }
+
+  .final-cta .section-title {
+    color: var(--cream);
+    margin: 0 auto 16px;
+    text-align: center;
+  }
+
+  .final-sub {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.5);
+    font-weight: 300;
+    margin-bottom: 40px;
+    line-height: 1.7;
+  }
+
+  .final-cta .hero-cta {
+    background: var(--cream);
+    color: var(--text);
+  }
+  .final-cta .hero-cta:hover {
+    background: white;
+  }
+
+  .final-price {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.35);
+    margin-top: 16px;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .footer-left {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+  .footer-right {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text-faint);
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-text { animation: fadeUp 0.8s ease 0.2s both; }
+  .hero-magazine { animation: fadeUp 0.8s ease 0.5s both; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 60px;
+      text-align: center;
+    }
+    .hero-text { max-width: 100%; }
+    .hero-sub { margin: 0 auto 40px; }
+    .hero-title { font-size: 3.2rem; }
+    .how-steps { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .cover-inner { grid-template-columns: 1fr; gap: 60px; }
+    .cover-anatomy { order: -1; }
+    .anno { display: none; }
+    .spread { max-width: 100%; }
+    .mag-cover, .mag-stack-1, .mag-stack-2 { width: 280px; height: 350px; }
+    .mag-destination .dest-name { font-size: 32px; }
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 60px 24px; }
+    .hero-title { font-size: 2.6rem; }
+    .how-section, .spread-section, .specs-section { padding: 80px 24px; }
+    .cover-section, .shelf-section, .final-cta { padding: 80px 24px; }
+    .how-steps { grid-template-columns: 1fr; }
+    .section-title { font-size: 2.2rem; }
+    .mag-cover, .mag-stack-1, .mag-stack-2 { width: 240px; height: 300px; }
+    .mag-destination .dest-name { font-size: 26px; }
+    .shelf { flex-wrap: wrap; gap: 4px; }
+    .spine { height: 160px !important; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-label">Photo Magazine by Social Print Studio</div>
+        <h1 class="hero-title">Your trip.<br>38 pages.<br>$26.</h1>
+        <p class="hero-sub">You took 400 photos. They're rotting in your camera roll. Pick 38, name the place, and we'll print you a magazine that belongs on a coffee table.</p>
+        <a href="#" class="hero-cta">Make yours</a>
+        <div class="hero-price">8×10" softcover &middot; 38 pages &middot; recycled luster stock</div>
+      </div>
+
+      <div class="hero-magazine">
+        <div class="mag-stack-2"></div>
+        <div class="mag-stack-1"></div>
+        <div class="mag-cover">
+          <div class="mag-photo"></div>
+          <div class="mag-overlay"></div>
+          <div class="mag-masthead">The Trip</div>
+          <div class="mag-destination">
+            <div class="dest-name">Barcelona</div>
+            <div class="dest-date">March 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section">
+    <div class="section-eyebrow">How it works</div>
+    <h2 class="section-title">Four steps. No design skills. No decisions you'll regret.</h2>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="step-num">01</div>
+        <div class="step-title">Name the trip</div>
+        <div class="step-desc">Where'd you go? Type the place. That's your cover.</div>
+      </div>
+      <div class="how-step">
+        <div class="step-num">02</div>
+        <div class="step-title">Upload 39 photos</div>
+        <div class="step-desc">First one's the cover. The rest fill 38 pages of full-bleed spreads. Order matters — tell the story.</div>
+      </div>
+      <div class="how-step">
+        <div class="step-num">03</div>
+        <div class="step-title">Preview</div>
+        <div class="step-desc">See your cover, flip through the spreads. Drag to reorder. When it feels right, it's right.</div>
+      </div>
+      <div class="how-step">
+        <div class="step-num">04</div>
+        <div class="step-title">Print</div>
+        <div class="step-desc">$26. Arrives in a week. Put it on the coffee table. Never think about it again.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE COVER -->
+  <section class="cover-section">
+    <div class="cover-inner">
+      <div class="cover-text">
+        <div class="section-eyebrow">The cover</div>
+        <h2 class="section-title">Your photo. Three lines of type. That's it.</h2>
+        <p>We took the cover design from magazines we actually want on our shelf — Cereal, Drift, Kinfolk. One photo, edge to edge. The destination in confident serif type. A date. No clutter, no clip art, no "designed by AI." Just your photo, looking like it belongs.</p>
+        <p style="margin-top: 16px;">The slight desaturation isn't a filter — it's editorial. It's the difference between "I took this on my iPhone" and "this is a magazine I made."</p>
+      </div>
+      <div class="cover-anatomy">
+        <div class="anatomy-mag">
+          <div class="mag-overlay"></div>
+          <div class="mag-masthead" style="top: 24px; font-size: 11px; letter-spacing: 0.35em;">The Trip</div>
+          <div class="mag-destination" style="bottom: 48px;">
+            <div class="dest-name" style="font-size: 36px;">Tokyo</div>
+            <div class="dest-date">November 2025</div>
+          </div>
+          <div class="anno anno-masthead">Series masthead</div>
+          <div class="anno anno-photo">Your photo, desaturated<br>slightly for editorial tone</div>
+          <div class="anno anno-dest">Destination — large,<br>confident, serif</div>
+          <div class="anno anno-date">Date — small, quiet</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPREADS -->
+  <section class="spread-section">
+    <div class="section-eyebrow">Inside</div>
+    <h2 class="section-title">Full-bleed photos. No layouts to choose. No templates.</h2>
+    <p style="font-size: 1rem; color: var(--text-muted); font-weight: 300; line-height: 1.7; max-width: 500px;">Every page is one photo, edge to edge. The paper does the work — 100% recycled stock with a luster finish that makes colors feel warm and real. Like the photo is glowing, not printed.</p>
+
+    <div class="spread-preview">
+      <div class="spread">
+        <div class="spread-page" style="background: linear-gradient(135deg, #b8906e, #7a6050);"></div>
+        <div class="spread-page" style="background: linear-gradient(135deg, #6e8ab8, #4a6080);"></div>
+      </div>
+      <div class="spread-note">Each spread is two facing pages. 38 pages = 19 spreads of your trip, in order.</div>
+    </div>
+  </section>
+
+  <!-- THE SHELF -->
+  <section class="shelf-section">
+    <div class="shelf-inner">
+      <div class="section-eyebrow">The series</div>
+      <h2 class="section-title">Every trip gets a volume.</h2>
+      <p class="shelf-sub">Tokyo. Lake Como. That weekend in Portland. The cabin trip where nothing happened but everything was perfect. Each one sits on the shelf, spine out, like it was always there.</p>
+
+      <div class="shelf">
+        <div class="spine"><span class="spine-text">Tokyo</span></div>
+        <div class="spine"><span class="spine-text">Big Sur</span></div>
+        <div class="spine"><span class="spine-text">Barcelona</span></div>
+        <div class="spine"><span class="spine-text">Portland</span></div>
+        <div class="spine"><span class="spine-text">Lake Como</span></div>
+        <div class="spine"><span class="spine-text">Marrakech</span></div>
+        <div class="spine"><span class="spine-text">Kyoto</span></div>
+        <div class="spine"><span class="spine-text">Tulum</span></div>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-faint); font-weight: 300; margin-top: 24px;">$26 each. $104/year if you travel quarterly. Your life in trips, on a shelf.</p>
+    </div>
+  </section>
+
+  <!-- SPECS -->
+  <section class="specs-section">
+    <div class="section-eyebrow">Specs</div>
+    <h2 class="section-title">What you get.</h2>
+    <div class="specs-grid">
+      <div class="spec-row">
+        <span class="spec-label">Format</span>
+        <span class="spec-value">Softcover photo magazine</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Size</span>
+        <span class="spec-value">8 &times; 10 inches</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Pages</span>
+        <span class="spec-value">38 pages + cover</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Photos</span>
+        <span class="spec-value">39 total (1 cover + 38 interior)</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Paper</span>
+        <span class="spec-value">100% recycled, luster finish</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Printing</span>
+        <span class="spec-value">Lab-quality, US-based</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Price</span>
+        <span class="spec-value">$26</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Shipping</span>
+        <span class="spec-value">~1 week, US domestic</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta">
+    <div class="section-eyebrow" style="color: rgba(255,255,255,0.35);">Ready?</div>
+    <h2 class="section-title">Your photos deserve<br>better than a camera roll.</h2>
+    <p class="final-sub">Pick the trip. Upload the photos. We'll handle the rest.</p>
+    <a href="#" class="hero-cta">Make your first issue</a>
+    <div class="final-price">$26 &middot; No subscription &middot; No account required</div>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span class="footer-left">Social Print Studio &middot; The Trip</span>
+    <span class="footer-right">Powered by PrintKit</span>
+  </div>
+
+</body>
+</html>
